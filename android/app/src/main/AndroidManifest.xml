@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ninestars.newspublishers.newsdx">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <queries>
+        <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
+    </queries>
    <application
         android:label="newsdx"
         android:name="${applicationName}"
@@ -31,5 +34,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+       <meta-data android:name="com.facebook.sdk.ApplicationId"
+           android:value="@string/facebook_app_id"/>
+
     </application>
 </manifest>
