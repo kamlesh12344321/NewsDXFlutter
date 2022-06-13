@@ -53,11 +53,17 @@ dependencies:
   http: any
   get: ^4.6.5
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.1
+  flutter_native_splash: ^2.2.3
 # The following section is specific to Flutter packages.
+
+flutter_native_splash:
+  image: assets/app_logo_new.svg
+  color: 42a5f5
 
 
 flutter:
@@ -67,10 +73,10 @@ flutter:
     - assets/app_logo_new.svg
     - assets/powered_news.svg
     - assets/back_button.png
-    - assets/apple.png
+    - assets/apple.svg
     - assets/line.png
     - assets/google_logo_new.svg
-    - assets/facebook.png
+    - assets/facebook.svg
     - assets/menu.svg
     - assets/app_icon_title.svg
   fonts:

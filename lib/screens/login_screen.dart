@@ -112,166 +112,172 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 16.0, top: 14.0, right: 0.0, bottom: 0.0),
-                    child: Text(
-                      MyConstant.loginScreenTitle,
-                      style: TextStyle(
-                          color: Colors.black,
-                          letterSpacing: .5,
-                          fontSize: 30,
-                          fontWeight: FontWeight.w900),
-                    ),
-                  ),
-                ),
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 16.0, top: 10.0, right: 0.0, bottom: 0.0),
-                    child: Text(
-                      MyConstant.loginScreenSubTitle,
-                      style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 16.0, top: 16.0, right: 0.0, bottom: 0.0),
-                    child: Text(
-                      MyConstant.emailErrorMsg,
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16.0, top: 5.0, right: 16.0, bottom: 0.0),
-                    child: TextField(
-                      controller: myController,
-                      maxLines: 1,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        label: Text(MyConstant.emailHint),
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16.0, top: 18.0, right: 16.0, bottom: 0.0),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.blue,
-                          minimumSize: const Size.fromHeight(50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                        ),
-                        child: const Text(MyConstant.signInButtonTitle),
-                        onPressed: () {
-                          //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const OTPScreen()));
-                          //appState.login();
-                          appState.currentAction = PageAction(
-                              state: PageState.addWidget,
-                              widget: const OTPScreen(),
-                              page: OtpPageConfig);
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16.0, top: 17.0, right: 0.0, bottom: 0.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Image.asset("assets/line.png"),
-                        Text("or"),
-                        Image.asset("assets/line.png"),
-                      ],
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16.0, top: 15.0, right: 0.0, bottom: 0.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextButton(
-                            onPressed: () {
-                              LocalPreferenceService localPref =
-                                  LocalPreferenceService();
-                              Future<UserCredential> signIn =
-                                  signInWithGoogle();
-                              signIn
-                                  .then((value) => {
-                                        if (value.user != null)
-                                          {
-                                            appState.login(true),
-                                            appState.currentAction = PageAction(
-                                                state: PageState.addWidget,
-                                                widget: const HomeScreen(),
-                                                page: HomePageConfig)
-                                          }
-                                      })
-                                  .onError((error, stackTrace) => {
-                                        // show snakeBar
-                                      });
-                            },
-                            child:
-                                SvgPicture.asset("assets/google_logo_new.svg")),
-                        TextButton(
-                            onPressed: () {
-                              signInWithFacebook();
-                            },
-                            child: Image.asset("assets/facebook.png")),
-                        TextButton(
-                            onPressed: () {},
-                            child: Image.asset("assets/apple.png")),
-                      ],
-                    ),
-                  ),
-                ),
+
+
               ],
             ),
+
+            const Align(
+              alignment:  AlignmentDirectional(-1.0, -0.75),
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 16.0, right: 0.0, bottom: 0.0),
+                child: Text(
+                  MyConstant.loginScreenTitle,
+                  style: TextStyle(
+                      color: Colors.black,
+                      letterSpacing: .5,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w900),
+                ),
+              ),
+            ),
+
+            const Align(
+              alignment:  AlignmentDirectional(-1.0, -0.48),
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 16.0, right: 0.0, bottom: 0.0),
+                child: Text(
+                  MyConstant.loginScreenSubTitle,
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+            const Align(
+              alignment:  AlignmentDirectional(-1.0, -0.30),
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 16.0, right: 0.0, bottom: 0.0),
+                child: Text(
+                  MyConstant.emailErrorMsg,
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300),
+                ),
+              ),
+            ),
             Align(
-              alignment: const AlignmentDirectional(-0.02, 0.92),
+              alignment: const AlignmentDirectional(0.0, -0.15),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 16.0, right: 16.0, bottom: 0.0),
+                child: TextField(
+                  controller: myController,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text(MyConstant.emailHint),
+                  ),
+                ),
+              ),
+            ),
+            Align(
+              alignment: const AlignmentDirectional(-0.08, 0.14),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 16.0, right: 16.0, bottom: 0.0),
+                child: TextButton(
+                  onPressed: () {},
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                      minimumSize: const Size.fromHeight(50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: const Text(MyConstant.signInButtonTitle),
+                    onPressed: () {
+                      //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const OTPScreen()));
+                      //appState.login();
+                      appState.currentAction = PageAction(
+                          state: PageState.addWidget,
+                          widget: const OTPScreen(),
+                          page: OtpPageConfig);
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Align(
+              alignment: const AlignmentDirectional(-0.02, 0.30),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 16.0, right: 0.0, bottom: 0.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Image.asset("assets/line.png"),
+                    Text("or"),
+                    Image.asset("assets/line.png"),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: const AlignmentDirectional(-0.02, 0.45),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 16.0, right: 0.0, bottom: 0.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          LocalPreferenceService localPref =
+                          LocalPreferenceService();
+                          Future<UserCredential> signIn =
+                          signInWithGoogle();
+                          signIn
+                              .then((value) => {
+                            if (value.user != null)
+                              {
+                                appState.login(true),
+                                appState.currentAction = PageAction(
+                                    state: PageState.addWidget,
+                                    widget: const HomeScreen(),
+                                    page: HomePageConfig)
+                              }
+                          })
+                              .onError((error, stackTrace) => {
+                            // show snakeBar
+                          });
+                        },
+                        child:
+                        SvgPicture.asset("assets/google_logo_new.svg")),
+                    TextButton(
+                        onPressed: () {
+                          signInWithFacebook();
+                        },
+                        child: SvgPicture.asset("assets/facebook.svg")),
+                    TextButton(
+                        onPressed: () {},
+                        child: SvgPicture.asset("assets/apple.svg")),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: const AlignmentDirectional(-0.02, 0.82),
               child: SizedBox(
                 width: double.infinity,
                 height: 100,
                 child: Column(
                   children: const [
-                    Text(MyConstant.signInScreenPrivacyPolicy),
+                    Text(MyConstant.signInScreenPrivacyPolicy,
+                        style: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w400),),
                     SizedBox(
                       height: 10,
                     ),
-                    Text(MyConstant.tcTitle),
+                    Text(MyConstant.tcTitle,
+                        style: TextStyle(color: Colors.blue, fontSize: 16, fontWeight: FontWeight.w400),),
                   ],
                 ),
               ),

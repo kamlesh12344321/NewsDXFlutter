@@ -20,6 +20,9 @@ class MyConstant{
   static const String otp_sent = "The secure 6 digit OTP is sent to your registered";
   static const String otp_mail_id = "email ID : ";
 
+  // Facebook console details
+
+
 
 
   // Preference key string
