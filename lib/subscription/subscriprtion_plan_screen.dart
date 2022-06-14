@@ -1,7 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:newsdx/app_constants/string_constant.dart';
-import 'package:newsdx/widgets/app_bar.dart';
 
 class SubscriptionPlanScreen extends StatefulWidget {
   const SubscriptionPlanScreen({Key? key}) : super(key: key);
@@ -18,9 +16,6 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
       body: PageView(
         children: [
           Container()
-
-
-
         ],
       ),
     );
