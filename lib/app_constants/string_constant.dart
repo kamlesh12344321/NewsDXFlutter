@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 class MyConstant{
   static const String appName = "NewsDX";
+  static const String propertyKey = "0a415906df2fd643733b865167adb19d";
   static const double appbarHeight = 50.0;
   static const String noTitle = "";
   static const String appType = "NEWS";
@@ -23,9 +24,6 @@ class MyConstant{
 
 
   // Preference key string
-
-static const String firebaseUserData = "user_data";
-  static const String isLoggedInKey = "isLoggedIn";
 
 
 }

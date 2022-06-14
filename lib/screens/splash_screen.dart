@@ -92,7 +92,7 @@ class _SplashState extends State<Splash> {
     super.didChangeDependencies();
     if (!_initialized) {
       _initialized = true;
-      Timer(const Duration(milliseconds: 5000), () {
+      Timer(const Duration(milliseconds: 2000), () {
         appState.setSplashFinished();
       });
     }

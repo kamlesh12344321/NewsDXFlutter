@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/route_parser.dart';
@@ -20,7 +19,8 @@ import 'dart:developer' as developer;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-runApp(const MyApp());
+  await Prefs.init();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -31,7 +31,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   final appState = AppState();
   late NewsDxRouterDelegate delegate;
   late NewsDxBackButtonDispatcher backButtonDispatcher;
@@ -46,8 +45,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   initState() {
-  super.initState();
-  initPlatformState();
+    super.initState();
+    initPlatformState();
   }
 
   @override
@@ -59,8 +58,31 @@ class _MyAppState extends State<MyApp> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    developer.log(Log_Tag , name: "MyApp2State :: build()");
-    return ChangeNotifierProvider(
+    developer.log(Log_Tag, name: "MyApp2State :: build()");
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => appState,
+        ),
+      ],
+      child: MaterialApp.router(
+        routeInformationParser: parser,
+        routerDelegate: delegate,
+        backButtonDispatcher: backButtonDispatcher,
+        debugShowCheckedModeBanner: false,
+        title: MyConstant.appName,
+        theme: ThemeData(
+          textTheme: GoogleFonts.latoTextTheme(
+            Theme.of(context).textTheme,
+          ),
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+      ),
+    );
+
+    /*return ChangeNotifierProvider(
         create: (_) => appState,
         child: MaterialApp.router(
           routeInformationParser: parser,
@@ -76,13 +98,12 @@ class _MyAppState extends State<MyApp> {
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
         ),
-    );
+    );*/
   }
-
 
   Future<void> initPlatformState() async {
     // Attach a listener to the Uri links stream
-    _linkSubscription = uriLinkStream.listen((Uri ?uri) {
+    _linkSubscription = uriLinkStream.listen((Uri? uri) {
       if (!mounted) return;
       setState(() {
         delegate.parseRoute(uri!);
@@ -96,10 +117,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
- _linkSubscription.cancel();
+    _linkSubscription.cancel();
     super.dispose();
   }
-
 }
-
-
