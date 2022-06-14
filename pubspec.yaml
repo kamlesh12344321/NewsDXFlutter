@@ -39,19 +39,17 @@ dependencies:
   sign_button: ^2.0.2
   sizer: ^2.0.15
   google_sign_in: ^5.3.3
-  flutter_facebook_auth: ^4.3.4+2
   firebase_core: ^1.17.1
   firebase_auth: ^3.3.19
   pin_code_fields: ^7.4.0
-  provider: any
+  provider: ^6.0.0
   uni_links: any
   google_fonts: ^3.0.1
   cached_network_image: ^3.2.1
-  twitter_login: ^4.2.3
-  sign_in_with_apple: ^4.0.0
   flutter_svg: ^1.1.0
   http: any
-  get: ^4.6.5
+  flutter_facebook_auth: ^3.5.3
+
 
 dev_dependencies:
   flutter_test:

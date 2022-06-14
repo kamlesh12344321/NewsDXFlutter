@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/route_parser.dart';
@@ -18,6 +19,7 @@ import 'dart:developer' as developer;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Prefs.init();
   runApp(const MyApp());
 }
 
@@ -57,8 +59,13 @@ class _MyAppState extends State<MyApp> {
       DeviceOrientation.portraitDown,
     ]);
     developer.log(Log_Tag, name: "MyApp2State :: build()");
-    return ChangeNotifierProvider(
-      create: (_) => appState,
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => appState,
+        ),
+      ],
       child: MaterialApp.router(
         routeInformationParser: parser,
         routerDelegate: delegate,
@@ -74,6 +81,24 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+
+    /*return ChangeNotifierProvider(
+        create: (_) => appState,
+        child: MaterialApp.router(
+          routeInformationParser: parser,
+          routerDelegate: delegate,
+          backButtonDispatcher: backButtonDispatcher,
+          debugShowCheckedModeBanner: false,
+          title: MyConstant.appName,
+          theme: ThemeData(
+            textTheme: GoogleFonts.latoTextTheme(
+              Theme.of(context).textTheme,
+            ),
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+        ),
+    );*/
   }
 
   Future<void> initPlatformState() async {
