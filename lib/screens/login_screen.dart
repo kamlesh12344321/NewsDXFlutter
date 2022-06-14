@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -16,12 +14,10 @@ import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/home_screen.dart';
 import 'package:newsdx/screens/otp_screen.dart';
 import 'package:newsdx/widgets/app_bar.dart';
+import 'package:newsdx/widgets/dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:twitter_login/entity/auth_result.dart';
-import 'package:twitter_login/twitter_login.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -30,21 +26,17 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   late final User _user;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   TextEditingController myController = TextEditingController();
-  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
-
-  get sha256 => "";
+  String? email = "";
 
   @override
   void initState() {
     myController.addListener(() {
-      //here you have the changes of your textfield
-      print("value: ${myController.text}");
-      //use setState to rebuild the widget
+      email = myController.text;
       setState(() {});
     });
     super.initState();
@@ -60,6 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
+
     return Scaffold(
       appBar: AppBarWidget(MyConstant.noTitle),
       backgroundColor: Colors.white,
@@ -112,172 +105,185 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-
-
-              ],
-            ),
-
-            const Align(
-              alignment:  AlignmentDirectional(-1.0, -0.75),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: 16.0, right: 0.0, bottom: 0.0),
-                child: Text(
-                  MyConstant.loginScreenTitle,
-                  style: TextStyle(
-                      color: Colors.black,
-                      letterSpacing: .5,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w900),
-                ),
-              ),
-            ),
-
-            const Align(
-              alignment:  AlignmentDirectional(-1.0, -0.48),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: 16.0, right: 0.0, bottom: 0.0),
-                child: Text(
-                  MyConstant.loginScreenSubTitle,
-                  style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-            ),
-            const Align(
-              alignment:  AlignmentDirectional(-1.0, -0.30),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: 16.0, right: 0.0, bottom: 0.0),
-                child: Text(
-                  MyConstant.emailErrorMsg,
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300),
-                ),
-              ),
-            ),
-            Align(
-              alignment: const AlignmentDirectional(0.0, -0.15),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 16.0, right: 16.0, bottom: 0.0),
-                child: TextField(
-                  controller: myController,
-                  maxLines: 1,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    label: Text(MyConstant.emailHint),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 16.0, top: 14.0, right: 0.0, bottom: 0.0),
+                    child: Text(
+                      MyConstant.loginScreenTitle,
+                      style: TextStyle(
+                          color: Colors.black,
+                          letterSpacing: .5,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w900),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Align(
-              alignment: const AlignmentDirectional(-0.08, 0.14),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 16.0, right: 16.0, bottom: 0.0),
-                child: TextButton(
-                  onPressed: () {},
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
-                      minimumSize: const Size.fromHeight(50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 16.0, top: 10.0, right: 0.0, bottom: 0.0),
+                    child: Text(
+                      MyConstant.loginScreenSubTitle,
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 16.0, top: 16.0, right: 0.0, bottom: 0.0),
+                    child: Text(
+                      MyConstant.emailErrorMsg,
+                      style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, top: 5.0, right: 16.0, bottom: 0.0),
+                    child: TextField(
+                      controller: myController,
+                      maxLines: 1,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text(MyConstant.emailHint),
                       ),
                     ),
-                    child: const Text(MyConstant.signInButtonTitle),
-                    onPressed: () {
-                      //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const OTPScreen()));
-                      //appState.login();
-                      appState.currentAction = PageAction(
-                          state: PageState.addWidget,
-                          widget: const OTPScreen(),
-                          page: OtpPageConfig);
-                    },
                   ),
                 ),
-              ),
-            ),
-            Align(
-              alignment: const AlignmentDirectional(-0.02, 0.30),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 16.0, right: 0.0, bottom: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Image.asset("assets/line.png"),
-                    Text("or"),
-                    Image.asset("assets/line.png"),
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: const AlignmentDirectional(-0.02, 0.45),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 16.0, right: 0.0, bottom: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextButton(
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, top: 18.0, right: 16.0, bottom: 0.0),
+                    child: TextButton(
+                      onPressed: () {},
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue,
+                          minimumSize: const Size.fromHeight(50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
+                        child: const Text(MyConstant.signInButtonTitle),
                         onPressed: () {
-                          LocalPreferenceService localPref =
-                          LocalPreferenceService();
-                          Future<UserCredential> signIn =
-                          signInWithGoogle();
-                          signIn
-                              .then((value) => {
-                            if (value.user != null)
+                          if (email!.isNotEmpty) {
+                          bool? isLogged = Prefs.getIsLoggedIn();
+
+                          }
+                          appState.currentAction = PageAction(
+                              state: PageState.addWidget,
+                              widget: const OTPScreen(),
+                              page: OtpPageConfig);
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, top: 17.0, right: 0.0, bottom: 0.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Image.asset("assets/line.png"),
+                        const Text("or"),
+                        Image.asset("assets/line.png"),
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, top: 15.0, right: 0.0, bottom: 0.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              Future<UserCredential> signIn =
+                              signInWithGoogle();
+                              signIn
+                                  .then((value) =>
                               {
-                                appState.login(true),
-                                appState.currentAction = PageAction(
-                                    state: PageState.addWidget,
-                                    widget: const HomeScreen(),
-                                    page: HomePageConfig)
-                              }
-                          })
-                              .onError((error, stackTrace) => {
-                            // show snakeBar
-                          });
-                        },
-                        child:
-                        SvgPicture.asset("assets/google_logo_new.svg")),
-                    TextButton(
-                        onPressed: () {
-                          signInWithFacebook();
-                        },
-                        child: SvgPicture.asset("assets/facebook.svg")),
-                    TextButton(
-                        onPressed: () {},
-                        child: SvgPicture.asset("assets/apple.svg")),
-                  ],
+                                if (value.user != null)
+                                  {
+                                    appState.login(true),
+                                    appState.currentAction = PageAction(
+                                        state: PageState.addWidget,
+                                        widget: const HomeScreen(),
+                                        page: HomePageConfig)
+                                  }
+                              })
+                                  .onError((error, stackTrace) =>
+                              {
+                                // show snakeBar
+                              });
+                            },
+                            child:
+                            SvgPicture.asset("assets/google_logo_new.svg")),
+                        TextButton(
+                            onPressed: () {
+                              Future<UserCredential?> signIn =
+                              signInWithFacebook();
+                              signIn
+                                  .then((value) =>
+                              {
+                                if (value?.user != null)
+                                  {
+                                    appState.login(true),
+                                    appState.currentAction = PageAction(
+                                        state: PageState.addWidget,
+                                        widget: const HomeScreen(),
+                                        page: HomePageConfig)
+                                  }
+                              })
+                                  .onError((error, stackTrace) =>
+                              {
+                                // show snakeBar
+                              });
+                            },
+                            child: Image.asset("assets/facebook.png")),
+                        TextButton(
+                            onPressed: () {},
+                            child: Image.asset("assets/apple.png")),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
             Align(
-              alignment: const AlignmentDirectional(-0.02, 0.82),
+              alignment: const AlignmentDirectional(-0.02, 0.92),
               child: SizedBox(
                 width: double.infinity,
                 height: 100,
                 child: Column(
                   children: const [
-                    Text(MyConstant.signInScreenPrivacyPolicy,
-                        style: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w400),),
+                    Text(MyConstant.signInScreenPrivacyPolicy),
                     SizedBox(
                       height: 10,
                     ),
-                    Text(MyConstant.tcTitle,
-                        style: TextStyle(color: Colors.blue, fontSize: 16, fontWeight: FontWeight.w400),),
+                    Text(MyConstant.tcTitle),
                   ],
                 ),
               ),
@@ -319,98 +325,27 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
+    await googleUser?.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-
-    // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  Future<UserCredential> signInWithFacebook() async {
-    // Trigger the sign-in flow
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-    final String token = loginResult.accessToken!.token;
-
-    // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(token);
-
-    // Once signed in, return the UserCredential
-    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  }
-
-  Future<UserCredential> signInWithTwitter() async {
-    // Create a TwitterLogin instance
-    final twitterLogin = TwitterLogin(
-        apiKey: '<your consumer key>',
-        apiSecretKey: ' <your consumer secret>',
-        redirectURI: '<your_scheme>://');
-
-    // Trigger the sign-in flow
-    final authResult = await twitterLogin.login();
-
-    // Create a credential from the access token
-    final twitterAuthCredential = TwitterAuthProvider.credential(
-      accessToken: authResult.authToken!,
-      secret: authResult.authTokenSecret!,
+  Future<UserCredential?> signInWithFacebook() async {
+    final LoginResult result = await FacebookAuth.instance.login(
+      permissions: ['public_profile', 'email', 'user_friends']
     );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance
-        .signInWithCredential(twitterAuthCredential);
+    if(result.status == LoginStatus.success) {
+      // Create a credential from the access token
+      final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.token);
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    }
+    return null;
   }
 
-  // Apple auth
-  String generateNonce([int length = 32]) {
-    const charset =
-        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
-    final random = Random.secure();
-    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
-        .join();
-  }
-
-  /// Returns the sha256 hash of [input] in hex notation.
-  String sha256ofString(String input) {
-    final bytes = utf8.encode(input);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
-  }
-
-  Future<UserCredential> signInWithApple() async {
-    // To prevent replay attacks with the credential returned from Apple, we
-    // include a nonce in the credential request. When signing in with
-    // Firebase, the nonce in the id token returned by Apple, is expected to
-    // match the sha256 hash of `rawNonce`.
-    final rawNonce = generateNonce();
-    final nonce = sha256ofString(rawNonce);
-
-    // Request credential for the currently signed in Apple account.
-    final appleCredential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-      nonce: nonce,
-    );
-
-    // Create an `OAuthCredential` from the credential returned by Apple.
-    final oauthCredential = OAuthProvider("apple.com").credential(
-      idToken: appleCredential.identityToken,
-      rawNonce: rawNonce,
-    );
-
-    // Sign in the user with Firebase. If the nonce we generated earlier does
-    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-  }
 }
