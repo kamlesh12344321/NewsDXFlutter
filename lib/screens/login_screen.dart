@@ -228,10 +228,6 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                                 if (value.user != null)
                                   {
                                     appState.login(true),
-                                    appState.currentAction = PageAction(
-                                        state: PageState.addWidget,
-                                        widget: const HomeScreen(),
-                                        page: HomePageConfig)
                                   }
                               })
                                   .onError((error, stackTrace) =>
@@ -251,10 +247,6 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                                 if (value?.user != null)
                                   {
                                     appState.login(true),
-                                    appState.currentAction = PageAction(
-                                        state: PageState.addWidget,
-                                        widget: const HomeScreen(),
-                                        page: HomePageConfig)
                                   }
                               })
                                   .onError((error, stackTrace) =>
