@@ -109,7 +109,7 @@ Future sendDataToServer(String value) async {
     "propertyKey": "0a415906df2fd643733b865167adb19d",
   };
   var bodyData = json.encode(data);
-  final response = await http.post(Uri.parse("http://192.168.13.27/projects/NewsDX/stg-server/NewsDXAPI/V3/end_users/verify_idTokenString"),
+  final response = await http.post(Uri.parse("https://api.newsdx.io/V1/end_users/verify_idTokenString"),
     body: bodyData
   );
  if(response.statusCode == 200){

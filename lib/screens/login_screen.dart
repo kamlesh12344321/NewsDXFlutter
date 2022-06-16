@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/home_screen.dart';
 import 'package:newsdx/screens/otp_screen.dart';
 import 'package:newsdx/widgets/app_bar.dart';
+import 'package:newsdx/widgets/dialog.dart';
 import 'package:provider/provider.dart';
 // import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:http/http.dart' as http;
@@ -222,42 +224,38 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                         TextButton(
                             onPressed: () {
                               Future<UserCredential> signIn =
-                                  signInWithGoogle();
+                              signInWithGoogle();
                               signIn
-                                  .then((value) => {
-                                        if (value.user != null)
-                                          {
-                                            appState.login(true),
-                                            appState.currentAction = PageAction(
-                                                state: PageState.addWidget,
-                                                widget: const HomeScreen(),
-                                                page: HomePageConfig)
-                                          }
-                                      })
-                                  .onError((error, stackTrace) => {
-                                        // show snakeBar
-                                      });
+                                  .then((value) =>
+                              {
+                                if (value.user != null)
+                                  {
+                                    appState.login(true),
+                                  }
+                              })
+                                  .onError((error, stackTrace) =>
+                              {
+                                // show snakeBar
+                              });
                             },
                             child:
-                                SvgPicture.asset("assets/google_logo_new.svg")), // Google ion
+                            SvgPicture.asset("assets/google_logo_new.svg")),
                         TextButton(
                             onPressed: () {
                               Future<UserCredential?> signIn =
-                                  signInWithFacebook();
+                              signInWithFacebook();
                               signIn
-                                  .then((value) => {
-                                        if (value?.user != null)
-                                          {
-                                            appState.login(true),
-                                            appState.currentAction = PageAction(
-                                                state: PageState.addWidget,
-                                                widget: const HomeScreen(),
-                                                page: HomePageConfig)
-                                          }
-                                      })
-                                  .onError((error, stackTrace) => {
-                                        // show snakeBar
-                                      });
+                                  .then((value) =>
+                              {
+                                if (value?.user != null)
+                                  {
+                                    appState.login(true),
+                                  }
+                              })
+                                  .onError((error, stackTrace) =>
+                              {
+                                // show snakeBar
+                              });
                             },
                             child: Image.asset("assets/facebook.png"),), // Facebook icon
                         TextButton(
@@ -352,7 +350,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   Future<UserCredential> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+    await googleUser?.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
@@ -361,12 +359,12 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   }
 
   Future<UserCredential?> signInWithFacebook() async {
-    final LoginResult result = await FacebookAuth.instance
-        .login(permissions: ['public_profile', 'email', 'user_friends']);
-    if (result.status == LoginStatus.success) {
+    final LoginResult result = await FacebookAuth.instance.login(
+      permissions: ['public_profile', 'email', 'user_friends']
+    );
+    if(result.status == LoginStatus.success) {
       // Create a credential from the access token
-      final OAuthCredential credential =
-          FacebookAuthProvider.credential(result.accessToken!.token);
+      final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.token);
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.signInWithCredential(credential);
     }

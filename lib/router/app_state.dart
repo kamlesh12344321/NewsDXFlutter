@@ -60,7 +60,7 @@ class AppState extends ChangeNotifier {
     _loggedIn = true;
     saveLoginState(loggedIn);
     if(isSocialLoggedIn){
-      _currentAction = PageAction(state: PageState.addPage, page: HomePageConfig);
+      _currentAction = PageAction(state: PageState.replaceAll, page: HomePageConfig);
     } else {
       _currentAction =
           PageAction(state: PageState.addPage, page: OtpPageConfig);
