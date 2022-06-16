@@ -11,6 +11,8 @@ import 'package:newsdx/screens/otp_screen.dart';
 import 'package:newsdx/screens/splash_screen.dart';
 import 'dart:developer' as developer;
 
+import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
+
 class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
   final List<Page> _pages = [];
@@ -152,6 +154,9 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
       case Pages.Home:
         HomePageConfig.currentPageAction = action;
         break;
+      case Pages.SubscriptionPlan:
+        SubscriptionPlanPageConfig.currentPageAction = action;
+        break;
       default:
         break;
     }
@@ -177,6 +182,10 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
 
         case Pages.Home:
           _addPageData(HomeScreen(), HomePageConfig);
+          break;
+
+        case Pages.SubscriptionPlan:
+          _addPageData(SubscriptionPlanScreen(),SubscriptionPlanPageConfig);
           break;
 
         default:

@@ -11,6 +11,11 @@ import 'package:http/http.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
+import 'package:newsdx/router/ui_pages.dart';
+import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
+import 'package:provider/provider.dart';
+
+import '../router/app_state.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -24,32 +29,42 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: const Icon(Icons.menu),
         title: Row(
           children: const [
-            Icon(Icons.ac_unit),
+            Icon(Icons.ac_unit,),
             Text(MyConstant.appName),
           ],
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: Container(
-              width: 30,
-              height: 30,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: CachedNetworkImage(
-                width: 120,
-                height: 120,
-                fit: BoxFit.cover,
-                imageUrl: "https://picsum.photos/250?image=9",
-                placeholder: (context, url) => const CircularProgressIndicator(
+            child: InkWell(
+              onTap: (){
+                appState.currentAction = PageAction(
+                    state: PageState.addWidget,
+                    widget: const SubscriptionPlanScreen(),
+                    page: SubscriptionPlanPageConfig);
+              },
+              child: Container(
+                width: 30,
+                height: 30,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
 
+                ),
+                child: CachedNetworkImage(
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                  imageUrl: "https://picsum.photos/250?image=9",
+                  placeholder: (context, url) => const CircularProgressIndicator(
+
+                  ),
                 ),
               ),
             ),

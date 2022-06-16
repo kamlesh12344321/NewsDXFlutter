@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class SubscriptionPlanScreen extends StatefulWidget {
@@ -11,13 +10,6 @@ class SubscriptionPlanScreen extends StatefulWidget {
 class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Subscriptions List")),
-      body: PageView(
-        children: [
-          Container()
-        ],
-      ),
-    );
+    return Container();
   }
 }

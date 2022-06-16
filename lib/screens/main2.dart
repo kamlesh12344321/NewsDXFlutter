@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/apple/auth_service.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/back_dispatcher.dart';
@@ -16,11 +17,15 @@ import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'dart:developer' as developer;
 
+import '../apple/apple_sign_in_available.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await Prefs.init();
-  runApp(const MyApp());
+  final appleSignInAvailable = await AppleSignInAvailable.check();
+  runApp(Provider<AppleSignInAvailable>.value(value: appleSignInAvailable,
+  child: const MyApp(),));
 }
 
 class MyApp extends StatefulWidget {
@@ -65,6 +70,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (context) => appState,
         ),
+        Provider(create: (_) => AuthService())
       ],
       child: MaterialApp.router(
         routeInformationParser: parser,
