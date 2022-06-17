@@ -21,8 +21,8 @@ class Prefs  {
 
   static bool getIsLoggedIn() => _prefs!.getBool(isLoggedInKey) ?? false;
 
-  static Future<bool> saveOtpId( bool value) async =>
-      await _prefs!.setBool(otpId, value);
+  static Future<bool> saveOtpId( int value) async =>
+      await _prefs!.setInt(otpId, value);
 
   static int getOtpId() => _prefs!.getInt(otpId) ?? 0;
 

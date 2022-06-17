@@ -4,12 +4,11 @@ class Assets {
 
   static const String assetsAppLogoNew = 'D:/NewsDX/assets/app_logo_new.svg';
   static const String assetsAppiconTitle = 'D:/NewsDX/assets/app_icon_title.svg';
-  static const String assetsApple = 'D:/NewsDX/assets/apple.png';
+  static const String assetsApple = 'D:/NewsDX/assets/apple.svg';
   static const String assetsBackButton = 'D:/NewsDX/assets/back_button.png';
-  static const String assetsFacebook = 'D:/NewsDX/assets/facebook.png';
+  static const String assetsFacebook = 'D:/NewsDX/assets/facebook.svg';
   static const String assetsGoogleLogoNew = 'D:/NewsDX/assets/google_logo_new.svg';
   static const String assetsLine = 'D:/NewsDX/assets/line.png';
   static const String assetsMenu = 'D:/NewsDX/assets/menu.svg';
   static const String assetsPoweredNews = 'D:/NewsDX/assets/powered_news.svg';
-
 }

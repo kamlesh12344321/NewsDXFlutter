@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:math';
 
@@ -10,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/model/otp_status.dart';
 import 'package:newsdx/model/user_data.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
@@ -21,6 +21,7 @@ import 'package:newsdx/widgets/dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -35,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   TextEditingController myController = TextEditingController();
   String? email = "";
+  late Future<OtpSendStatus> otpStatus;
 
   @override
   void initState() {
@@ -163,6 +165,11 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                         border: OutlineInputBorder(),
                         label: Text(MyConstant.emailHint),
                       ),
+                      onChanged: (text) {
+                        setState() {
+                          email = text;
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -181,16 +188,29 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                         ),
-                        child: const Text(MyConstant.signInButtonTitle),
+                        child:  Text(MyConstant.signInButtonTitle),
                         onPressed: () {
-                          if (email!.isNotEmpty) {
-                          bool? isLogged = Prefs.getIsLoggedIn();
-
+                          if (email!.isNotEmpty || email != null) {
+                            bool? isLogged = Prefs.getIsLoggedIn();
+                            Future<OtpSendStatus> status =
+                                getOtpSendStatus(email!);
+                            status
+                                .then(
+                                  (value) => {
+                                    if (value.status == true)
+                                      {
+                                        Prefs.saveOtpId(value.data.otpId),
+                                        appState.currentAction = PageAction(
+                                            state: PageState.addWidget,
+                                            widget: OTPScreen(emailId: email!,),
+                                            page: OtpPageConfig),
+                                      }
+                                  },
+                                )
+                                .onError(
+                                  (error, stackTrace) => {},
+                                );
                           }
-                          appState.currentAction = PageAction(
-                              state: PageState.addWidget,
-                              widget: const OTPScreen(),
-                              page: OtpPageConfig);
                         },
                       ),
                     ),
@@ -224,46 +244,42 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                         TextButton(
                             onPressed: () {
                               Future<UserCredential> signIn =
-                              signInWithGoogle();
+                                  signInWithGoogle();
                               signIn
-                                  .then((value) =>
-                              {
-                                if (value.user != null)
-                                  {
-                                    appState.login(true),
-                                    appState.currentAction = PageAction(
-                                        state: PageState.addWidget,
-                                        widget: const HomeScreen(),
-                                        page: HomePageConfig)
-                                  }
-                              })
-                                  .onError((error, stackTrace) =>
-                              {
-                                // show snakeBar
-                              });
+                                  .then((value) => {
+                                        if (value.user != null)
+                                          {
+                                            appState.login(true),
+                                            appState.currentAction = PageAction(
+                                                state: PageState.addWidget,
+                                                widget: const HomeScreen(),
+                                                page: HomePageConfig)
+                                          }
+                                      })
+                                  .onError((error, stackTrace) => {
+                                        // show snakeBar
+                                      });
                             },
                             child:
-                            SvgPicture.asset("assets/google_logo_new.svg")),
+                                SvgPicture.asset("assets/google_logo_new.svg")),
                         TextButton(
                             onPressed: () {
                               Future<UserCredential?> signIn =
-                              signInWithFacebook();
+                                  signInWithFacebook();
                               signIn
-                                  .then((value) =>
-                              {
-                                if (value?.user != null)
-                                  {
-                                    appState.login(true),
-                                    appState.currentAction = PageAction(
-                                        state: PageState.addWidget,
-                                        widget: const HomeScreen(),
-                                        page: HomePageConfig)
-                                  }
-                              })
-                                  .onError((error, stackTrace) =>
-                              {
-                                // show snakeBar
-                              });
+                                  .then((value) => {
+                                        if (value?.user != null)
+                                          {
+                                            appState.login(true),
+                                            appState.currentAction = PageAction(
+                                                state: PageState.addWidget,
+                                                widget: const HomeScreen(),
+                                                page: HomePageConfig)
+                                          }
+                                      })
+                                  .onError((error, stackTrace) => {
+                                        // show snakeBar
+                                      });
                             },
                             child: Image.asset("assets/facebook.png")),
                         TextButton(
@@ -330,7 +346,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   Future<UserCredential> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth =
-    await googleUser?.authentication;
+        await googleUser?.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
@@ -339,16 +355,27 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   }
 
   Future<UserCredential?> signInWithFacebook() async {
-    final LoginResult result = await FacebookAuth.instance.login(
-      permissions: ['public_profile', 'email', 'user_friends']
-    );
-    if(result.status == LoginStatus.success) {
+    final LoginResult result = await FacebookAuth.instance
+        .login(permissions: ['public_profile', 'email', 'user_friends']);
+    if (result.status == LoginStatus.success) {
       // Create a credential from the access token
-      final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.token);
+      final OAuthCredential credential =
+          FacebookAuthProvider.credential(result.accessToken!.token);
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.signInWithCredential(credential);
     }
     return null;
   }
 
+  Future<OtpSendStatus> getOtpSendStatus(String email) async {
+    final response = await http.post(
+        Uri.parse("https://api.newsdx.io/V1/end_users/send_email_otp"),
+        body: {"email" : email, "propertyKey" : MyConstant.propertyKey},
+    );
+    if (response.statusCode == 200) {
+      return OtpSendStatus.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("Failed to send OTP");
+    }
+  }
 }
