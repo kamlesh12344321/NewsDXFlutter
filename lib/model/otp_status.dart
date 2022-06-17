@@ -26,9 +26,9 @@ class OtpSendStatus {
     required Data data,
   }) =>
       OtpSendStatus(
-        status: status ?? this.status,
-        statusMsg: statusMsg ?? this.statusMsg,
-        data: data ?? this.data,
+        status: status,
+        statusMsg: statusMsg,
+        data: data,
       );
 
   factory OtpSendStatus.fromJson(Map<String, dynamic> json) => OtpSendStatus(
@@ -55,7 +55,7 @@ class Data {
     required int otpId,
   }) =>
       Data(
-        otpId: otpId ?? this.otpId,
+        otpId: otpId,
       );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(

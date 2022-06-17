@@ -12,6 +12,10 @@ import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/route_parser.dart';
 import 'package:newsdx/router/router_delegate.dart';
 import 'package:newsdx/router/ui_pages.dart';
+import 'package:newsdx/viewmodel/Article_list_view_model.dart';
+import 'package:newsdx/viewmodel/generic_list_view_model.dart';
+import 'package:newsdx/viewmodel/sections_list_view_model.dart';
+import 'package:newsdx/viewmodel/sport_stars_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'dart:developer' as developer;
@@ -65,6 +69,10 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (context) => appState,
         ),
+        ChangeNotifierProvider(create: (_) => SectionsViewModel()),
+        ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
+        ChangeNotifierProvider(create: (_) => SportStarsViewModel()),
+        ChangeNotifierProvider(create: (_) => GenericViewModel()),
       ],
       child: MaterialApp.router(
         routeInformationParser: parser,

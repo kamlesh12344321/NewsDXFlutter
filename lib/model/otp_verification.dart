@@ -26,9 +26,9 @@ class OtpVerification {
     required Data data,
   }) =>
       OtpVerification(
-        status: status ?? this.status,
-        statusMsg: statusMsg ?? this.statusMsg,
-        data: data ?? this.data,
+        status: status,
+        statusMsg: statusMsg,
+        data: data,
       );
 
   factory OtpVerification.fromJson(Map<String, dynamic> json) => OtpVerification(
@@ -58,8 +58,8 @@ class Data {
     required String accessToken,
   }) =>
       Data(
-        firstTimeUser: firstTimeUser ?? this.firstTimeUser,
-        accessToken: accessToken ?? this.accessToken,
+        firstTimeUser: firstTimeUser,
+        accessToken: accessToken,
       );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(

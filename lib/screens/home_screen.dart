@@ -11,6 +11,9 @@ import 'package:http/http.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
+import 'package:newsdx/model/otp_verification.dart';
+import 'package:newsdx/preference/user_preference.dart';
+import 'package:newsdx/widgets/bottom_navigation_bar.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -24,43 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const Icon(Icons.menu),
-        title: Row(
-          children: const [
-            Icon(Icons.ac_unit),
-            Text(MyConstant.appName),
-          ],
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Container(
-              width: 30,
-              height: 30,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: CachedNetworkImage(
-                width: 120,
-                height: 120,
-                fit: BoxFit.cover,
-                imageUrl: "https://picsum.photos/250?image=9",
-                placeholder: (context, url) => const CircularProgressIndicator(
-
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
-      body: const Center(
-        child: Text("Home"),
-      ),
-
-    );
+    return const TheHinduBottomNav();
   }
 
   @override
@@ -71,33 +38,31 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 getUserToken(){
   User? mUser = FirebaseAuth.instance.currentUser;
+  Future<OtpVerification> tokenResponse;
   if(mUser != null){
    mUser.getIdToken(true)
        .then((value) => {
          developer.log(value),
-      sendDataToServer(value),
-
-
+     tokenResponse =  sendDataToServer(value),
+     tokenResponse.then((value) => {
+       Prefs.saveAccessToken(value.data.accessToken)
+     })
    })
        .whenComplete(() => {
      developer.log("whenComplete")
    })
        .onError((error, stackTrace) => {
-     developer.log("onError :: "+error.toString())
+     developer.log("onError :: $error")
    });
   }
 }
 
-Future sendDataToServer(String value) async {
-  Map data = {
-    "idTokenString": value,
-    "propertyKey": "0a415906df2fd643733b865167adb19d",
-  };
-  var bodyData = json.encode(data);
-  final response = await http.post(Uri.parse("http://192.168.13.27/projects/NewsDX/stg-server/NewsDXAPI/V3/end_users/verify_idTokenString"),
-    body: bodyData
+Future<OtpVerification> sendDataToServer(String value) async {
+  Map<String, String> val = {"idTokenString": value, "propertyKey": MyConstant.propertyKey};
+  final response = await http.post(Uri.parse("https://api.newsdx.io/V1/end_users/verify_idTokenString"), body: val
   );
  if(response.statusCode == 200){
   developer.log(response.body);
  }
+ return OtpVerification.fromJson(jsonDecode(response.body));
 }

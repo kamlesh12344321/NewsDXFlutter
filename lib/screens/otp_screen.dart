@@ -208,6 +208,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   child: const Text(MyConstant.verifyButtonTitle),
                   onPressed: () {
                     if (otp.length == 5) {
+                      showProgressIndicator(true);
                       Future<OtpVerification> status =
                           getOtpVerificationStatus(otp);
                       status
@@ -215,18 +216,19 @@ class _OTPScreenState extends State<OTPScreen> {
                             (value) => {
                               if (value.status == true)
                                 {
-                                  if(value.status == true){
+                                    showProgressIndicator(false),
+                                    appState.login(true),
                                     appState.currentAction = PageAction(
                                         state: PageState.replaceAll,
                                         widget: const HomeScreen(),
                                         page: HomePageConfig),
-                                  },
+
                                 },
                             },
                           )
                           .onError(
                             (error, stackTrace) => {
-                              // Show Dialog
+                              showProgressIndicator(false),
                             },
                           );
                     } else{
@@ -320,5 +322,16 @@ class _OTPScreenState extends State<OTPScreen> {
     } else {
       throw Exception("Otp verification Failed");
     }
+  }
+
+  showProgressIndicator(bool visibility){
+    Visibility(visible :visibility, child:  const SizedBox(
+      height: 100,
+      width: 100,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    ),
+    );
   }
 }

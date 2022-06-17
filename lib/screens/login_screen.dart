@@ -37,6 +37,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   TextEditingController myController = TextEditingController();
   String? email = "";
   late Future<OtpSendStatus> otpStatus;
+  late bool isLoading = false;
 
   @override
   void initState() {
@@ -188,10 +189,10 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                         ),
-                        child:  Text(MyConstant.signInButtonTitle),
+                        child:  const Text(MyConstant.signInButtonTitle),
                         onPressed: () {
                           if (email!.isNotEmpty || email != null) {
-                            bool? isLogged = Prefs.getIsLoggedIn();
+                           showProgressIndicator(true);
                             Future<OtpSendStatus> status =
                                 getOtpSendStatus(email!);
                             status
@@ -200,6 +201,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                                     if (value.status == true)
                                       {
                                         Prefs.saveOtpId(value.data.otpId),
+                                        showProgressIndicator(false),
                                         appState.currentAction = PageAction(
                                             state: PageState.addWidget,
                                             widget: OTPScreen(emailId: email!,),
@@ -208,7 +210,9 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                                   },
                                 )
                                 .onError(
-                                  (error, stackTrace) => {},
+                                  (error, stackTrace) => {
+                                  showProgressIndicator(false),
+                                  },
                                 );
                           }
                         },
@@ -242,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         TextButton(
-                            onPressed: () {
+                            onPressed: ()  {
                               Future<UserCredential> signIn =
                                   signInWithGoogle();
                               signIn
@@ -281,10 +285,10 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                                         // show snakeBar
                                       });
                             },
-                            child: Image.asset("assets/facebook.png")),
+                            child: Image.asset("assets/facebook.svg")),
                         TextButton(
                             onPressed: () {},
-                            child: Image.asset("assets/apple.png")),
+                            child: Image.asset("assets/apple.svg")),
                       ],
                     ),
                   ),
@@ -377,5 +381,16 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
     } else {
       throw Exception("Failed to send OTP");
     }
+  }
+
+  showProgressIndicator(bool visibility){
+    Visibility(visible :visibility, child:  const SizedBox(
+      height: 100,
+      width: 100,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    ),
+    );
   }
 }

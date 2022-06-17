@@ -2,13 +2,38 @@
 class Assets {
   Assets._();
 
+  static const String NewsDXAssetsHomeSelected = 'D:/NewsDX/assets/home_selected.svg';
+  static const String assetsAppIconTitle = 'D:/NewsDX/assets/app_icon_title.svg';
+  static const String assetsAppLog = 'D:/NewsDX/assets/app_log.svg';
   static const String assetsAppLogoNew = 'D:/NewsDX/assets/app_logo_new.svg';
-  static const String assetsAppiconTitle = 'D:/NewsDX/assets/app_icon_title.svg';
   static const String assetsApple = 'D:/NewsDX/assets/apple.svg';
+  static const String assetsBack = 'D:/NewsDX/assets/back.png';
   static const String assetsBackButton = 'D:/NewsDX/assets/back_button.png';
+  static const String assetsCrownV90 = 'D:/NewsDX/assets/crown_v90.png';
   static const String assetsFacebook = 'D:/NewsDX/assets/facebook.svg';
+  static const String assetsFav = 'D:/NewsDX/assets/fav.png';
   static const String assetsGoogleLogoNew = 'D:/NewsDX/assets/google_logo_new.svg';
+  static const String assetsHamburger = 'D:/NewsDX/assets/hamburger.svg';
+  static const String assetsHomeSelected = 'D:/NewsDX/assets/home_selected.png';
+  static const String assetsHomeUnSelected = 'D:/NewsDX/assets/home_un_selected.svg';
+  static const String assetsLandscape = 'D:/NewsDX/assets/landscape.jpg';
+  static const String assetsLeftSliderThreeLine = 'D:/NewsDX/assets/left_slider_three_line.png';
   static const String assetsLine = 'D:/NewsDX/assets/line.png';
+  static const String assetsLogoActionbar = 'D:/NewsDX/assets/logo_actionbar.png';
   static const String assetsMenu = 'D:/NewsDX/assets/menu.svg';
+  static const String assetsMore = 'D:/NewsDX/assets/more.svg';
+  static const String assetsMoreSelected = 'D:/NewsDX/assets/more_selected.svg';
+  static const String assetsNewsletter = 'D:/NewsDX/assets/newsletter.svg';
+  static const String assetsNewsletterSelected = 'D:/NewsDX/assets/newsletter_selected.svg';
+  static const String assetsNewspaper = 'D:/NewsDX/assets/newspaper.svg';
+  static const String assetsNewspaperSelected = 'D:/NewsDX/assets/newspaper_selected.svg';
+  static const String assetsOverflowVerticleDot = 'D:/NewsDX/assets/overflow_verticle_dot.png';
+  static const String assetsPlaceHolder = 'D:/NewsDX/assets/place_holder.png';
   static const String assetsPoweredNews = 'D:/NewsDX/assets/powered_news.svg';
+  static const String assetsSearch = 'D:/NewsDX/assets/search.png';
+  static const String assetsShare = 'D:/NewsDX/assets/share.png';
+  static const String assetsSportstar = 'D:/NewsDX/assets/sportstar.png';
+  static const String assetsTrending = 'D:/NewsDX/assets/trending.svg';
+  static const String assetsTrendingSelected = 'D:/NewsDX/assets/trending_selected.svg';
+
 }
