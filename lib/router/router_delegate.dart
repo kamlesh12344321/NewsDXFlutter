@@ -13,6 +13,8 @@ import 'dart:developer' as developer;
 
 import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
 
+import '../userprofile/user_profile_info_screen.dart';
+
 class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
   final List<Page> _pages = [];
@@ -157,6 +159,9 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
       case Pages.SubscriptionPlan:
         SubscriptionPlanPageConfig.currentPageAction = action;
         break;
+      case Pages.UserProfileInfo:
+        UserProfileInfoPageConfig.currentPageAction = action;
+        break;
       default:
         break;
     }
@@ -186,6 +191,10 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
 
         case Pages.SubscriptionPlan:
           _addPageData(SubscriptionPlanScreen(),SubscriptionPlanPageConfig);
+          break;
+
+        case Pages.UserProfileInfo:
+          _addPageData(UserProfileInfoScreen(), UserProfileInfoPageConfig);
           break;
 
         default:

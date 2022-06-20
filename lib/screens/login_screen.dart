@@ -257,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                                 // show snakeBar
                               });
                             },
-                            child: Image.asset("assets/facebook.png"),), // Facebook icon
+                            child: Image.asset("assets/facebook.svg"),), // Facebook icon
                         TextButton(
                           onPressed: () async {
                             _signInWithApple(context);
@@ -287,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                             //
                             // await FirebaseAuth.instance.signInWithCredential(credential);
                           },
-                          child: Image.asset("assets/apple.png"),
+                          child: Image.asset("assets/apple.svg"),
                         ), // Apple icon
                       ],
                     ),

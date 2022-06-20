@@ -84,6 +84,7 @@ flutter:
     - assets/facebook.svg
     - assets/menu.svg
     - assets/app_icon_title.svg
+    - assets/tick.svg
   fonts:
     - family: Montserrat
       fonts:

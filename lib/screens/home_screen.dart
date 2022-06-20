@@ -16,6 +16,7 @@ import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../router/app_state.dart';
+import '../userprofile/user_profile_info_screen.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -46,8 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: (){
                 appState.currentAction = PageAction(
                     state: PageState.addWidget,
-                    widget: const SubscriptionPlanScreen(),
-                    page: SubscriptionPlanPageConfig);
+                    widget: const UserProfileInfoScreen(),
+                    page: UserProfileInfoPageConfig);
               },
               child: Container(
                 width: 30,

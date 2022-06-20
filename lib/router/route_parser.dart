@@ -26,6 +26,8 @@ class NewsDxRouteParser extends RouteInformationParser<PageConfiguration> {
         return HomePageConfig;
       case SubscriptionPlanScreenPath:
         return SubscriptionPlanPageConfig;
+      case UserProfileScreenPath:
+        return UserProfileInfoPageConfig;
       default:
         return SplashPageConfig;
     }

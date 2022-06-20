@@ -11,6 +11,7 @@ const String LoginPath = '/login';
 const String OtpPath = '/otp';
 const String HomePath = '/home';
 const String SubscriptionPlanScreenPath = '/subscription';
+const String UserProfileScreenPath = '/userProfileInfo';
 
 enum Pages {
       Splash,
@@ -18,6 +19,7 @@ enum Pages {
       Otp,
       Home,
       SubscriptionPlan,
+      UserProfileInfo
 }
 
 class PageConfiguration {
@@ -38,4 +40,5 @@ PageConfiguration LoginPageConfig = PageConfiguration(key: 'login', path: Splash
 PageConfiguration OtpPageConfig = PageConfiguration(key: 'otp', path: SplashPath, uiPage: Pages.Otp, currentPageAction: null);
 PageConfiguration HomePageConfig = PageConfiguration(key: 'home', path: SplashPath, uiPage: Pages.Home, currentPageAction: null);
 PageConfiguration SubscriptionPlanPageConfig = PageConfiguration(key: 'subscription', path: SplashPath, uiPage: Pages.SubscriptionPlan, currentPageAction: null);
+PageConfiguration UserProfileInfoPageConfig = PageConfiguration(key: 'userProfileInfo', path: SplashPath, uiPage: Pages.UserProfileInfo, currentPageAction: null);
 
