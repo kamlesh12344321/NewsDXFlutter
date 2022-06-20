@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:newsdx/model/SectionList.dart';
+import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/repo/api_status.dart';
 import '../repo/section_service.dart';
 
 
-class SectionsViewModel extends ChangeNotifier{
+class HomeSectionsViewModel extends ChangeNotifier{
   bool _isLoading = false;
-  SectionsList? _sectionListModel;
+  HomeSection? _homeSectionListModel;
 
   bool get loading => _isLoading;
 
-  SectionsList? get sectionList => _sectionListModel;
-  SectionsViewModel(){
+  HomeSection? get homeSectionList => _homeSectionListModel;
+  HomeSectionsViewModel(){
     getSections();
   }
 
@@ -20,15 +21,15 @@ class SectionsViewModel extends ChangeNotifier{
     _isLoading = loading;
   }
 
-  setSectionListModel( SectionsList sectionList){
-    _sectionListModel = sectionList;
+  setSectionListModel( HomeSection sectionList){
+    _homeSectionListModel = sectionList;
   }
 
   getSections() async {
     setLoading(true);
-    var response = await SectionServices.getSections();
+    var response = await SectionServices.getHomeSection();
     if(response is Success){
-      setSectionListModel(response.response as SectionsList);
+      setSectionListModel(response.response as HomeSection);
       notifyListeners();
     }
   }

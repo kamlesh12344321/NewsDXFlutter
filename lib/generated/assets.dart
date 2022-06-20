@@ -27,6 +27,7 @@ class Assets {
   static const String assetsNewsletterSelected = 'D:/NewsDX/assets/newsletter_selected.svg';
   static const String assetsNewspaper = 'D:/NewsDX/assets/newspaper.svg';
   static const String assetsNewspaperSelected = 'D:/NewsDX/assets/newspaper_selected.svg';
+  static const String assetsNoBookMark = 'D:/NewsDX/assets/no_book_mark.svg';
   static const String assetsOverflowVerticleDot = 'D:/NewsDX/assets/overflow_verticle_dot.png';
   static const String assetsPlaceHolder = 'D:/NewsDX/assets/place_holder.png';
   static const String assetsPoweredNews = 'D:/NewsDX/assets/powered_news.svg';

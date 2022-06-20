@@ -285,10 +285,10 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                                         // show snakeBar
                                       });
                             },
-                            child: Image.asset("assets/facebook.svg")),
+                            child: SvgPicture.asset("assets/facebook.svg")),
                         TextButton(
                             onPressed: () {},
-                            child: Image.asset("assets/apple.svg")),
+                            child: SvgPicture.asset("assets/apple.svg")),
                       ],
                     ),
                   ),

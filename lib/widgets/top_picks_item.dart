@@ -23,7 +23,7 @@ class _TopPicksViewState extends State<TopPicksView> {
           itemCount: widget.data?.length,
           itemBuilder: (context, index) {
             Article? article = widget.data![index];
-              String imageUrl = article.imgUrl;
+              String imageUrl = article.images![0] as String;
             return Container(
               margin: const EdgeInsets.only(top: 15, bottom: 10, left: 16, right: 10),
               width: 149,
@@ -34,7 +34,7 @@ class _TopPicksViewState extends State<TopPicksView> {
                   Center(
                     child: InkWell(
                       onTap: (){
-                        _sendDataToSecondScreen(context, widget.data?[index].description);
+                        _sendDataToSecondScreen(context, widget.data?[index].descPart1);
                       },
                       child: Container(
                         width: 139.0,
@@ -52,7 +52,7 @@ class _TopPicksViewState extends State<TopPicksView> {
                                   image: imageProvider, fit: BoxFit.cover),
                             ),
                           ),
-                          errorWidget: (context, url, error) => Image.asset("assets/images/place_holder.png"),
+                          // errorWidget: (context, url, error) => Image.asset("assets/place_holder.png"),
                         ),
                       ),
                     )

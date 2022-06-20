@@ -13,7 +13,12 @@ import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
 import 'package:newsdx/model/otp_verification.dart';
 import 'package:newsdx/preference/user_preference.dart';
+import 'package:newsdx/viewmodel/Article_list_view_model.dart';
+import 'package:newsdx/viewmodel/generic_list_view_model.dart';
+import 'package:newsdx/viewmodel/sections_list_view_model.dart';
+import 'package:newsdx/viewmodel/sport_stars_view_model.dart';
 import 'package:newsdx/widgets/bottom_navigation_bar.dart';
+import 'package:provider/provider.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -27,13 +32,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const TheHinduBottomNav();
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => SectionsViewModel()),
+    ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
+    // ChangeNotifierProvider(create: (_) => SportStarsViewModel()),
+    // ChangeNotifierProvider(create: (_) => GenericViewModel()),
+    ],
+      child: const TheHinduBottomNav(),
+    );
   }
 
   @override
   void initState() {
     super.initState();
+    if(Prefs.getAccessToken() == null ){
     getUserToken();
+  }
   }
 }
 getUserToken(){

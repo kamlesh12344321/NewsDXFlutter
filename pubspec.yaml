@@ -95,6 +95,7 @@ flutter:
     - assets/more_selected.svg
     - assets/hamburger.svg
     - assets/app_log.svg
+    - assets/no_book_mark.svg
   fonts:
     - family: Montserrat
       fonts:

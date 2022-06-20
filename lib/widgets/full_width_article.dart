@@ -28,7 +28,7 @@ class _FullWidthImageItemState extends State<FullWidthImageItem> {
           color: Colors.white,
           image: DecorationImage(
               fit: BoxFit.cover,
-              image: NetworkImage(widget.article?.imgUrl ?? MyConstant.PLACE_HOLDER)
+              image: NetworkImage(widget.article?.images?[0].imageId ?? MyConstant.PLACE_HOLDER)
           )
       ),
     );

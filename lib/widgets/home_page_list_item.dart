@@ -9,7 +9,7 @@ class HomePageListItem extends StatefulWidget {
   final String? articleTitle;
   final String? articleImageUrl;
 
-  const HomePageListItem(
+   HomePageListItem(
       {Key? key, required this.articleTitle, required this.articleImageUrl})
       : super(key: key);
 

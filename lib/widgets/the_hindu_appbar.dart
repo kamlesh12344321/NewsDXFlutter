@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:newsdx/screens/bookmark.dart';
 
 class TheHinduAppBar extends StatelessWidget with PreferredSizeWidget {
   const TheHinduAppBar({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class TheHinduAppBar extends StatelessWidget with PreferredSizeWidget {
           iconSize: 12,
           padding: const EdgeInsets.only(right: 16),
           onPressed: () {
-
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const BookMarks()));
           },
         )
       ],

@@ -10,7 +10,7 @@ class CustomTabView extends StatefulWidget {
   final int? initPosition;
 
 
-  CustomTabView({ required this.itemCount, this.tabBuilder, this.pageBuilder, this.stub,
+   CustomTabView({ required this.itemCount, this.tabBuilder, this.pageBuilder, this.stub,
     this.onPositionChange, this.onScroll, this.initPosition});
 
   @override
@@ -98,13 +98,13 @@ class _CustomTabsState extends State<CustomTabView> with TickerProviderStateMixi
             isScrollable: true,
             controller: controller,
             labelColor: Colors.black,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
               fontFamily: "FiraSans"
             ),
             unselectedLabelColor: Colors.grey,
-            indicator: BoxDecoration(
+            indicator: const BoxDecoration(
               border: Border(
                 bottom: BorderSide(
                   color: Colors.transparent,
