@@ -66,8 +66,8 @@ class Data {
       );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    currentpage: json["CURRENTPAGE"] ?? null,
-    timestamp: json["TIMESTAMP"] ?? null,
+    currentpage: json["CURRENTPAGE"],
+    timestamp: json["TIMESTAMP"],
     articles: json["ARTICLES"] == null ? null : List<ArticleById>.from(json["ARTICLES"].map((x) => ArticleById.fromJson(x))),
   );
 

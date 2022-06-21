@@ -35,7 +35,7 @@ class _TopPicksViewState extends State<TopPicksView> {
                   Center(
                     child: InkWell(
                       onTap: (){
-                        _sendDataToSecondScreen(context, widget.data?[index].descPart1);
+                        // _sendDataToSecondScreen(context, widget.data?[index].descPart1);
                       },
                       child: Container(
                         width: 139.0,
@@ -82,12 +82,12 @@ class _TopPicksViewState extends State<TopPicksView> {
     );
   }
 
-  void _sendDataToSecondScreen(BuildContext context, String? des) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ArticleDetail(
-          ),
-        ));
-  }
+  // void _sendDataToSecondScreen(BuildContext context, String? des) {
+  //   Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => ArticleDetail(article: ,
+  //         ),
+  //       ));
+  // }
 }

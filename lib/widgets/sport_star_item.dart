@@ -42,7 +42,7 @@ class _sportStarItemState extends State<sportStarItem> {
                 return InkWell(
                   onTap: (){
                     final Sports? sports = widget.data?[index];
-                    _sendDataToSecondScreen(context, sports?.description);
+                    // _sendDataToSecondScreen(context, sports?.description);
                   },
                   child: SportPageListItem(
                     sports: widget.data?[index],
@@ -56,12 +56,12 @@ class _sportStarItemState extends State<sportStarItem> {
     );
   }
 
-  void _sendDataToSecondScreen(BuildContext context, String? des) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ArticleDetail(
-          ),
-        ));
-  }
+  // void _sendDataToSecondScreen(BuildContext context, String? des) {
+  //   Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => ArticleDetail(
+  //         ),
+  //       ));
+  // }
 }

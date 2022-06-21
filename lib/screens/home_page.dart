@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/model/SectionList.dart';
+import 'package:newsdx/model/all_section.dart';
 import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/preference/user_preference.dart';
+import 'package:newsdx/repo/api_status.dart';
 import 'package:newsdx/repo/section_service.dart';
 import 'package:newsdx/screens/article_detail.dart';
 import 'package:newsdx/viewmodel/Article_list_view_model.dart';
@@ -50,7 +54,7 @@ class _HomePageState extends State<HomePage> {
   late ScrollController _controller;
   late ScrollController _controllerBanner;
   late HomeSectionsViewModel homeSectionsViewModel;
-  late HomeSection homeSection;
+  HomeSection? homeSection;
   int _currentIndex = 0;
 
   @override
@@ -59,11 +63,14 @@ class _HomePageState extends State<HomePage> {
     _controllerBanner = ScrollController();
     homeSectionsViewModel = context.watch<HomeSectionsViewModel>();
     sectionsViewModel = context.watch<SectionsViewModel>();
-    homeSection = homeSectionsViewModel.homeSectionList!;
-    sectionsList = sectionsViewModel.sectionList;
+    homeSection = homeSectionsViewModel.homeSectionList;
+    sectionsList = sectionsViewModel?.sectionList;
     int? lengthValue = sectionsList?.data?.length ?? 0;
-    Section homeSectionCreate =
-    Section(id: "40", sectionName: "Home",);
+    int onScrolledPosition = 0;
+    Section homeSectionCreate = Section(
+      id: "40",
+      sectionName: "Home",
+    );
     if (sectionsList?.data?[0].sectionName != "Home") {
       sectionsList?.data?.insert(0, homeSectionCreate);
     }
@@ -74,42 +81,79 @@ class _HomePageState extends State<HomePage> {
         tabBuilder: (context, index) => Tab(
           text: sectionsList?.data?[index].sectionName,
         ),
-        pageBuilder: (context, index){
-          if(index == 0) {
-            List<Article>? bannerList = homeSection.data?.banner;
+        pageBuilder: (context, index) {
+          if (index == 0) {
+            List<Article>? bannerList = homeSection?.data?.banner;
             return ListView.builder(
-              addAutomaticKeepAlives: true,
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: homeSection.data?.articles?.length,
-              controller: _controller,
-              itemBuilder: (context, index) {
-                if(index == 0){
-                  return SizedBox(
-                    height: 200,
-                    width: double.infinity,
-                    child:  PageView.builder(
-                         controller: PageController(
-                           initialPage: _currentIndex,
-                           keepPage: true,
-                         ),
-                           onPageChanged: (int index) {
-                             _currentIndex = index;
-                             FocusScope.of(context).requestFocus(FocusNode());
-                           },
-                         itemCount: bannerList!.length,
-                         itemBuilder: (BuildContext context, int index) {
-                           Article? article = bannerList[index];
-                          return FullImageViewItem(article: article,);
-                         },
-                       ),
-                  );
-                }
-                return Container();
-              }
-            );
+                addAutomaticKeepAlives: true,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: homeSection?.data?.articles?.length ?? 0,
+                controller: _controller,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return SizedBox(
+                      height: 260,
+                      width: double.infinity,
+                      child: PageView.builder(
+                        controller: PageController(
+                          initialPage: _currentIndex,
+                          keepPage: true,
+                        ),
+                        onPageChanged: (int index) {
+                          _currentIndex = index;
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
+                        itemCount: bannerList!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Article? article = bannerList[index];
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ArticleDetail(
+                                            article: article,
+                                          )));
+                            },
+                            child: FullImageViewItem(
+                              article: article,
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }
+                  return Container();
+                });
           }
-          return const Text("no data");
+          return FutureBuilder<AllSection>(
+            future: getArticles(sectionsList?.data?[index].id),
+            builder: (context , snapShot) {
+
+              if(snapShot.hasData) {
+                DataAllSection? val = snapShot.data?.data;
+                var listValue = val?.articles ??= <ArticleAllSection>[];
+                var sectionName = listValue![0].sectionName.toString();
+                var sectionId = listValue![0].sectionId.toString();
+                print('SectionName :: $sectionName');
+                print('SectionId :: $sectionId');
+
+                return Center(child: Text(sectionName , style: TextStyle(color: Colors.blue),), );
+              } else if(snapShot.hasError) {
+                return Center(child: Text("Error", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),));
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              /*AllSection allSection = snapShot.data as AllSection;
+              if(!snapShot.hasData){
+                return const Center(child: CircularProgressIndicator());
+              } else{
+                return Center(child: Text(allSection.data?.articles?[0].descPart1 ?? " no data"),);
+              }*/
+            },
+          );
         },
       ),
     );
@@ -127,24 +171,16 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _sendDataToSecondScreen(BuildContext context, String? des) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ArticleDetail(),
-        ));
-  }
-
-  // static Future<Object> getArticles( String? sectionId) async {
-  //   String? getAccessToken = "Bearer ${MyConstant.propertyToken}";
-  //     var url = Uri.parse(MyConstant.ARTICLE_LIST);
-  //     var response = await http.post(url,
-  //       body: {"sectionId" : sectionId},
-  //       headers: {
-  //         "Authorization":  getAccessToken,
-  //       },
-  //     );
-  //
-  //       return homeArticleFromJson(response.body) as ArticleListById;
-  // }
+  static Future<AllSection> getArticles(String? sectionId) async {
+    String? getAccessToken = "Bearer ${MyConstant.propertyToken}";
+      var url = Uri.parse(MyConstant.ARTICLE_LIST);
+      final response = await http.post(
+        url,
+        body: {"sectionId": sectionId},
+        headers: {
+          "Authorization": getAccessToken,
+        },
+      );
+      return allSectionFromJson(response.body);
+    }
 }
