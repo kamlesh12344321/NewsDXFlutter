@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/screens/article_detail.dart';
 import 'package:newsdx/widgets/article_list.dart';
 
 class TopPicksView extends StatefulWidget {
-  List<Article>? data;
+  List<ArticleById>? data;
 
   TopPicksView({Key? key, required this.data}) : super(key: key);
 
@@ -22,8 +23,8 @@ class _TopPicksViewState extends State<TopPicksView> {
           scrollDirection: Axis.horizontal,
           itemCount: widget.data?.length,
           itemBuilder: (context, index) {
-            Article? article = widget.data![index];
-              String imageUrl = article.images![0] as String;
+            Article? article = widget.data![index] as Article?;
+              String imageUrl = article?.images![0] as String;
             return Container(
               margin: const EdgeInsets.only(top: 15, bottom: 10, left: 16, right: 10),
               width: 149,

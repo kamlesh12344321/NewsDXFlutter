@@ -29,6 +29,7 @@ class SectionsViewModel extends ChangeNotifier{
     var response = await SectionServices.getSections();
     if(response is Success){
       setSectionListModel(response.response as SectionsList);
+      setLoading(false);
       notifyListeners();
     }
   }

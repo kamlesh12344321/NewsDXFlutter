@@ -22,7 +22,7 @@ class TheHinduAppBar extends StatelessWidget with PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-         SvgPicture.asset("assets/app_log.svg.svg",)
+         SvgPicture.asset("assets/app_log.svg",)
         ],
       ),
       actions: [

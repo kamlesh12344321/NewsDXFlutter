@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) => appState,
         ),
         ChangeNotifierProvider(create: (_) => SectionsViewModel()),
-        // ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
+        ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
         // ChangeNotifierProvider(create: (_) => SportStarsViewModel()),
         // ChangeNotifierProvider(create: (_) => GenericViewModel()),
         ChangeNotifierProvider(create: (_) => HomeSectionsViewModel()),

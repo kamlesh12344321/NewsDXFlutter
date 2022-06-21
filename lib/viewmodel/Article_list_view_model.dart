@@ -6,9 +6,9 @@ import 'package:newsdx/widgets/article_list.dart';
 
 class ArticleListViewModel extends ChangeNotifier{
   bool _isLoading = false;
-  ArticleList? _homeArticle;
+  ArticleListById? _homeArticle;
   bool get loading => _isLoading;
-  ArticleList? get homeArticles => _homeArticle;
+  ArticleListById? get homeArticles => _homeArticle;
 
 
   ArticleListViewModel(){
@@ -19,7 +19,7 @@ class ArticleListViewModel extends ChangeNotifier{
     _isLoading = loading;
   }
 
-  setArticleList(ArticleList? homeArticleList){
+  setArticleList(ArticleListById? homeArticleList){
     _homeArticle = homeArticleList;
   }
 
@@ -27,7 +27,7 @@ class ArticleListViewModel extends ChangeNotifier{
     setLoading(true);
     var response = await SectionServices.getArticles();
     if(response is Success){
-      setArticleList(response.response as ArticleList?);
+      setArticleList(response.response as ArticleListById?);
       notifyListeners();
     }
   }

@@ -1,5 +1,3 @@
-
-
 // To parse this JSON data, do
 //
 //     final homsSection = homsSectionFromJson(jsonString);
@@ -12,19 +10,19 @@ String homeSectionToJson(HomeSection data) => json.encode(data.toJson());
 
 class HomeSection {
   HomeSection({
-    this.status,
-    this.statusMsg,
-    this.data,
+    required this.status,
+    required this.statusMsg,
+    required this.data,
   });
 
-   bool? status;
-   String? statusMsg;
-   Data? data;
+  final bool status;
+  final String statusMsg;
+  final Data data;
 
   HomeSection copyWith({
-    bool? status,
-    String? statusMsg,
-    Data? data,
+    required bool status,
+    required String statusMsg,
+    required Data data,
   }) =>
       HomeSection(
         status: status ?? this.status,
@@ -41,31 +39,31 @@ class HomeSection {
   Map<String, dynamic> toJson() => {
     "STATUS": status,
     "STATUS_MSG": statusMsg,
-    "DATA": data?.toJson(),
+    "DATA": data.toJson(),
   };
 }
 
 class Data {
   Data({
-    this.banner,
-    this.widgets,
-    this.articles,
-    this.liveWidget,
-    this.htmlWidget,
+    required this.banner,
+    required this.widgets,
+    required this.articles,
+    required this.liveWidget,
+    required this.htmlWidget,
   });
 
-   List<Article>? banner;
-   List<SectionWidget>? widgets;
-   List<Article>? articles;
-   LiveWidget? liveWidget;
-   HtmlWidget? htmlWidget;
+  final List<Article> banner;
+  final List<WidgetHome> widgets;
+  final List<Article> articles;
+  final LiveWidget liveWidget;
+  final HtmlWidget htmlWidget;
 
   Data copyWith({
-    List<Article>? banner,
-    List<SectionWidget>? widgets,
-    List<Article>? articles,
-    LiveWidget? liveWidget,
-    HtmlWidget? htmlWidget,
+    required List<Article> banner,
+    required List<WidgetHome> widgets,
+    required List<Article> articles,
+    required LiveWidget liveWidget,
+    required HtmlWidget htmlWidget,
   }) =>
       Data(
         banner: banner ?? this.banner,
@@ -77,102 +75,95 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     banner: List<Article>.from(json["BANNER"].map((x) => Article.fromJson(x))),
-    widgets: List<SectionWidget>.from(json["WIDGETS"].map((x) => SectionWidget.fromJson(x))),
+    widgets: List<WidgetHome>.from(json["WIDGETS"].map((x) => WidgetHome.fromJson(x))),
     articles: List<Article>.from(json["ARTICLES"].map((x) => Article.fromJson(x))),
     liveWidget: LiveWidget.fromJson(json["LIVE_WIDGET"]),
     htmlWidget: HtmlWidget.fromJson(json["HTML_WIDGET"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "BANNER": List<dynamic>.from(banner!.map((x) => x.toJson())),
-    "WIDGETS": List<dynamic>.from(widgets!.map((x) => x.toJson())),
-    "ARTICLES": List<dynamic>.from(articles!.map((x) => x.toJson())),
-    "LIVE_WIDGET": liveWidget?.toJson(),
-    "HTML_WIDGET": htmlWidget?.toJson(),
+    "BANNER": List<dynamic>.from(banner.map((x) => x.toJson())),
+    "WIDGETS": List<dynamic>.from(widgets.map((x) => x.toJson())),
+    "ARTICLES": List<dynamic>.from(articles.map((x) => x.toJson())),
+    "LIVE_WIDGET": liveWidget.toJson(),
+    "HTML_WIDGET": htmlWidget.toJson(),
   };
 }
 
 class Article {
   Article({
-    this.sectionName,
-    this.sectionId,
-    this.articleId,
-    this.propId,
-    this.propKey,
-    this.title,
-    this.leadText,
-    this.link,
-    this.type,
-    this.category,
-    this.author,
-    this.audioUrl,
-    this.videoUrl,
-    this.location,
-    this.publishDate,
-    this.hasImages,
-    this.thumbnail,
-    this.images,
-    this.relatedArticles,
-    this.shortDescription,
-    this.descPart1,
-    this.descPart2,
-    this.publishDateGmtMillis,
+      this.sectionName,
+    required this.sectionId,
+    required this.articleId,
+    required this.propKey,
+    required this.title,
+    required this.leadText,
+    required this.link,
+    required this.type,
+    required this.category,
+    required this.author,
+    required this.audioUrl,
+    required this.videoUrl,
+    required this.location,
+    required this.publishDate,
+    required this.images,
+    required  this.relatedArticles,
+    required this.shortDescription,
+    required this.descPart1,
+    required this.publishDateGmtMillis,
+    required this.authorPhoto,
+    required this.guid,
   });
 
-   String? sectionName;
-   String? sectionId;
-   String? articleId;
-   String? propId;
+   SectionName? sectionName;
+  final String sectionId;
+  final String articleId;
    PropKey? propKey;
-   String? title;
-   String? leadText;
-   String? link;
+  final String title;
+  final String leadText;
+  final String link;
    Type? type;
-   String? category;
-   String? author;
-   String? audioUrl;
-   VideoUrl? videoUrl;
-   String? location;
-   DateTime? publishDate;
-   bool? hasImages;
-   String? thumbnail;
-   List<Image>? images;
-   List<dynamic>? relatedArticles;
-   String? shortDescription;
-   String? descPart1;
-   String? descPart2;
-   int? publishDateGmtMillis;
+  final String category;
+  final String author;
+  final String audioUrl;
+  final String videoUrl;
+  final String location;
+  final DateTime publishDate;
+  final List<ImageHome> images;
+  final List<dynamic> relatedArticles;
+  final String shortDescription;
+  final String descPart1;
+  final int publishDateGmtMillis;
+  final String authorPhoto;
+  final String guid;
 
   Article copyWith({
-    String? sectionName,
-    String? sectionId,
-    String? articleId,
-    String? propId,
-    PropKey? propKey,
-    String? title,
-    String? leadText,
-    String? link,
-    Type? type,
-    String? category,
-    String? author,
-    String? audioUrl,
-    VideoUrl? videoUrl,
-    String? location,
-    DateTime? publishDate,
-    bool? hasImages,
-    String? thumbnail,
-    List<Image>? images,
-    List<dynamic>? relatedArticles,
-    String? shortDescription,
-    String? descPart1,
-    String? descPart2,
-    int? publishDateGmtMillis,
+    required SectionName sectionName,
+    required  String sectionId,
+    required String articleId,
+     PropKey? propKey,
+    required String title,
+    required String leadText,
+    required String link,
+     Type? type,
+    required String category,
+    required  String author,
+    required String audioUrl,
+    required String videoUrl,
+    required String location,
+    required DateTime publishDate,
+    required List<ImageHome> images,
+    required  List<dynamic> relatedArticles,
+    required String shortDescription,
+    required String descPart1,
+    required int publishDateGmtMillis,
+    required String authorPhoto,
+    required String guid,
   }) =>
       Article(
         sectionName: sectionName ?? this.sectionName,
         sectionId: sectionId ?? this.sectionId,
         articleId: articleId ?? this.articleId,
-        propId: propId ?? this.propId,
         propKey: propKey ?? this.propKey,
         title: title ?? this.title,
         leadText: leadText ?? this.leadText,
@@ -184,88 +175,83 @@ class Article {
         videoUrl: videoUrl ?? this.videoUrl,
         location: location ?? this.location,
         publishDate: publishDate ?? this.publishDate,
-        hasImages: hasImages ?? this.hasImages,
-        thumbnail: thumbnail ?? this.thumbnail,
         images: images ?? this.images,
         relatedArticles: relatedArticles ?? this.relatedArticles,
         shortDescription: shortDescription ?? this.shortDescription,
         descPart1: descPart1 ?? this.descPart1,
-        descPart2: descPart2 ?? this.descPart2,
         publishDateGmtMillis: publishDateGmtMillis ?? this.publishDateGmtMillis,
+        authorPhoto: authorPhoto ?? this.authorPhoto,
+        guid: guid ?? this.guid,
       );
 
   factory Article.fromJson(Map<String, dynamic> json) => Article(
-    sectionName: json["SECTION_NAME"],
+    sectionName: sectionNameValues!.map[json["SECTION_NAME"]],
     sectionId: json["SECTION_ID"],
     articleId: json["ARTICLE_ID"],
-    propId: json["PROP_ID"],
-    propKey: propKeyValues.map?[json["PROP_KEY"]],
+    propKey: propKeyValues.map[json["PROP_KEY"]],
     title: json["TITLE"],
     leadText: json["LEAD_TEXT"],
     link: json["LINK"],
-    type: typeValues.map?[json["TYPE"]],
+    type: typeValues.map[json["TYPE"]],
     category: json["CATEGORY"],
     author: json["AUTHOR"],
     audioUrl: json["AUDIO_URL"],
-    videoUrl: videoUrlValues.map?[json["VIDEO_URL"]],
+    videoUrl: json["VIDEO_URL"],
     location: json["LOCATION"],
     publishDate: DateTime.parse(json["PUBLISH_DATE"]),
-    hasImages: json["HAS_IMAGES"],
-    thumbnail: json["THUMBNAIL"],
-    images: List<Image>.from(json["IMAGES"].map((x) => Image.fromJson(x))),
+    images: List<ImageHome>.from(json["IMAGES"].map((x) => ImageHome.fromJson(x))),
     relatedArticles: List<dynamic>.from(json["RELATED_ARTICLES"].map((x) => x)),
     shortDescription: json["SHORT_DESCRIPTION"],
     descPart1: json["DESC_PART_1"],
-    descPart2: json["DESC_PART_2"],
     publishDateGmtMillis: json["PUBLISH_DATE_GMT_MILLIS"],
+    authorPhoto: json["AUTHOR_PHOTO"],
+    guid: json["guid"],
   );
 
   Map<String, dynamic> toJson() => {
-    "SECTION_NAME": sectionName,
+    "SECTION_NAME": sectionNameValues.reverse?[sectionName],
     "SECTION_ID": sectionId,
     "ARTICLE_ID": articleId,
-    "PROP_ID": propId,
-    "PROP_KEY": propKeyValues.reverse![propKey],
+    "PROP_KEY": propKeyValues.reverse?[propKey],
     "TITLE": title,
     "LEAD_TEXT": leadText,
     "LINK": link,
-    "TYPE": typeValues.reverse![type],
+    "TYPE": typeValues.reverse?[type],
     "CATEGORY": category,
     "AUTHOR": author,
     "AUDIO_URL": audioUrl,
-    "VIDEO_URL": videoUrlValues.reverse![videoUrl],
+    "VIDEO_URL": videoUrl,
     "LOCATION": location,
-    "PUBLISH_DATE": publishDate?.toIso8601String(),
-    "HAS_IMAGES": hasImages,
-    "THUMBNAIL": thumbnail,
-    "IMAGES": List<dynamic>.from(images!.map((x) => x.toJson())),
-    "RELATED_ARTICLES": List<dynamic>.from(relatedArticles!.map((x) => x)),
+    "PUBLISH_DATE": publishDate.toIso8601String(),
+    "IMAGES": List<dynamic>.from(images.map((x) => x.toJson())),
+    "RELATED_ARTICLES": List<dynamic>.from(relatedArticles.map((x) => x)),
     "SHORT_DESCRIPTION": shortDescription,
     "DESC_PART_1": descPart1,
-    "DESC_PART_2": descPart2,
     "PUBLISH_DATE_GMT_MILLIS": publishDateGmtMillis,
+    "AUTHOR_PHOTO": authorPhoto,
+    "guid": guid,
   };
 }
 
-class Image {
-  Image({
-    this.imageId,
-    this.caption,
+class ImageHome {
+  ImageHome({
+    required this.imageId,
+    required this.caption,
   });
 
-   String? imageId;
-   String? caption;
+  final String imageId;
+  final String caption;
 
-  Image copyWith({
-    String? imageId,
-    String? caption,
+  ImageHome copyWith({
+     required String imageId,
+      required String caption,
   }) =>
-      Image(
+      ImageHome(
         imageId: imageId ?? this.imageId,
         caption: caption ?? this.caption,
       );
 
-  factory Image.fromJson(Map<String, dynamic> json) => Image(
+  factory ImageHome.fromJson(Map<String, dynamic> json) => ImageHome(
     imageId: json["IMAGE_ID"],
     caption: json["CAPTION"],
   );
@@ -276,50 +262,46 @@ class Image {
   };
 }
 
-enum PropKey { THE_7_DAC8_A2317_C54_BB70_B28_EBA723685859 }
+enum PropKey { THE_0_A415906_DF2_FD643733_B865167_ADB19_D }
 
 final propKeyValues = EnumValues({
-  "7dac8a2317c54bb70b28eba723685859": PropKey.THE_7_DAC8_A2317_C54_BB70_B28_EBA723685859
+  "0a415906df2fd643733b865167adb19d": PropKey.THE_0_A415906_DF2_FD643733_B865167_ADB19_D
 });
 
-enum Type { ARTICLE, VIDEO }
+enum SectionName { EDUCATION, SPORTS }
+
+final sectionNameValues = EnumValues({
+  "Education": SectionName.EDUCATION,
+  "Sports": SectionName.SPORTS
+});
+
+enum Type { ARTICLE }
 
 final typeValues = EnumValues({
-  "ARTICLE": Type.ARTICLE,
-  "VIDEO": Type.VIDEO
-});
-
-enum VideoUrl { EMPTY, BIN_U9_LT_V_QM_Q, VC_AT7_A_S15_CW, AZC0_GB_ZMF_MO, CVC_XOA12_S_YW }
-
-final videoUrlValues = EnumValues({
-  "AZC0GBZmfMo": VideoUrl.AZC0_GB_ZMF_MO,
-  "BinU9LtVQmQ": VideoUrl.BIN_U9_LT_V_QM_Q,
-  "CVCXoa12sYw": VideoUrl.CVC_XOA12_S_YW,
-  "": VideoUrl.EMPTY,
-  "vcAT7aS15Cw": VideoUrl.VC_AT7_A_S15_CW
+  "ARTICLE": Type.ARTICLE
 });
 
 class HtmlWidget {
   HtmlWidget({
-    this.isEnabled,
-    this.url,
-    this.position,
-    this.action,
-    this.source,
+    required this.isEnabled,
+    required this.url,
+    required this.position,
+    required this.action,
+    required this.source,
   });
 
-   bool? isEnabled;
-   String? url;
-   String? position;
-   String? action;
-   String? source;
+  final bool isEnabled;
+  final String url;
+  final String position;
+  final String action;
+  final String source;
 
   HtmlWidget copyWith({
-    bool? isEnabled,
-    String? url,
-    String? position,
-    String? action,
-    String? source,
+    required bool isEnabled,
+    required String url,
+    required String position,
+    required String action,
+    required String source,
   }) =>
       HtmlWidget(
         isEnabled: isEnabled ?? this.isEnabled,
@@ -348,25 +330,25 @@ class HtmlWidget {
 
 class LiveWidget {
   LiveWidget({
-    this.isEnabled,
-    this.position,
-    this.refreshInterval,
-    this.articlesLimit,
-    this.articles,
+    required this.isEnabled,
+    required this.position,
+    required this.refreshInterval,
+    required this.articlesLimit,
+    required this.articles,
   });
 
-   bool? isEnabled;
-   String? position;
-   int? refreshInterval;
-   int? articlesLimit;
-   List<Article>? articles;
+  final bool isEnabled;
+  final String position;
+  final String refreshInterval;
+  final int articlesLimit;
+  final List<dynamic> articles;
 
   LiveWidget copyWith({
-    bool? isEnabled,
-    String? position,
-    int? refreshInterval,
-    int? articlesLimit,
-    List<Article>? articles,
+    required bool isEnabled,
+    required String position,
+    required String refreshInterval,
+    required int articlesLimit,
+    required List<dynamic> articles,
   }) =>
       LiveWidget(
         isEnabled: isEnabled ?? this.isEnabled,
@@ -381,7 +363,7 @@ class LiveWidget {
     position: json["POSITION"],
     refreshInterval: json["REFRESH_INTERVAL"],
     articlesLimit: json["ARTICLES_LIMIT"],
-    articles: List<Article>.from(json["ARTICLES"].map((x) => Article.fromJson(x))),
+    articles: List<dynamic>.from(json["ARTICLES"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -389,33 +371,33 @@ class LiveWidget {
     "POSITION": position,
     "REFRESH_INTERVAL": refreshInterval,
     "ARTICLES_LIMIT": articlesLimit,
-    "ARTICLES": List<dynamic>.from(articles!.map((x) => x.toJson())),
+    "ARTICLES": List<dynamic>.from(articles.map((x) => x)),
   };
 }
 
-class SectionWidget {
-  SectionWidget({
-    this.sectionId,
-    this.sectionName,
-    this.displayOrder,
-    this.type,
-    this.articles,
+class WidgetHome {
+  WidgetHome({
+    required this.sectionId,
+    required this.sectionName,
+    required this.displayOrder,
+    required this.type,
+    required this.articles,
   });
 
-   String? sectionId;
-  final String? sectionName;
-  final int? displayOrder;
-  final String? type;
-  final List<Article>? articles;
+  final String sectionId;
+   SectionName? sectionName;
+  final int displayOrder;
+  final String type;
+  final List<Article> articles;
 
-  SectionWidget copyWith({
-    String? sectionId,
-    String? sectionName,
-    int? displayOrder,
-    String? type,
-    List<Article>? articles,
+  WidgetHome copyWith({
+    required String sectionId,
+    required SectionName sectionName,
+    required int displayOrder,
+    required String type,
+    required List<Article> articles,
   }) =>
-      SectionWidget(
+      WidgetHome(
         sectionId: sectionId ?? this.sectionId,
         sectionName: sectionName ?? this.sectionName,
         displayOrder: displayOrder ?? this.displayOrder,
@@ -423,9 +405,9 @@ class SectionWidget {
         articles: articles ?? this.articles,
       );
 
-  factory SectionWidget.fromJson(Map<String, dynamic> json) => SectionWidget(
+  factory WidgetHome.fromJson(Map<String, dynamic> json) => WidgetHome(
     sectionId: json["SECTION_ID"],
-    sectionName: json["SECTION_NAME"],
+    sectionName: sectionNameValues.map[json["SECTION_NAME"]],
     displayOrder: json["DISPLAY_ORDER"],
     type: json["TYPE"],
     articles: List<Article>.from(json["ARTICLES"].map((x) => Article.fromJson(x))),
@@ -433,23 +415,21 @@ class SectionWidget {
 
   Map<String, dynamic> toJson() => {
     "SECTION_ID": sectionId,
-    "SECTION_NAME": sectionName,
+    "SECTION_NAME": sectionNameValues.reverse?[sectionName],
     "DISPLAY_ORDER": displayOrder,
     "TYPE": type,
-    "ARTICLES": List<dynamic>.from(articles!.map((x) => x.toJson())),
+    "ARTICLES": List<dynamic>.from(articles.map((x) => x.toJson())),
   };
 }
 
 class EnumValues<T> {
-  Map<String, T>? map;
+  Map<String, T> map;
   Map<T, String>? reverseMap;
 
   EnumValues(this.map);
 
   Map<T, String>? get reverse {
-    if (reverseMap == null) {
-      reverseMap = map?.map((k, v) => new MapEntry(v, k));
-    }
+    reverseMap ??= map.map((k, v) => MapEntry(v, k));
     return reverseMap;
   }
 }

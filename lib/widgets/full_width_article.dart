@@ -4,7 +4,7 @@ import 'package:newsdx/widgets/article_list.dart';
 import 'package:newsdx/widgets/big_text.dart';
 
 class FullWidthImageItem extends StatefulWidget {
-  final Article? article;
+  final ArticleById? article;
 
 
   FullWidthImageItem(this.article);
