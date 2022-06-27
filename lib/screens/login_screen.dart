@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -7,6 +9,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/model/otp_status.dart';
+import 'package:newsdx/model/user_data.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
@@ -15,13 +19,12 @@ import 'package:newsdx/screens/otp_screen.dart';
 import 'package:newsdx/widgets/app_bar.dart';
 import 'package:newsdx/widgets/dialog.dart';
 import 'package:provider/provider.dart';
-// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:sign_button/constants.dart';
+import 'package:sign_button/create_button.dart';
 import 'package:http/http.dart' as http;
-import 'package:the_apple_sign_in/the_apple_sign_in.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:the_apple_sign_in/scope.dart';
 
 import '../apple/auth_service.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -36,6 +39,8 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   TextEditingController myController = TextEditingController();
   String? email = "";
+  late Future<OtpSendStatus> otpStatus;
+  late bool isLoading = false;
 
   @override
   void initState() {
@@ -164,6 +169,11 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                         border: OutlineInputBorder(),
                         label: Text(MyConstant.emailHint),
                       ),
+                      onChanged: (text) {
+                        setState() {
+                          email = text;
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -184,13 +194,30 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                         ),
                         child: const Text(MyConstant.signInButtonTitle),
                         onPressed: () {
-                          if (email!.isNotEmpty) {
-                            bool? isLogged = Prefs.getIsLoggedIn();
+                          if (email!.isNotEmpty || email != null) {
+                           showProgressIndicator(true);
+                            Future<OtpSendStatus> status =
+                                getOtpSendStatus(email!);
+                            status
+                                .then(
+                                  (value) => {
+                                    if (value.status == true)
+                                      {
+                                        Prefs.saveOtpId(value.data.otpId),
+                                        showProgressIndicator(false),
+                                        appState.currentAction = PageAction(
+                                            state: PageState.addWidget,
+                                            widget: OTPScreen(emailId: email!,),
+                                            page: OtpPageConfig),
+                                      }
+                                  },
+                                )
+                                .onError(
+                                  (error, stackTrace) => {
+                                  showProgressIndicator(false),
+                                  },
+                                );
                           }
-                          appState.currentAction = PageAction(
-                              state: PageState.addWidget,
-                              widget: const OTPScreen(),
-                              page: OtpPageConfig);
                         },
                       ),
                     ),
@@ -231,6 +258,10 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                                 if (value.user != null)
                                   {
                                     appState.login(true),
+                                    appState.currentAction = PageAction(
+                                        state: PageState.addWidget,
+                                        widget: const HomeScreen(),
+                                        page: HomePageConfig)
                                   }
                               })
                                   .onError((error, stackTrace) =>
@@ -250,6 +281,10 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                                 if (value?.user != null)
                                   {
                                     appState.login(true),
+                                    appState.currentAction = PageAction(
+                                        state: PageState.addWidget,
+                                        widget: const HomeScreen(),
+                                        page: HomePageConfig)
                                   }
                               })
                                   .onError((error, stackTrace) =>
@@ -257,38 +292,10 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                                 // show snakeBar
                               });
                             },
-                            child: Image.asset("assets/facebook.svg"),), // Facebook icon
+                            child: SvgPicture.asset("assets/facebook.svg")),
                         TextButton(
-                          onPressed: () async {
-                            _signInWithApple(context);
-                            // final appleIdCredential =
-                            // await SignInWithApple.getAppleIDCredential(
-                            //   scopes: [
-                            //     AppleIDAuthorizationScopes.email,
-                            //     AppleIDAuthorizationScopes.fullName,
-                            //   ],
-                            //
-                            //   webAuthenticationOptions:WebAuthenticationOptions(
-                            //     clientId:"NewsDXV3",
-                            //
-                            //     redirectUri:Uri.parse("https://ndx-v3.firebaseapp.com/__/auth/handler"),
-                            //
-                            //   ),
-                            // );
-                            //
-                            //
-                            // final credential =
-                            // OAuthProvider('apple.com').credential(
-                            //   idToken: appleIdCredential.identityToken,
-                            //   accessToken: appleIdCredential.authorizationCode,
-                            // );
-                            //
-                            // //("kanhai apple -> $credential");
-                            //
-                            // await FirebaseAuth.instance.signInWithCredential(credential);
-                          },
-                          child: Image.asset("assets/apple.svg"),
-                        ), // Apple icon
+                            onPressed: () {},
+                            child: SvgPicture.asset("assets/apple.svg")),
                       ],
                     ),
                   ),
@@ -380,5 +387,27 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
       // TODO: Show alert here
       print(e);
     }
+  }
+  Future<OtpSendStatus> getOtpSendStatus(String email) async {
+    final response = await http.post(
+        Uri.parse("https://api.newsdx.io/V1/end_users/send_email_otp"),
+        body: {"email" : email, "propertyKey" : MyConstant.propertyKey},
+    );
+    if (response.statusCode == 200) {
+      return OtpSendStatus.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("Failed to send OTP");
+    }
+  }
+
+  showProgressIndicator(bool visibility){
+    Visibility(visible :visibility, child:  const SizedBox(
+      height: 100,
+      width: 100,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    ),
+    );
   }
 }

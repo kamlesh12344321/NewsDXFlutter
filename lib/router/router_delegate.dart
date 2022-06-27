@@ -182,7 +182,7 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
           break;
 
         case Pages.Otp:
-          _addPageData(OTPScreen(), OtpPageConfig);
+          _addPageData(const OTPScreen(emailId: '',), OtpPageConfig);
           break;
 
         case Pages.Home:

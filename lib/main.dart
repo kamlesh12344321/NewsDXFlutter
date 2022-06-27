@@ -13,11 +13,16 @@ import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/route_parser.dart';
 import 'package:newsdx/router/router_delegate.dart';
 import 'package:newsdx/router/ui_pages.dart';
+import 'package:newsdx/viewmodel/Article_list_view_model.dart';
+import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
+import 'package:newsdx/viewmodel/generic_list_view_model.dart';
+import 'package:newsdx/viewmodel/sections_list_view_model.dart';
+import 'package:newsdx/viewmodel/sport_stars_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'dart:developer' as developer;
 
-import '../apple/apple_sign_in_available.dart';
+import 'apple/apple_sign_in_available.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +30,7 @@ void main() async {
   await Prefs.init();
   final appleSignInAvailable = await AppleSignInAvailable.check();
   runApp(Provider<AppleSignInAvailable>.value(value: appleSignInAvailable,
-  child: const MyApp(),));
+  child: MyApp(),));
 }
 
 class MyApp extends StatefulWidget {
@@ -70,6 +75,11 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (context) => appState,
         ),
+        ChangeNotifierProvider(create: (_) => SectionsViewModel()),
+        // ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
+        // ChangeNotifierProvider(create: (_) => SportStarsViewModel()),
+        // ChangeNotifierProvider(create: (_) => GenericViewModel()),
+        ChangeNotifierProvider(create: (_) => HomeSectionsViewModel()),
         Provider(create: (_) => AuthService())
       ],
       child: MaterialApp.router(

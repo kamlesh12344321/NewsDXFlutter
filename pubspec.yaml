@@ -49,6 +49,7 @@ dependencies:
   flutter_svg: ^1.1.0
   http: 0.13.4
   flutter_facebook_auth: ^3.5.3
+  sign_in_with_apple: ^4.0.0
 #  sign_in_with_apple: ^4.0.0
 #  the_apple_sign_in: any
 #  sign_in_with_apple: ^4.0.0
@@ -57,6 +58,8 @@ dependencies:
   html: ^0.15.0
   js: ^0.6.2
   universal_html: ^2.0.8
+  device_info_plus: ^4.0.0
+  in_app_purchase: ^3.0.0
 
 
 dev_dependencies:
@@ -84,6 +87,30 @@ flutter:
     - assets/facebook.svg
     - assets/menu.svg
     - assets/app_icon_title.svg
+    - assets/crown_v90.png
+    - assets/overflow_verticle_dot.png
+    - assets/search.png
+    - assets/logo_actionbar.png
+    - assets/back.png
+    - assets/landscape.jpg
+    - assets/share.png
+    - assets/fav.png
+    - assets/home_selected.png
+    - assets/sportstar.png
+    - assets/place_holder.png
+    - assets/home_selected.svg
+    - assets/home_un_selected.svg
+    - assets/trending.svg
+    - assets/trending_selected.svg
+    - assets/newspaper.svg
+    - assets/newspaper_selected.svg
+    - assets/newsletter.svg
+    - assets/newsletter_selected.svg
+    - assets/more.svg
+    - assets/more_selected.svg
+    - assets/hamburger.svg
+    - assets/app_log.svg
+    - assets/no_book_mark.svg
     - assets/tick.svg
   fonts:
     - family: Montserrat

@@ -5,12 +5,12 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-OtpStatus otpStatusFromJson(String str) => OtpStatus.fromJson(json.decode(str));
+OtpSendStatus otpStatusFromJson(String str) => OtpSendStatus.fromJson(json.decode(str));
 
-String otpStatusToJson(OtpStatus data) => json.encode(data.toJson());
+String otpStatusToJson(OtpSendStatus data) => json.encode(data.toJson());
 
-class OtpStatus {
-  OtpStatus({
+class OtpSendStatus {
+  OtpSendStatus({
     required this.status,
     required this.statusMsg,
     required this.data,
@@ -20,18 +20,18 @@ class OtpStatus {
   final String statusMsg;
   final Data data;
 
-  OtpStatus copyWith({
+  OtpSendStatus copyWith({
     required bool status,
     required String statusMsg,
     required Data data,
   }) =>
-      OtpStatus(
-        status: status ?? this.status,
-        statusMsg: statusMsg ?? this.statusMsg,
-        data: data ?? this.data,
+      OtpSendStatus(
+        status: status,
+        statusMsg: statusMsg,
+        data: data,
       );
 
-  factory OtpStatus.fromJson(Map<String, dynamic> json) => OtpStatus(
+  factory OtpSendStatus.fromJson(Map<String, dynamic> json) => OtpSendStatus(
     status: json["status"],
     statusMsg: json["STATUS_MSG"],
     data: Data.fromJson(json["data"]),
@@ -55,7 +55,7 @@ class Data {
     required int otpId,
   }) =>
       Data(
-        otpId: otpId ?? this.otpId,
+        otpId: otpId,
       );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
