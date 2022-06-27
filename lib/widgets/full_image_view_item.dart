@@ -18,7 +18,7 @@ class _FullImageViewItemState extends State<FullImageViewItem> {
   Widget build(BuildContext context) {
     String imageUrl = "";
     if(widget.article!.images.isNotEmpty){
-       imageUrl = "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.article!.images[0].imageId}.jpg";
+       imageUrl = "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.article!.images[0].imageId}_600.jpg";
     }
     print(imageUrl);
     return Container(

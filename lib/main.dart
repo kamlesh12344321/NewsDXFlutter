@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
@@ -22,6 +23,7 @@ import 'package:uni_links/uni_links.dart';
 import 'dart:developer' as developer;
 
 void main() async {
+  Loggy.initLoggy();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await Prefs.init();

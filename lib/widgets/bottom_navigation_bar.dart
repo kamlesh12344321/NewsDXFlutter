@@ -30,7 +30,6 @@ class _TheHinduBottomNavState extends State<TheHinduBottomNav> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const NavBar(),
-      appBar: const TheHinduAppBar(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _pageIndex,
         backgroundColor: Colors.white,

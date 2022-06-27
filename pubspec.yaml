@@ -50,6 +50,7 @@ dependencies:
   http: any
   flutter_facebook_auth: ^3.5.3
   sign_in_with_apple: ^4.0.0
+  loggy: ^2.0.1+1
 
 
 dev_dependencies:
@@ -65,24 +66,11 @@ flutter:
   assets:
     - assets/app_logo_new.svg
     - assets/powered_news.svg
-    - assets/back_button.png
     - assets/apple.svg
-    - assets/line.png
     - assets/google_logo_new.svg
     - assets/facebook.svg
     - assets/menu.svg
     - assets/app_icon_title.svg
-    - assets/crown_v90.png
-    - assets/overflow_verticle_dot.png
-    - assets/search.png
-    - assets/logo_actionbar.png
-    - assets/back.png
-    - assets/landscape.jpg
-    - assets/share.png
-    - assets/fav.png
-    - assets/home_selected.png
-    - assets/sportstar.png
-    - assets/place_holder.png
     - assets/home_selected.svg
     - assets/home_un_selected.svg
     - assets/trending.svg
@@ -96,6 +84,7 @@ flutter:
     - assets/hamburger.svg
     - assets/app_log.svg
     - assets/no_book_mark.svg
+    - assets/share.svg
   fonts:
     - family: Montserrat
       fonts:

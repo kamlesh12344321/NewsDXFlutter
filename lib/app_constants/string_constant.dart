@@ -20,7 +20,7 @@ class MyConstant{
   static const String fontFamily = "Montserrat";
   static const String otp_sent = "The secure 6 digit OTP is sent to your registered";
   static const String otp_mail_id = "email ID : ";
-  static const String PLACE_HOLDER = "http://hindumysqlstaging.ninestars.in/admin/assets/images/icons/th/Light/xxhdpi/ads.png";
+  static const String PLACE_HOLDER = "http://hindumysqlstaging.ninestars.in/admin/assets/images/icons/th/Light/hdpi/ads.png";
   static const String ARTICLE_LIST = "https://api.newsdx.io/V1/articles/getArticles";
   static const String SECTION_LIST = "https://api.newsdx.io/V1/sections/getSections";
   static const String send_id_token = "https://api.newsdx.io/V1/end_users/verify_idTokenString";
