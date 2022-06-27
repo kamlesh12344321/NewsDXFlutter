@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/apple/auth_service.dart';
 import 'package:newsdx/preference/user_preference.dart';
@@ -25,6 +26,7 @@ import 'dart:developer' as developer;
 import 'apple/apple_sign_in_available.dart';
 
 void main() async {
+  Loggy.initLoggy();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await Prefs.init();
@@ -76,7 +78,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) => appState,
         ),
         ChangeNotifierProvider(create: (_) => SectionsViewModel()),
-        // ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
+        ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
         // ChangeNotifierProvider(create: (_) => SportStarsViewModel()),
         // ChangeNotifierProvider(create: (_) => GenericViewModel()),
         ChangeNotifierProvider(create: (_) => HomeSectionsViewModel()),

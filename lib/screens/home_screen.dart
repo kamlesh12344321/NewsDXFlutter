@@ -32,15 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => SectionsViewModel()),
-    ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
-    // ChangeNotifierProvider(create: (_) => SportStarsViewModel()),
-    // ChangeNotifierProvider(create: (_) => GenericViewModel()),
-    ],
-      child: const TheHinduBottomNav(),
-    );
+    return const TheHinduBottomNav();
   }
 
   @override

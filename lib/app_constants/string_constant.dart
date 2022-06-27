@@ -20,12 +20,13 @@ class MyConstant{
   static const String fontFamily = "Montserrat";
   static const String otp_sent = "The secure 6 digit OTP is sent to your registered";
   static const String otp_mail_id = "email ID : ";
-  static const String PLACE_HOLDER = "http://hindumysqlstaging.ninestars.in/admin/assets/images/icons/th/Light/xxhdpi/ads.png";
+  static const String PLACE_HOLDER = "http://hindumysqlstaging.ninestars.in/admin/assets/images/icons/th/Light/hdpi/ads.png";
   static const String ARTICLE_LIST = "https://api.newsdx.io/V1/articles/getArticles";
   static const String SECTION_LIST = "https://api.newsdx.io/V1/sections/getSections";
   static const String send_id_token = "https://api.newsdx.io/V1/end_users/verify_idTokenString";
-  static const String home_section = "https://admin.newsdx.in/NewsDXAPI/V2//home/getHomeSection";
+  static const String home_section = "https://api.newsdx.io/V1/home/getHomeSection";
   static const String PLACE_HOLDER_SMALL = "http://hindumysqlstaging.ninestars.in/admin/assets/images/icons/th/Light/xxhdpi/widget-b.png";
+  static const String propertyToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0aW1lIjoxNjU1NzA5MTA4LCJwcm9wZXJ0eUtleSI6IjBhNDE1OTA2ZGYyZmQ2NDM3MzNiODY1MTY3YWRiMTlkIn0.DveZXEDBB2OJIUU31KlHexj-1L1nYEx1Uxisv45Q0oU";
   static const String bookMarkScreenDes = "Kindly bookmark to view the "
       "\n \n             "
       "       data here";
