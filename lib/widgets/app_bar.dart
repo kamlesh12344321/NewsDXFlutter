@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 class AppBarWidget extends StatefulWidget with PreferredSizeWidget {
   final String _title;
@@ -21,7 +22,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
       backgroundColor: Colors.white,
       elevation: 0.0,
       title: Text(widget._title),
-      leading:IconButton(onPressed: (){}, icon: Image.asset("assets/back_button.png")),
+      leading:IconButton(onPressed: (){}, icon: SvgPicture.asset("assets/back.svg")),
     );
   }
 }

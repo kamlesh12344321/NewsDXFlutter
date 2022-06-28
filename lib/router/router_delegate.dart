@@ -5,6 +5,7 @@ import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/router_delegate.dart';
 import 'package:newsdx/router/ui_pages.dart';
+import 'package:newsdx/screens/article_detail.dart';
 import 'package:newsdx/screens/home_screen.dart';
 import 'package:newsdx/screens/login_screen.dart';
 import 'package:newsdx/screens/otp_screen.dart';
@@ -162,6 +163,10 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
       case Pages.UserProfileInfo:
         UserProfileInfoPageConfig.currentPageAction = action;
         break;
+      case Pages.ArticleDe:
+        ArticleDetailPageConfig.currentPageAction = action;
+        break;
+
       default:
         break;
     }
@@ -187,6 +192,9 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
 
         case Pages.Home:
           _addPageData(HomeScreen(), HomePageConfig);
+          break;
+        case Pages.ArticleDe:
+          _addPageData(ArticleDetail(), ArticleDetailPageConfig);
           break;
 
         case Pages.SubscriptionPlan:

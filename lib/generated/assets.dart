@@ -5,12 +5,16 @@ class Assets {
   static const String assetsAppIconTitle = 'D:/NewsDX/assets/app_icon_title.svg';
   static const String assetsAppLog = 'D:/NewsDX/assets/app_log.svg';
   static const String assetsAppLogoNew = 'D:/NewsDX/assets/app_logo_new.svg';
+  static const String assetsAppbarLogo = 'D:/NewsDX/assets/appbar_logo.png';
   static const String assetsApple = 'D:/NewsDX/assets/apple.svg';
+  static const String assetsBack = 'D:/NewsDX/assets/back.svg';
+  static const String assetsBiBookmark = 'D:/NewsDX/assets/bi_bookmark.svg';
   static const String assetsFacebook = 'D:/NewsDX/assets/facebook.svg';
   static const String assetsGoogleLogoNew = 'D:/NewsDX/assets/google_logo_new.svg';
   static const String assetsHamburger = 'D:/NewsDX/assets/hamburger.svg';
   static const String assetsHomeSelected = 'D:/NewsDX/assets/home_selected.svg';
   static const String assetsHomeUnSelected = 'D:/NewsDX/assets/home_un_selected.svg';
+  static const String assetsLine = 'D:/NewsDX/assets/line.svg';
   static const String assetsMenu = 'D:/NewsDX/assets/menu.svg';
   static const String assetsMore = 'D:/NewsDX/assets/more.svg';
   static const String assetsMoreSelected = 'D:/NewsDX/assets/more_selected.svg';
@@ -20,6 +24,7 @@ class Assets {
   static const String assetsNewspaperSelected = 'D:/NewsDX/assets/newspaper_selected.svg';
   static const String assetsNoBookMark = 'D:/NewsDX/assets/no_book_mark.svg';
   static const String assetsPoweredNews = 'D:/NewsDX/assets/powered_news.svg';
+  static const String assetsProfilePlaceholder = 'D:/NewsDX/assets/profile_placeholder.svg';
   static const String assetsShare = 'D:/NewsDX/assets/share.svg';
   static const String assetsTrending = 'D:/NewsDX/assets/trending.svg';
   static const String assetsTrendingSelected = 'D:/NewsDX/assets/trending_selected.svg';
