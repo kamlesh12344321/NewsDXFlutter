@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:newsdx/utils/CustomColors.dart';
 
 class SmallIconArticle extends StatelessWidget{
@@ -18,9 +19,7 @@ class SmallIconArticle extends StatelessWidget{
       child: ClipRRect(
         borderRadius: BorderRadius.circular(0.0),
         child: Container(
-          child: Image(
-            image: AssetImage(imagePath!),
-          ),
+          child: SvgPicture.asset(imagePath!),
           decoration: const BoxDecoration(
             color: CustomColors.topPicksSection,
           ),

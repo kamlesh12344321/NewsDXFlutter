@@ -6,6 +6,7 @@ import 'package:newsdx/model/SectionPojo.dart';import 'package:newsdx/widgets/bi
 import 'package:newsdx/widgets/small_icon_article.dart';
 import 'package:newsdx/widgets/small_text.dart';
 import 'package:newsdx/model/SectionPojo.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 
 
 class HomePageListItem extends StatefulWidget {
@@ -22,8 +23,10 @@ class _HomePageListItemState extends State<HomePageListItem> {
   @override
   Widget build(BuildContext context) {
     String imageUrl = "";
-    //int? isImgUrlExist = widget.articleItem?.images?.length;
-    // if(isImgUrlExist != 0) {
+    String? _timestamp = widget.articleItem!.publishdate; // [DateTime] formatted as String.
+    var _convertedTimestamp = DateTime.parse(_timestamp!); // Converting into [DateTime] object
+    var result = GetTimeAgo.parse(_convertedTimestamp);
+
     if(widget.articleItem!.images!.isNotEmpty) {
        imageUrl = "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageid}_100.jpg";
     } else{
@@ -66,8 +69,7 @@ class _HomePageListItemState extends State<HomePageListItem> {
                   children: [
                     Row(
                       children: [
-                        SmallText("National  ", 12, Colors.black, 1.0),
-                        SmallText("Time  ", 12, Colors.black, 1.0),
+                        SmallText(result , 12, Colors.black, 1.0),
                       ],
                     ),
                     Row(
@@ -77,14 +79,14 @@ class _HomePageListItemState extends State<HomePageListItem> {
                           width: 18,
                           height: 17,
                         ),
-                        SmallIconArticle("assets/images/fav.png", 18.0, 17.0),
+                        SvgPicture.asset("assets/bi_bookmark.svg"),
                       ],
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

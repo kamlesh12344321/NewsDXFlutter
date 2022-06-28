@@ -51,6 +51,7 @@ dependencies:
   flutter_facebook_auth: ^3.5.3
   sign_in_with_apple: ^4.0.0
   loggy: ^2.0.1+1
+  get_time_ago: ^1.1.4
 
 
 dev_dependencies:
@@ -85,6 +86,11 @@ flutter:
     - assets/app_log.svg
     - assets/no_book_mark.svg
     - assets/share.svg
+    - assets/line.svg
+    - assets/back.svg
+    - assets/appbar_logo.png
+    - assets/profile_placeholder.svg
+    - assets/bi_bookmark.svg
   fonts:
     - family: Montserrat
       fonts:

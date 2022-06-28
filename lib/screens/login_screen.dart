@@ -229,9 +229,9 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Image.asset("assets/line.png"),
+                        SvgPicture.asset("assets/line.svg"),
                         const Text("or"),
-                        Image.asset("assets/line.png"),
+                        SvgPicture.asset("assets/line.svg"),
                       ],
                     ),
                   ),
@@ -296,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
               ],
             ),
             Align(
-              alignment: const AlignmentDirectional(-0.02, 0.92),
+              alignment: const AlignmentDirectional(-0.02, 0.90),
               child: SizedBox(
                 width: double.infinity,
                 height: 100,
