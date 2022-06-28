@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:in_app_purchase/in_app_purchase.dart';
+
 SubscriptionPlan subscriptionPlanFromJson(String str) => SubscriptionPlan.fromJson(json.decode(str));
 
 String subscriptionPlanToJson(SubscriptionPlan data) => json.encode(data.toJson());
@@ -58,4 +60,20 @@ class Plan {
     "referenceName": referenceName,
     "product_features": List<dynamic>.from(productFeatures!.map((x) => x)),
   };
+}
+
+
+
+class IAPModel {
+
+  SubscriptionPlan subscriptionPlan = SubscriptionPlan();
+
+  Set<String> kProductIds = Set();
+  List<PurchaseDetails> purchases = <PurchaseDetails>[];
+  List<ProductDetails> products = <ProductDetails>[];
+  List<String> consumables = <String>[];
+  List<String> notFoundIds = <String>[];
+  String queryProductError = "";
+
+
 }

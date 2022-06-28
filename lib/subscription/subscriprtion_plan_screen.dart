@@ -32,10 +32,7 @@ const String _kGoldSubscriptionId = 'subscription_gold';
 
 
 class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
-  late Future<SubscriptionPlan> futurePost;
-
-
-
+  // late Future<SubscriptionPlan> futurePost;
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
   List<String> _notFoundIds = <String>[];
@@ -47,12 +44,11 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
   bool _loading = true;
   String? _queryProductError;
 
-  List<String> _kProductIds = [];
+  // List<String> _kProductIds = [];
 
   @override
   void initState() {
-
-    futurePost = fetchPost();
+    //futurePost = fetchPost();
     final Stream<List<PurchaseDetails>> purchaseUpdated =
         _inAppPurchase.purchaseStream;
     _subscription =
@@ -63,7 +59,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
         }, onError: (Object error) {
           // handle error here.
         });
-    initStoreInfo();
+    // initStoreInfo();
     super.initState();
   }
 
@@ -89,6 +85,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
       await iosPlatformAddition.setDelegate(ExamplePaymentQueueDelegate());
     }
 
+    List<String> _kProductIds = [];
     final ProductDetailsResponse productDetailResponse =
     await _inAppPurchase.queryProductDetails(_kProductIds.toSet());
     if (productDetailResponse.error != null) {
@@ -178,7 +175,8 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
               SizedBox(height: 50,),
               Expanded(
                 child: FutureBuilder<SubscriptionPlan>(
-                  future: futurePost,
+                  // future: futurePost,
+                  future: fetchPost(),
                     builder: (context , snapshot){
                     if (snapshot.hasData) {
                       debugPrint("$snapshot");
@@ -190,7 +188,10 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                         },
                       );
 
-                    } else {
+                    } else if(snapshot.hasError) {
+                      return Text('Error!', style: TextStyle(color: Colors.red),);
+                    }
+                    else {
                       return Center(child: CircularProgressIndicator());
                     }
                     }
@@ -230,14 +231,39 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
     );
 
     if (response.statusCode == 200) {
+      Set<String> _kProductIds = Set();
       final subscriptionPlan = subscriptionPlanFromJson(response.body);
       for (int i = 0; i < subscriptionPlan.data!.length; i++) {
         _kProductIds.add(subscriptionPlan.data![i].productId.toString());
       }
+
+//////////////////////////////////////////////////
+      final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+      if (Platform.isIOS) {
+        final InAppPurchaseStoreKitPlatformAddition iosPlatformAddition =
+        _inAppPurchase
+            .getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();
+        await iosPlatformAddition.setDelegate(ExamplePaymentQueueDelegate());
+      }
+
+      final ProductDetailsResponse productDetailResponse = await _inAppPurchase.queryProductDetails(_kProductIds);
+      if (productDetailResponse.error != null) {
+        _queryProductError = productDetailResponse.error!.message;
+        // _isAvailable = isAvailable;
+        _products = productDetailResponse.productDetails;
+        _purchases = <PurchaseDetails>[];
+        _notFoundIds = productDetailResponse.notFoundIDs;
+        _consumables = <String>[];
+        _purchasePending = false;
+        _loading = false;
+      }
+
+      //////////////////////////////////////////////////
+
+
       return subscriptionPlan;
-    } else {
-      throw Exception('Failed to load album');
     }
+    return SubscriptionPlan();
   }
 
   Future<void> consume(String id) async {
