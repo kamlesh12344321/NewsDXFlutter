@@ -11,7 +11,10 @@ import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/repo/api_status.dart';
 import 'package:newsdx/repo/section_service.dart';
+import 'package:newsdx/router/app_state.dart';
+import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
+import 'package:newsdx/screens/more.dart';
 import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
 import 'package:newsdx/viewmodel/generic_list_view_model.dart';
@@ -52,6 +55,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
     _controller = ScrollController();
     _controllerBanner = ScrollController();
     homeSectionsViewModel = context.watch<HomeSectionsViewModel>();
@@ -88,12 +92,22 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                 child: SvgPicture.asset("assets/app_log.svg"),
               ),
               actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Transform.scale(
-                    scale: 1,
-                    child: SvgPicture.asset("assets/profile_placeholder.svg"),
+                GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: Transform.scale(
+                      scale: 1,
+                      child: SvgPicture.asset("assets/profile_placeholder.svg"),
+                    ),
                   ),
+                  onTap: (){
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const MoreScreen(),
+                    //   ),
+                    // );
+                  },
                 )
               ],
               bottom: TabBar(
@@ -113,6 +127,10 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                     (int index) {
                   if (index == 0) {
                     List<Article>? bannerList = homeSection?.data?.banner;
+                    List<WidgetHome>? widgetsList = homeSection?.data?.widgets;
+                    List<Article>? articles =  homeSection?.data?.articles;
+                    LiveWidget? liveWidget =  homeSection?.data?.liveWidget;
+                    HtmlWidget? htmlWidget = homeSection?.data?.htmlWidget;
                     return ListView.builder(
                         addAutomaticKeepAlives: true,
                         scrollDirection: Axis.vertical,
@@ -172,18 +190,16 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                             itemBuilder: (context, index) {
                               Articles? article = val?.articles?[index];
                               return ListTile(
+                                tileColor: Colors.white,
                                 title: HomePageListItem(
                                   articleItem: article,
                                 ),
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ArticleDetail(
-                                        articleItem: article,
-                                      ),
-                                    ),
-                                  );
+                                 Navigator.push(context, MaterialPageRoute(
+                                     builder: (context) => ArticleDetail(
+                                         articleItem: article,
+                                     ),
+                                 ));
                                 },
                               );
                             },

@@ -153,10 +153,6 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
       case Pages.Home:
         HomePageConfig.currentPageAction = action;
         break;
-      case Pages.ArticleDe:
-        ArticleDetailPageConfig.currentPageAction = action;
-        break;
-
       default:
         break;
     }
@@ -182,9 +178,6 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
 
         case Pages.Home:
           _addPageData(HomeScreen(), HomePageConfig);
-          break;
-        case Pages.ArticleDe:
-          _addPageData(ArticleDetail(), ArticleDetailPageConfig);
           break;
         default:
           break;

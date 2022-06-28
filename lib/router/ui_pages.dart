@@ -10,14 +10,12 @@ const String SplashPath = '/splash';
 const String LoginPath = '/login';
 const String OtpPath = '/otp';
 const String HomePath = '/home';
-const String ArticleDe = '/articleDetail';
 
 enum Pages {
       Splash,
       Login,
       Otp,
       Home,
-      ArticleDe,
 }
 
 class PageConfiguration {
@@ -37,5 +35,4 @@ PageConfiguration SplashPageConfig = PageConfiguration(key: 'Splash', path: Spla
 PageConfiguration LoginPageConfig = PageConfiguration(key: 'login', path: SplashPath, uiPage: Pages.Login, currentPageAction: null);
 PageConfiguration OtpPageConfig = PageConfiguration(key: 'otp', path: SplashPath, uiPage: Pages.Otp, currentPageAction: null);
 PageConfiguration HomePageConfig = PageConfiguration(key: 'home', path: SplashPath, uiPage: Pages.Home, currentPageAction: null);
-PageConfiguration ArticleDetailPageConfig = PageConfiguration(key: 'articleDetail', path: SplashPath, uiPage: Pages.ArticleDe, currentPageAction: null);
 

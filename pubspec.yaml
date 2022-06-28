@@ -52,12 +52,15 @@ dependencies:
   sign_in_with_apple: ^4.0.0
   loggy: ^2.0.1+1
   get_time_ago: ^1.1.4
+  text_to_speech: ^0.2.3
+  flutter_html: any
+
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.1
+  flutter_lints: 1.0.0
 # The following section is specific to Flutter packages.
 
 
@@ -91,6 +94,9 @@ flutter:
     - assets/appbar_logo.png
     - assets/profile_placeholder.svg
     - assets/bi_bookmark.svg
+    - assets/speaker.svg
+    - assets/forward.svg
+    - assets/dot.svg
   fonts:
     - family: Montserrat
       fonts:
