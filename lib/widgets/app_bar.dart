@@ -22,7 +22,9 @@ class _AppBarWidgetState extends State<AppBarWidget> {
       backgroundColor: Colors.white,
       elevation: 0.0,
       title: Text(widget._title),
-      leading:IconButton(onPressed: (){}, icon: SvgPicture.asset("assets/back.svg")),
+      leading:IconButton(onPressed: (){
+        Navigator.of(context).pop();
+      }, icon: SvgPicture.asset("assets/back.svg")),
     );
   }
 }

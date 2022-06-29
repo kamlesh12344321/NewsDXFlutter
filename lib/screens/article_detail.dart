@@ -100,7 +100,7 @@ class ArticleDetail extends StatelessWidget {
                        tts.stop();
                      } else {
                        isSpeaking  = true;
-                       tts.speak(articleItem?.descpart1 ?? "");
+                       tts.speak(removeAllHtmlTags(articleItem!.descpart1!) ?? "");
                      }
                    },
                    child: Align(
@@ -133,5 +133,15 @@ class ArticleDetail extends StatelessWidget {
         ),
       )
     );
+  }
+
+  String? removeAllHtmlTags(String htmlText) {
+    RegExp exp = RegExp(
+        r"<[^>]*>",
+        multiLine: true,
+        caseSensitive: true
+    );
+
+    return htmlText.replaceAll(exp, '');
   }
 }

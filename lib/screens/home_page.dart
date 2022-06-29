@@ -35,7 +35,6 @@ import 'package:newsdx/widgets/sport_stars.dart';
 import 'package:newsdx/widgets/subscribe_user.dart';
 import 'package:newsdx/widgets/top_picks_item.dart';
 import 'package:provider/provider.dart';
-import '../router/app_state.dart';
 import '../utils/CustomColors.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
@@ -83,7 +82,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
           length: lengthValue,
           initialIndex: 0,
           child: Scaffold(
-            drawer: NavBar(),
+            drawer: const NavBar(),
             appBar: AppBar(
               backgroundColor: Colors.white,
               centerTitle: true,

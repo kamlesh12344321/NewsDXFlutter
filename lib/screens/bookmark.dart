@@ -15,7 +15,7 @@ class _BookMarksState extends State<BookMarks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(MyConstant.noTitle),
+      appBar: AppBarWidget(MyConstant.noTitle,),
       body: size == 0 ? const EmptyBookMarkContainer() : const BookMarkFilledContainer(),
     );
   }
