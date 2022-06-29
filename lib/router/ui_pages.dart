@@ -20,8 +20,7 @@ enum Pages {
       Otp,
       Home,
       SubscriptionPlan,
-      UserProfileInfo
-      Home,
+      UserProfileInfo,
       ArticleDe,
 }
 

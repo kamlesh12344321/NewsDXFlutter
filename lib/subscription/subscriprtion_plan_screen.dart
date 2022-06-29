@@ -16,6 +16,7 @@ import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
 import 'consumable_store.dart';
 
 class SubscriptionPlanScreen extends StatefulWidget {
+  // final List<Plan>? subscriptionPlanList;
   const SubscriptionPlanScreen({Key? key}) : super(key: key);
 
   @override
@@ -24,15 +25,12 @@ class SubscriptionPlanScreen extends StatefulWidget {
 
 
 const bool _kAutoConsume = true;
-
 const String _kConsumableId = 'consumable';
-const String _kUpgradeId = 'upgrade';
 const String _kSilverSubscriptionId = 'subscription_silver';
 const String _kGoldSubscriptionId = 'subscription_gold';
 
 
 class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
-  // late Future<SubscriptionPlan> futurePost;
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
   List<String> _notFoundIds = <String>[];
@@ -44,89 +42,21 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
   bool _loading = true;
   String? _queryProductError;
 
-  // List<String> _kProductIds = [];
+
+  late SubscriptionPlan mSubscriptionPlane;
+   List<String> kPro = [];
 
   @override
   void initState() {
-    //futurePost = fetchPost();
-    final Stream<List<PurchaseDetails>> purchaseUpdated =
-        _inAppPurchase.purchaseStream;
-    _subscription =
-        purchaseUpdated.listen((List<PurchaseDetails> purchaseDetailsList) {
-          _listenToPurchaseUpdated(purchaseDetailsList);
-        }, onDone: () {
-          _subscription.cancel();
-        }, onError: (Object error) {
-          // handle error here.
-        });
-    // initStoreInfo();
     super.initState();
-  }
 
-  Future<void> initStoreInfo() async {
-    final bool isAvailable = await _inAppPurchase.isAvailable();
-    if (!isAvailable) {
-      setState(() {
-        _isAvailable = isAvailable;
-        _products = <ProductDetails>[];
-        _purchases = <PurchaseDetails>[];
-        _notFoundIds = <String>[];
-        _consumables = <String>[];
-        _purchasePending = false;
-        _loading = false;
+    setState((){
+      fetchPost().then((value) => {
+        kPro = value
       });
-      return;
-    }
-
-    if (Platform.isIOS) {
-      final InAppPurchaseStoreKitPlatformAddition iosPlatformAddition =
-      _inAppPurchase
-          .getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();
-      await iosPlatformAddition.setDelegate(ExamplePaymentQueueDelegate());
-    }
-
-    List<String> _kProductIds = [];
-    final ProductDetailsResponse productDetailResponse =
-    await _inAppPurchase.queryProductDetails(_kProductIds.toSet());
-    if (productDetailResponse.error != null) {
-      setState(() {
-        _queryProductError = productDetailResponse.error!.message;
-        _isAvailable = isAvailable;
-        _products = productDetailResponse.productDetails;
-        _purchases = <PurchaseDetails>[];
-        _notFoundIds = productDetailResponse.notFoundIDs;
-        _consumables = <String>[];
-        _purchasePending = false;
-        _loading = false;
-      });
-      return;
-    }
-
-    if (productDetailResponse.productDetails.isEmpty) {
-      setState(() {
-        _queryProductError = null;
-        _isAvailable = isAvailable;
-        _products = productDetailResponse.productDetails;
-        _purchases = <PurchaseDetails>[];
-        _notFoundIds = productDetailResponse.notFoundIDs;
-        _consumables = <String>[];
-        _purchasePending = false;
-        _loading = false;
-      });
-      return;
-    }
-
-    final List<String> consumables = await ConsumableStore.load();
-    setState(() {
-      _isAvailable = isAvailable;
-      _products = productDetailResponse.productDetails;
-      _notFoundIds = productDetailResponse.notFoundIDs;
-      _consumables = consumables;
-      _purchasePending = false;
-      _loading = false;
     });
-  }
 
+  }
   @override
   void dispose() {
     if (Platform.isIOS) {
@@ -174,27 +104,12 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
               ),
               SizedBox(height: 50,),
               Expanded(
-                child: FutureBuilder<SubscriptionPlan>(
-                  // future: futurePost,
-                  future: fetchPost(),
-                    builder: (context , snapshot){
-                    if (snapshot.hasData) {
-                      debugPrint("$snapshot");
-                      return PageView.builder(
-                        itemCount: snapshot.data!.data!.length,
-                        controller:  controller,
-                        itemBuilder: (context,index){
-                          return SubscriptionPlanCard(data: snapshot.data!.data![index],);
-                        },
-                      );
-
-                    } else if(snapshot.hasError) {
-                      return Text('Error!', style: TextStyle(color: Colors.red),);
-                    }
-                    else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    }
+                child:  PageView.builder(
+                  itemCount: _products.length,
+                  controller:  controller,
+                  itemBuilder: (context,index){
+                    return SubscriptionPlanCard(data: _products[index],);
+                  },
                 ),
               ),
               SizedBox(
@@ -214,7 +129,8 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
 
   }
 
-  Future<SubscriptionPlan> fetchPost() async {
+  Future<List<String>> fetchPost() async {
+    List<String>  _kProductIds  =[];
     String? getAccessToken = "Bearer ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0aW1lIjoxNjU1NzA5MTA4LCJwcm9wZXJ0eUtleSI6IjBhNDE1OTA2ZGYyZmQ2NDM3MzNiODY1MTY3YWRiMTlkIn0.DveZXEDBB2OJIUU31KlHexj-1L1nYEx1Uxisv45Q0oU"}";
 
     Map data = {
@@ -231,39 +147,84 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
     );
 
     if (response.statusCode == 200) {
-      Set<String> _kProductIds = Set();
       final subscriptionPlan = subscriptionPlanFromJson(response.body);
       for (int i = 0; i < subscriptionPlan.data!.length; i++) {
         _kProductIds.add(subscriptionPlan.data![i].productId.toString());
       }
+      _kProductIds.add("article_30");
+      _kProductIds.add("article_50");
+      _kProductIds.add("article_40");
+      _kProductIds.add("article_20");
 
-//////////////////////////////////////////////////
-      final InAppPurchase _inAppPurchase = InAppPurchase.instance;
-      if (Platform.isIOS) {
-        final InAppPurchaseStoreKitPlatformAddition iosPlatformAddition =
-        _inAppPurchase
-            .getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();
-        await iosPlatformAddition.setDelegate(ExamplePaymentQueueDelegate());
-      }
+      initStoreInfo(_kProductIds);
+      return _kProductIds;
+    }
+    return [];
+  }
 
-      final ProductDetailsResponse productDetailResponse = await _inAppPurchase.queryProductDetails(_kProductIds);
-      if (productDetailResponse.error != null) {
+  Future<void> initStoreInfo(List<String> kProductIds) async {
+    final bool isAvailable = await _inAppPurchase.isAvailable();
+    if (!isAvailable) {
+      setState(() {
+        _isAvailable = isAvailable;
+        _products = <ProductDetails>[];
+        _purchases = <PurchaseDetails>[];
+        _notFoundIds = <String>[];
+        _consumables = <String>[];
+        _purchasePending = false;
+        _loading = false;
+        debugPrint("kk1 initStoreInfo-> product"+_products.length.toString()+" "+_purchases.length.toString()+" "+_notFoundIds.length.toString());
+      });
+      return;
+    }
+
+    if (Platform.isIOS) {
+      final InAppPurchaseStoreKitPlatformAddition iosPlatformAddition =
+      _inAppPurchase
+          .getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();
+      await iosPlatformAddition.setDelegate(ExamplePaymentQueueDelegate());
+    }
+
+    // List<String> _kProductIds = [];
+    final ProductDetailsResponse productDetailResponse =
+    await _inAppPurchase.queryProductDetails(kProductIds.toSet());
+    if (productDetailResponse.error != null) {
+      setState(() {
         _queryProductError = productDetailResponse.error!.message;
-        // _isAvailable = isAvailable;
+        _isAvailable = isAvailable;
         _products = productDetailResponse.productDetails;
         _purchases = <PurchaseDetails>[];
         _notFoundIds = productDetailResponse.notFoundIDs;
         _consumables = <String>[];
         _purchasePending = false;
         _loading = false;
-      }
-
-      //////////////////////////////////////////////////
-
-
-      return subscriptionPlan;
+      });
+      return;
     }
-    return SubscriptionPlan();
+
+    if (productDetailResponse.productDetails.isEmpty) {
+      setState(() {
+        _queryProductError = null;
+        _isAvailable = isAvailable;
+        _products = productDetailResponse.productDetails;
+        _purchases = <PurchaseDetails>[];
+        _notFoundIds = productDetailResponse.notFoundIDs;
+        _consumables = <String>[];
+        _purchasePending = false;
+        _loading = false;
+       });
+      return;
+    }
+
+    List<String> consumables = await ConsumableStore.load();
+    setState(() {
+      _isAvailable = isAvailable;
+      _products = productDetailResponse.productDetails;
+      _notFoundIds = productDetailResponse.notFoundIDs;
+      _consumables = consumables;
+      _purchasePending = false;
+      _loading = false;
+    });
   }
 
   Future<void> consume(String id) async {

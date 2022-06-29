@@ -11,7 +11,9 @@ import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/repo/api_status.dart';
 import 'package:newsdx/repo/section_service.dart';
+import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
+import 'package:newsdx/userprofile/user_profile_info_screen.dart';
 import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
 import 'package:newsdx/viewmodel/generic_list_view_model.dart';
@@ -29,6 +31,7 @@ import 'package:newsdx/widgets/sport_stars.dart';
 import 'package:newsdx/widgets/subscribe_user.dart';
 import 'package:newsdx/widgets/top_picks_item.dart';
 import 'package:provider/provider.dart';
+import '../router/app_state.dart';
 import '../utils/CustomColors.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
@@ -52,6 +55,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
     _controller = ScrollController();
     _controllerBanner = ScrollController();
     homeSectionsViewModel = context.watch<HomeSectionsViewModel>();
@@ -90,9 +94,17 @@ class _HomePageState extends State<HomePage> with UiLoggy {
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 16),
-                  child: Transform.scale(
-                    scale: 1,
-                    child: SvgPicture.asset("assets/profile_placeholder.svg"),
+                  child: IconButton(
+                    icon: Transform.scale(
+                        scale: 1,
+                        child: SvgPicture.asset("assets/profile_placeholder.svg"),
+                  ),
+                    onPressed: (){
+                      appState.currentAction = PageAction(
+                          state: PageState.addWidget,
+                          widget: const UserProfileInfoScreen(),
+                          page: UserProfileInfoPageConfig);
+                    },
                   ),
                 )
               ],
