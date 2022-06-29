@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/router/app_state.dart';
+import 'package:newsdx/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class Splash extends StatefulWidget {

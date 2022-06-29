@@ -20,6 +20,7 @@ import 'package:newsdx/viewmodel/generic_list_view_model.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
 import 'package:newsdx/viewmodel/sport_stars_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:theme_provider/theme_provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'dart:developer' as developer;
 
@@ -84,39 +85,25 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => HomeSectionsViewModel()),
         Provider(create: (_) => AuthService())
       ],
-      child: MaterialApp.router(
-        routeInformationParser: parser,
-        routerDelegate: delegate,
-        backButtonDispatcher: backButtonDispatcher,
-        debugShowCheckedModeBanner: false,
-        title: MyConstant.appName,
-        theme: ThemeData(
-          textTheme: GoogleFonts.latoTextTheme(
-            Theme.of(context).textTheme,
-          ),
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-      ),
+      child: ThemeProvider(
+        themes: [
+          AppTheme.light(),
+          AppTheme.dark(),
+        ],
+          child: ThemeConsumer(
+              child: Builder(
+                builder: (themeContext) =>  MaterialApp.router(
+                  routeInformationParser: parser,
+                  routerDelegate: delegate,
+                  backButtonDispatcher: backButtonDispatcher,
+                  debugShowCheckedModeBanner: false,
+                  title: MyConstant.appName,
+                  theme: ThemeProvider.themeOf(themeContext).data,
+                ),
+              )
+          )
+      )
     );
-
-    /*return ChangeNotifierProvider(
-        create: (_) => appState,
-        child: MaterialApp.router(
-          routeInformationParser: parser,
-          routerDelegate: delegate,
-          backButtonDispatcher: backButtonDispatcher,
-          debugShowCheckedModeBanner: false,
-          title: MyConstant.appName,
-          theme: ThemeData(
-            textTheme: GoogleFonts.latoTextTheme(
-              Theme.of(context).textTheme,
-            ),
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-        ),
-    );*/
   }
 
   Future<void> initPlatformState() async {

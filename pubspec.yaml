@@ -62,6 +62,11 @@ dependencies:
   in_app_purchase: ^3.0.0
   loggy: ^2.0.1+1
   get_time_ago: ^1.1.4
+  text_to_speech: ^0.2.3
+  flutter_html: any
+  theme_provider: ^0.5.0
+  getwidget: ^3.0.1
+
 
 
 dev_dependencies:
@@ -107,6 +112,9 @@ flutter:
     - assets/appbar_logo.png
     - assets/profile_placeholder.svg
     - assets/bi_bookmark.svg
+    - assets/speaker.svg
+    - assets/forward.svg
+    - assets/dot.svg
   fonts:
     - family: Montserrat
       fonts:

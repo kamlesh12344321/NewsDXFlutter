@@ -11,9 +11,12 @@ import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/repo/api_status.dart';
 import 'package:newsdx/repo/section_service.dart';
+import 'package:newsdx/router/app_state.dart';
+import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
 import 'package:newsdx/userprofile/user_profile_info_screen.dart';
+import 'package:newsdx/screens/more.dart';
 import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
 import 'package:newsdx/viewmodel/generic_list_view_model.dart';
@@ -26,6 +29,7 @@ import 'package:newsdx/widgets/custom_tab_view.dart';
 import 'package:newsdx/widgets/full_image_view_item.dart';
 import 'package:newsdx/widgets/full_width_article.dart';
 import 'package:newsdx/widgets/home_page_list_item.dart';
+import 'package:newsdx/widgets/nav_bar.dart';
 import 'package:newsdx/widgets/sport_star_item.dart';
 import 'package:newsdx/widgets/sport_stars.dart';
 import 'package:newsdx/widgets/subscribe_user.dart';
@@ -79,14 +83,18 @@ class _HomePageState extends State<HomePage> with UiLoggy {
           length: lengthValue,
           initialIndex: 0,
           child: Scaffold(
+            drawer: NavBar(),
             appBar: AppBar(
               backgroundColor: Colors.white,
               centerTitle: true,
               elevation: 0.0,
+
               leading: Transform.scale(
                   scale: 1.2,
                   child: IconButton(
-                      icon: SvgPicture.asset("assets/menu.svg"), onPressed: () {})),
+                      icon: SvgPicture.asset("assets/menu.svg"), onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  })),
               title: Transform.scale(
                 scale: 1,
                 child: SvgPicture.asset("assets/app_log.svg"),
@@ -125,11 +133,32 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                     (int index) {
                   if (index == 0) {
                     List<Article>? bannerList = homeSection?.data?.banner;
+                    List<WidgetHome>? widgetsList = homeSection?.data?.widgets;
+                    List<Article>? articles =  homeSection?.data?.articles;
+                    LiveWidget? liveWidget =  homeSection?.data?.liveWidget;
+                    HtmlWidget? htmlWidget = homeSection?.data?.htmlWidget;
+
+                    int listSize = 0;
+                    if(bannerList != null ) {
+                      listSize++;
+                    }
+                    if(widgetsList != null) {
+                      listSize++;
+                    }
+                    if(articles!= null) {
+                      listSize++;
+                    }
+                    if(liveWidget != null) {
+                      listSize++;
+                    }
+                    if(htmlWidget!= null) {
+                      listSize++;
+                    }
                     return ListView.builder(
                         addAutomaticKeepAlives: true,
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
-                        itemCount: homeSection?.data?.articles?.length ?? 0,
+                        itemCount: listSize,
                         controller: _controller,
                         itemBuilder: (context, index) {
                           if (index == 0) {
@@ -184,18 +213,18 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                             itemBuilder: (context, index) {
                               Articles? article = val?.articles?[index];
                               return ListTile(
+                                tileColor: Colors.white,
                                 title: HomePageListItem(
                                   articleItem: article,
                                 ),
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ArticleDetail(
-                                        articleItem: article,
-                                      ),
-                                    ),
-                                  );
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticleDetail(articleItem: article,)));
+
+                                  // Navigator.push(context, MaterialPageRoute(
+                                 //     builder: (context) => ArticleDetail(
+                                 //         articleItem: article,
+                                 //     ),
+                                 // ));
                                 },
                               );
                             },
