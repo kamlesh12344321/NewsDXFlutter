@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:getwidget/components/toggle/gf_toggle.dart';
+import 'package:getwidget/types/gf_toggle_type.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/preference/user_preference.dart';
+import 'package:provider/provider.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({Key? key}) : super(key: key);
@@ -22,14 +27,18 @@ class _MoreScreenState extends State<MoreScreen> {
         leading: Transform.scale(
             scale: 1.2,
             child: IconButton(
-                icon: SvgPicture.asset("assets/back.svg"), onPressed: () {}),),
+                icon: SvgPicture.asset("assets/back.svg"), onPressed: () {
+                  Navigator.of(context).pop();
+            }),),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: Transform.scale(
-              scale: 1,
-              child: SvgPicture.asset("assets/profile_placeholder.svg"),
-            ),
+            child: CircleAvatar(
+              radius: 16.0,
+              child: ClipRect(
+                child: Prefs.getProfilePre() ? Image.network('https://picsum.photos/250?image=9') : SvgPicture.asset("assets/profile_placeholder.svg"),
+              ),
+            )
           )
         ],
       ),
@@ -58,7 +67,12 @@ class _MoreScreenState extends State<MoreScreen> {
                       color: Colors.grey,
                       fontSize: 16,
                     ),),
-                    SvgPicture.asset("assets/profile_placeholder.svg")
+                    GFToggle(
+                      onChanged: (val){},
+                      value: true,
+                      enabledTrackColor: Colors.blue,
+                      type: GFToggleType.ios,
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -74,17 +88,27 @@ class _MoreScreenState extends State<MoreScreen> {
             ),),
             Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Dark mode", style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),),
-                    SvgPicture.asset("assets/profile_placeholder.svg")
-                  ],
-                ),
-                SizedBox(
+               GestureDetector(
+                 child:  Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     const Text("Dark mode", style: TextStyle(
+                       color: Colors.grey,
+                       fontSize: 16,
+                     ),),
+                     GFToggle(
+                       onChanged: (val){},
+                       value: true,
+                       enabledTrackColor: Colors.blue,
+                       type: GFToggleType.ios,
+                     )
+                   ],
+                 ),
+                 onTap: (){
+                   ThemeProvider.controllerOf(context).nextTheme();
+                 },
+               ),
+                const SizedBox(
                   height: 10,
                 ),
 

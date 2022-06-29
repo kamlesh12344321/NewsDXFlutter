@@ -27,6 +27,7 @@ import 'package:newsdx/widgets/custom_tab_view.dart';
 import 'package:newsdx/widgets/full_image_view_item.dart';
 import 'package:newsdx/widgets/full_width_article.dart';
 import 'package:newsdx/widgets/home_page_list_item.dart';
+import 'package:newsdx/widgets/nav_bar.dart';
 import 'package:newsdx/widgets/sport_star_item.dart';
 import 'package:newsdx/widgets/sport_stars.dart';
 import 'package:newsdx/widgets/subscribe_user.dart';
@@ -79,14 +80,18 @@ class _HomePageState extends State<HomePage> with UiLoggy {
           length: lengthValue,
           initialIndex: 0,
           child: Scaffold(
+            drawer: NavBar(),
             appBar: AppBar(
               backgroundColor: Colors.white,
               centerTitle: true,
               elevation: 0.0,
+
               leading: Transform.scale(
                   scale: 1.2,
                   child: IconButton(
-                      icon: SvgPicture.asset("assets/menu.svg"), onPressed: () {})),
+                      icon: SvgPicture.asset("assets/menu.svg"), onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  })),
               title: Transform.scale(
                 scale: 1,
                 child: SvgPicture.asset("assets/app_log.svg"),
@@ -100,14 +105,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                       child: SvgPicture.asset("assets/profile_placeholder.svg"),
                     ),
                   ),
-                  onTap: (){
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const MoreScreen(),
-                    //   ),
-                    // );
-                  },
+                  onTap: (){},
                 )
               ],
               bottom: TabBar(
@@ -131,11 +129,28 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                     List<Article>? articles =  homeSection?.data?.articles;
                     LiveWidget? liveWidget =  homeSection?.data?.liveWidget;
                     HtmlWidget? htmlWidget = homeSection?.data?.htmlWidget;
+
+                    int listSize = 0;
+                    if(bannerList != null ) {
+                      listSize++;
+                    }
+                    if(widgetsList != null) {
+                      listSize++;
+                    }
+                    if(articles!= null) {
+                      listSize++;
+                    }
+                    if(liveWidget != null) {
+                      listSize++;
+                    }
+                    if(htmlWidget!= null) {
+                      listSize++;
+                    }
                     return ListView.builder(
                         addAutomaticKeepAlives: true,
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
-                        itemCount: homeSection?.data?.articles?.length ?? 0,
+                        itemCount: listSize,
                         controller: _controller,
                         itemBuilder: (context, index) {
                           if (index == 0) {
@@ -156,6 +171,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                   Article? article = bannerList[index];
                                   return InkWell(
                                     onTap: () {
+                                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticleDetail(articleItem: arti,)));
                                       // Navigator.push(
                                       //   context,
                                       //   MaterialPageRoute(
@@ -195,11 +211,13 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                   articleItem: article,
                                 ),
                                 onTap: () {
-                                 Navigator.push(context, MaterialPageRoute(
-                                     builder: (context) => ArticleDetail(
-                                         articleItem: article,
-                                     ),
-                                 ));
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticleDetail(articleItem: article,)));
+
+                                  // Navigator.push(context, MaterialPageRoute(
+                                 //     builder: (context) => ArticleDetail(
+                                 //         articleItem: article,
+                                 //     ),
+                                 // ));
                                 },
                               );
                             },

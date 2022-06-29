@@ -17,7 +17,7 @@ class _FullImageViewItemState extends State<FullImageViewItemG> {
   Widget build(BuildContext context) {
     String imageUrl = "";
     if(widget.article!.images!.isNotEmpty){
-      imageUrl = "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.article!.images![0].imageid}.jpg";
+      imageUrl = "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.article!.images![0].imageid}_600.jpg";
     }
     print(imageUrl);
     return Container(
@@ -32,8 +32,8 @@ class _FullImageViewItemState extends State<FullImageViewItemG> {
           image: NetworkImage( imageUrl ??  MyConstant.PLACE_HOLDER),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
+      child: const Padding(
+        padding: EdgeInsets.all(10),
         child: Text(""),
       ),
     );

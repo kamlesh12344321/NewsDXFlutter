@@ -11,6 +11,7 @@ class Prefs  {
   static const String isLoggedInKey = "isLoggedIn";
   static const String otpId = "otp_id";
   static const String accessToken = "accessToken";
+  static const String isProfileImagePresent = "profile_image_present";
 
   static Future<SharedPreferences?> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -28,6 +29,11 @@ class Prefs  {
   static Future<bool> saveAccessToken(String? value) async =>
       await _prefs!.setString(accessToken, value!);
   static String? getAccessToken() => _prefs!.getString(accessToken) ?? "";
+
+  static Future<bool> saveIsProfileImagePre(bool value) async =>
+      await _prefs!.setBool(isProfileImagePresent,value);
+
+  static bool getProfilePre() => _prefs!.getBool(isProfileImagePresent) ?? false;
 
 
 }

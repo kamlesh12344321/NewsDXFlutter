@@ -32,7 +32,9 @@ class ArticleDetail extends StatelessWidget {
         leading: Transform.scale(
           scale: 1.2,
           child: IconButton(
-              icon: SvgPicture.asset("assets/back.svg"), onPressed: () {}),
+              icon: SvgPicture.asset("assets/back.svg"), onPressed: () {
+                Navigator.of(context).pop();
+          }),
         ),
         title: Transform.scale(
           scale: 1,
@@ -98,7 +100,7 @@ class ArticleDetail extends StatelessWidget {
                        tts.stop();
                      } else {
                        isSpeaking  = true;
-                       tts.speak(articleItem!.descpart1!);
+                       tts.speak(articleItem?.descpart1 ?? "");
                      }
                    },
                    child: Align(
@@ -110,7 +112,7 @@ class ArticleDetail extends StatelessWidget {
                     width: 5,
                   ),
                   Flexible(
-                    child: Text(articleItem!.title!, style: const TextStyle(
+                    child: Text(articleItem?.title ?? "", style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w800,
                         fontSize: 28,
@@ -124,8 +126,8 @@ class ArticleDetail extends StatelessWidget {
               ),),
               Padding(padding: const EdgeInsets.only(top: 10, left: 16, right: 16,bottom: 5), child:
                 FullImageViewItemG(article: articleItem,),),
-              Text(articleItem!.images![0].caption!),
-              Padding(padding: const EdgeInsets.only(left: 16, right: 16,), child: Html(data: articleItem!.descpart1),),
+              // Text( articleItem?.images?[0].caption ?? ""),
+              Padding(padding: const EdgeInsets.only(left: 16, right: 16,), child: Html(data: articleItem?.descpart1),),
             ],
           ),
         ),

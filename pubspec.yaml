@@ -54,6 +54,8 @@ dependencies:
   get_time_ago: ^1.1.4
   text_to_speech: ^0.2.3
   flutter_html: any
+  theme_provider: ^0.5.0
+  getwidget: ^3.0.1
 
 
 
