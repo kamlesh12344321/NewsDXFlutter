@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/model/otp_status.dart';
 import 'package:newsdx/model/user_data.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
@@ -16,12 +17,14 @@ import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/home_screen.dart';
 import 'package:newsdx/screens/otp_screen.dart';
 import 'package:newsdx/widgets/app_bar.dart';
+import 'package:newsdx/widgets/dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:twitter_login/entity/auth_result.dart';
-import 'package:twitter_login/twitter_login.dart';
+import 'package:http/http.dart' as http;
+import 'package:the_apple_sign_in/scope.dart';
+
+import '../apple/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -30,21 +33,19 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   late final User _user;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   TextEditingController myController = TextEditingController();
-  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
-
-  get sha256 => "";
+  String? email = "";
+  late Future<OtpSendStatus> otpStatus;
+  late bool isLoading = false;
 
   @override
   void initState() {
     myController.addListener(() {
-      //here you have the changes of your textfield
-      print("value: ${myController.text}");
-      //use setState to rebuild the widget
+      email = myController.text;
       setState(() {});
     });
     super.initState();
@@ -60,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
+
     return Scaffold(
       appBar: AppBarWidget(MyConstant.noTitle),
       backgroundColor: Colors.white,
@@ -167,6 +169,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: OutlineInputBorder(),
                         label: Text(MyConstant.emailHint),
                       ),
+                      onChanged: (text) {
+                        setState() {
+                          email = text;
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -187,12 +194,30 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         child: const Text(MyConstant.signInButtonTitle),
                         onPressed: () {
-                          //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const OTPScreen()));
-                          //appState.login();
-                          appState.currentAction = PageAction(
-                              state: PageState.addWidget,
-                              widget: const OTPScreen(),
-                              page: OtpPageConfig);
+                          if (email!.isNotEmpty || email != null) {
+                           showProgressIndicator(true);
+                            Future<OtpSendStatus> status =
+                                getOtpSendStatus(email!);
+                            status
+                                .then(
+                                  (value) => {
+                                    if (value.status == true)
+                                      {
+                                        Prefs.saveOtpId(value.data.otpId),
+                                        showProgressIndicator(false),
+                                        appState.currentAction = PageAction(
+                                            state: PageState.addWidget,
+                                            widget: OTPScreen(emailId: email!,),
+                                            page: OtpPageConfig),
+                                      }
+                                  },
+                                )
+                                .onError(
+                                  (error, stackTrace) => {
+                                  showProgressIndicator(false),
+                                  },
+                                );
+                          }
                         },
                       ),
                     ),
@@ -207,9 +232,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Image.asset("assets/line.png"),
-                        Text("or"),
-                        Image.asset("assets/line.png"),
+                        SvgPicture.asset("assets/line.svg"),
+                        const Text("or"),
+                        SvgPicture.asset("assets/line.svg"),
                       ],
                     ),
                   ),
@@ -225,35 +250,52 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         TextButton(
                             onPressed: () {
-                              LocalPreferenceService localPref =
-                                  LocalPreferenceService();
                               Future<UserCredential> signIn =
-                                  signInWithGoogle();
+                              signInWithGoogle();
                               signIn
-                                  .then((value) => {
-                                        if (value.user != null)
-                                          {
-                                            appState.login(true),
-                                            appState.currentAction = PageAction(
-                                                state: PageState.addWidget,
-                                                widget: const HomeScreen(),
-                                                page: HomePageConfig)
-                                          }
-                                      })
-                                  .onError((error, stackTrace) => {
-                                        // show snakeBar
-                                      });
+                                  .then((value) =>
+                              {
+                                if (value.user != null)
+                                  {
+                                    appState.login(true),
+                                    appState.currentAction = PageAction(
+                                        state: PageState.addWidget,
+                                        widget: const HomeScreen(),
+                                        page: HomePageConfig)
+                                  }
+                              })
+                                  .onError((error, stackTrace) =>
+                              {
+                                // show snakeBar
+                              });
                             },
                             child:
-                                SvgPicture.asset("assets/google_logo_new.svg")),
+                            SvgPicture.asset("assets/google_logo_new.svg")),
                         TextButton(
                             onPressed: () {
+                              Future<UserCredential?> signIn =
                               signInWithFacebook();
+                              signIn
+                                  .then((value) =>
+                              {
+                                if (value?.user != null)
+                                  {
+                                    appState.login(true),
+                                    appState.currentAction = PageAction(
+                                        state: PageState.addWidget,
+                                        widget: const HomeScreen(),
+                                        page: HomePageConfig)
+                                  }
+                              })
+                                  .onError((error, stackTrace) =>
+                              {
+                                // show snakeBar
+                              });
                             },
-                            child: Image.asset("assets/facebook.png")),
+                            child: SvgPicture.asset("assets/facebook.svg")),
                         TextButton(
                             onPressed: () {},
-                            child: Image.asset("assets/apple.png")),
+                            child: SvgPicture.asset("assets/apple.svg")),
                       ],
                     ),
                   ),
@@ -261,7 +303,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
             Align(
-              alignment: const AlignmentDirectional(-0.02, 0.92),
+              alignment: const AlignmentDirectional(-0.02, 0.90),
               child: SizedBox(
                 width: double.infinity,
                 height: 100,
@@ -313,98 +355,63 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
+    await googleUser?.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-
-    // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  Future<UserCredential> signInWithFacebook() async {
-    // Trigger the sign-in flow
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-    final String token = loginResult.accessToken!.token;
-
-    // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(token);
-
-    // Once signed in, return the UserCredential
-    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  }
-
-  Future<UserCredential> signInWithTwitter() async {
-    // Create a TwitterLogin instance
-    final twitterLogin = TwitterLogin(
-        apiKey: '<your consumer key>',
-        apiSecretKey: ' <your consumer secret>',
-        redirectURI: '<your_scheme>://');
-
-    // Trigger the sign-in flow
-    final authResult = await twitterLogin.login();
-
-    // Create a credential from the access token
-    final twitterAuthCredential = TwitterAuthProvider.credential(
-      accessToken: authResult.authToken!,
-      secret: authResult.authTokenSecret!,
+  Future<UserCredential?> signInWithFacebook() async {
+    final LoginResult result = await FacebookAuth.instance.login(
+      permissions: ['public_profile', 'email', 'user_friends']
     );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance
-        .signInWithCredential(twitterAuthCredential);
+    if(result.status == LoginStatus.success) {
+      // Create a credential from the access token
+      final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.token);
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    }
+    return null;
   }
 
-  // Apple auth
-  String generateNonce([int length = 32]) {
-    const charset =
-        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
-    final random = Random.secure();
-    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
-        .join();
+  Future<void> _signInWithApple(BuildContext context) async {
+    try {
+      final authService = Provider.of<AuthService>(context, listen: false);
+      final user = await authService.signInWithApple([Scope.email, Scope.fullName]);
+      print('uid: ${user.uid}');
+    } catch (e) {
+      // TODO: Show alert here
+      print(e);
+    }
   }
-
-  /// Returns the sha256 hash of [input] in hex notation.
-  String sha256ofString(String input) {
-    final bytes = utf8.encode(input);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
-  }
-
-  Future<UserCredential> signInWithApple() async {
-    // To prevent replay attacks with the credential returned from Apple, we
-    // include a nonce in the credential request. When signing in with
-    // Firebase, the nonce in the id token returned by Apple, is expected to
-    // match the sha256 hash of `rawNonce`.
-    final rawNonce = generateNonce();
-    final nonce = sha256ofString(rawNonce);
-
-    // Request credential for the currently signed in Apple account.
-    final appleCredential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-      nonce: nonce,
+  Future<OtpSendStatus> getOtpSendStatus(String email) async {
+    String? getAccessToken = "Bearer ${MyConstant.propertyToken}";
+    final response = await http.post(
+        Uri.parse("https://api.newsdx.io/V1/end_users/send_email_otp"),
+      headers: {
+        "Authorization":  getAccessToken,
+      },
+        body: {"email" : email, "propertyKey" : MyConstant.propertyKey},
     );
+    if (response.statusCode == 200) {
+      return OtpSendStatus.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("Failed to send OTP");
+    }
+  }
 
-    // Create an `OAuthCredential` from the credential returned by Apple.
-    final oauthCredential = OAuthProvider("apple.com").credential(
-      idToken: appleCredential.identityToken,
-      rawNonce: rawNonce,
+  showProgressIndicator(bool visibility){
+    Visibility(visible :visibility, child:  const SizedBox(
+      height: 100,
+      width: 100,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    ),
     );
-
-    // Sign in the user with Firebase. If the nonce we generated earlier does
-    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
   }
 }

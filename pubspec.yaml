@@ -39,25 +39,46 @@ dependencies:
   sign_button: ^2.0.2
   sizer: ^2.0.15
   google_sign_in: ^5.3.3
-  flutter_facebook_auth: ^4.3.4+2
   firebase_core: ^1.17.1
   firebase_auth: ^3.3.19
   pin_code_fields: ^7.4.0
-  provider: any
+  provider: ^6.0.3
   uni_links: any
   google_fonts: ^3.0.1
   cached_network_image: ^3.2.1
-  twitter_login: ^4.2.3
-  sign_in_with_apple: ^4.0.0
   flutter_svg: ^1.1.0
-  http: any
-  get: ^4.6.5
+  http: 0.13.4
+  flutter_facebook_auth: ^3.5.3
+  sign_in_with_apple: ^4.0.0
+#  sign_in_with_apple: ^4.0.0
+#  the_apple_sign_in: any
+#  sign_in_with_apple: ^4.0.0
+  the_apple_sign_in: ^1.1.1
+  url_launcher: any
+  html: ^0.15.0
+  js: ^0.6.2
+  universal_html: ^2.0.8
+  device_info_plus: ^4.0.0
+  in_app_purchase: ^3.0.0
+  loggy: ^2.0.1+1
+  get_time_ago: ^1.1.4
+  text_to_speech: ^0.2.3
+  flutter_html: any
+  theme_provider: ^0.5.0
+  getwidget: ^3.0.1
+
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.1
+  flutter_native_splash: ^2.2.3
 # The following section is specific to Flutter packages.
+
+flutter_native_splash:
+  image: assets/app_logo_new.svg
+  color: 42a5f5
 
 
 flutter:
@@ -66,13 +87,34 @@ flutter:
   assets:
     - assets/app_logo_new.svg
     - assets/powered_news.svg
-    - assets/back_button.png
-    - assets/apple.png
-    - assets/line.png
+    - assets/apple.svg
     - assets/google_logo_new.svg
-    - assets/facebook.png
+    - assets/facebook.svg
     - assets/menu.svg
     - assets/app_icon_title.svg
+    - assets/home_selected.svg
+    - assets/home_un_selected.svg
+    - assets/trending.svg
+    - assets/trending_selected.svg
+    - assets/newspaper.svg
+    - assets/newspaper_selected.svg
+    - assets/newsletter.svg
+    - assets/newsletter_selected.svg
+    - assets/more.svg
+    - assets/more_selected.svg
+    - assets/hamburger.svg
+    - assets/app_log.svg
+    - assets/no_book_mark.svg
+    - assets/share.svg
+    - assets/tick.svg
+    - assets/line.svg
+    - assets/back.svg
+    - assets/appbar_logo.png
+    - assets/profile_placeholder.svg
+    - assets/bi_bookmark.svg
+    - assets/speaker.svg
+    - assets/forward.svg
+    - assets/dot.svg
   fonts:
     - family: Montserrat
       fonts:

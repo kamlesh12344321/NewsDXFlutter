@@ -24,6 +24,10 @@ class NewsDxRouteParser extends RouteInformationParser<PageConfiguration> {
         return OtpPageConfig;
       case HomePath:
         return HomePageConfig;
+      case SubscriptionPlanScreenPath:
+        return SubscriptionPlanPageConfig;
+      case UserProfileScreenPath:
+        return UserProfileInfoPageConfig;
       default:
         return SplashPageConfig;
     }
@@ -41,6 +45,9 @@ class NewsDxRouteParser extends RouteInformationParser<PageConfiguration> {
         return const RouteInformation(location: OtpPath);
       case Pages.Home:
         return const RouteInformation(location: HomePath);
+      case Pages.SubscriptionPlan:
+        return const RouteInformation(location: SubscriptionPlanScreenPath);
+
       default: return const RouteInformation(location: SplashPath);
     }
 

@@ -5,11 +5,16 @@ import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/router_delegate.dart';
 import 'package:newsdx/router/ui_pages.dart';
+import 'package:newsdx/screens/article_detail.dart';
 import 'package:newsdx/screens/home_screen.dart';
 import 'package:newsdx/screens/login_screen.dart';
 import 'package:newsdx/screens/otp_screen.dart';
 import 'package:newsdx/screens/splash_screen.dart';
 import 'dart:developer' as developer;
+
+import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
+
+import '../userprofile/user_profile_info_screen.dart';
 
 class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
@@ -152,6 +157,12 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
       case Pages.Home:
         HomePageConfig.currentPageAction = action;
         break;
+      case Pages.SubscriptionPlan:
+        SubscriptionPlanPageConfig.currentPageAction = action;
+        break;
+      case Pages.UserProfileInfo:
+        UserProfileInfoPageConfig.currentPageAction = action;
+        break;
       default:
         break;
     }
@@ -172,11 +183,19 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
           break;
 
         case Pages.Otp:
-          _addPageData(OTPScreen(), OtpPageConfig);
+          _addPageData(const OTPScreen(emailId: '',), OtpPageConfig);
           break;
 
         case Pages.Home:
           _addPageData(HomeScreen(), HomePageConfig);
+          break;
+
+        case Pages.SubscriptionPlan:
+          _addPageData(SubscriptionPlanScreen(),SubscriptionPlanPageConfig);
+          break;
+
+        case Pages.UserProfileInfo:
+          _addPageData(UserProfileInfoScreen(), UserProfileInfoPageConfig);
           break;
 
         default:

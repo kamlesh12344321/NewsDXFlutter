@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +37,7 @@ class AppState extends ChangeNotifier {
   }
 
   AppState() {
-    getLoggedInState();
+    _loggedIn = Prefs.getIsLoggedIn();
   }
 
   resetCurrentAction() {
@@ -59,7 +60,7 @@ class AppState extends ChangeNotifier {
     _loggedIn = true;
     saveLoginState(loggedIn);
     if(isSocialLoggedIn){
-      _currentAction = PageAction(state: PageState.addPage, page: HomePageConfig);
+      _currentAction = PageAction(state: PageState.replaceAll, page: HomePageConfig);
     } else {
       _currentAction =
           PageAction(state: PageState.addPage, page: OtpPageConfig);
@@ -67,13 +68,6 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
   void saveLoginState(bool loggedIn) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool(MyConstant.isLoggedInKey, loggedIn);
-  }
-
-  getLoggedInState() async {
-    var pref = await SharedPreferences.getInstance();
-    _loggedIn = pref.getBool(MyConstant.isLoggedInKey)!;
-    _loggedIn ??= false;
+   Prefs.saveIsLoggedIn(loggedIn);
   }
 }

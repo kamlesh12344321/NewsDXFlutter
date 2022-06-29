@@ -1,0 +1,797 @@
+Index: lib/router/route_parser.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/router/route_parser.dart b/lib/router/route_parser.dart
+--- a/lib/router/route_parser.dart	(revision 00dfe82bfcc4783f1ff8f740264dbab900b414d2)
++++ b/lib/router/route_parser.dart	(date 1655356316262)
+@@ -24,6 +24,8 @@
+         return OtpPageConfig;
+       case HomePath:
+         return HomePageConfig;
++      case SubscriptionPlanScreenPath:
++        return SubscriptionPlanPageConfig;
+       default:
+         return SplashPageConfig;
+     }
+@@ -41,6 +43,9 @@
+         return const RouteInformation(location: OtpPath);
+       case Pages.Home:
+         return const RouteInformation(location: HomePath);
++      case Pages.SubscriptionPlan:
++        return const RouteInformation(location: SubscriptionPlanScreenPath);
++
+       default: return const RouteInformation(location: SplashPath);
+     }
+ 
+Index: lib/screens/main2.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/screens/main2.dart b/lib/screens/main2.dart
+--- a/lib/screens/main2.dart	(revision 00dfe82bfcc4783f1ff8f740264dbab900b414d2)
++++ b/lib/screens/main2.dart	(date 1655294125561)
+@@ -6,6 +6,7 @@
+ import 'package:flutter/services.dart';
+ import 'package:google_fonts/google_fonts.dart';
+ import 'package:newsdx/app_constants/string_constant.dart';
++import 'package:newsdx/apple/auth_service.dart';
+ import 'package:newsdx/preference/user_preference.dart';
+ import 'package:newsdx/router/app_state.dart';
+ import 'package:newsdx/router/back_dispatcher.dart';
+@@ -16,11 +17,15 @@
+ import 'package:uni_links/uni_links.dart';
+ import 'dart:developer' as developer;
+ 
++import '../apple/apple_sign_in_available.dart';
++
+ void main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+   await Firebase.initializeApp();
+   await Prefs.init();
+-  runApp(const MyApp());
++  final appleSignInAvailable = await AppleSignInAvailable.check();
++  runApp(Provider<AppleSignInAvailable>.value(value: appleSignInAvailable,
++  child: const MyApp(),));
+ }
+ 
+ class MyApp extends StatefulWidget {
+@@ -65,6 +70,7 @@
+         ChangeNotifierProvider(
+           create: (context) => appState,
+         ),
++        Provider(create: (_) => AuthService())
+       ],
+       child: MaterialApp.router(
+         routeInformationParser: parser,
+Index: lib/apple/auth_service.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/apple/auth_service.dart b/lib/apple/auth_service.dart
+new file mode 100644
+--- /dev/null	(date 1655294407797)
++++ b/lib/apple/auth_service.dart	(date 1655294407797)
+@@ -0,0 +1,50 @@
++import 'package:firebase_auth/firebase_auth.dart';
++import 'package:flutter/services.dart';
++import 'package:the_apple_sign_in/the_apple_sign_in.dart';
++
++class AuthService {
++  final _firebaseAuth = FirebaseAuth.instance;
++
++  Future<User> signInWithApple(List<Scope> scopes) async {
++    // 1. perform the sign-in request
++    final result = await TheAppleSignIn.performRequests(
++        [AppleIdRequest(requestedScopes: scopes)]);
++    // 2. check the result
++    switch (result.status) {
++      case AuthorizationStatus.authorized:
++        final appleIdCredential = result.credential!;
++        final oAuthProvider = OAuthProvider('apple.com');
++        final credential = oAuthProvider.credential(
++          idToken: String.fromCharCodes(appleIdCredential.identityToken!),
++          accessToken:
++          String.fromCharCodes(appleIdCredential.authorizationCode!),
++        );
++        final userCredential =
++        await _firebaseAuth.signInWithCredential(credential);
++        final firebaseUser = userCredential.user!;
++        if (scopes.contains(Scope.fullName)) {
++          final fullName = appleIdCredential.fullName;
++          if (fullName != null &&
++              fullName.givenName != null &&
++              fullName.familyName != null) {
++            final displayName = '${fullName.givenName} ${fullName.familyName}';
++            await firebaseUser.updateDisplayName(displayName);
++          }
++        }
++        return firebaseUser;
++      case AuthorizationStatus.error:
++        throw PlatformException(
++          code: 'ERROR_AUTHORIZATION_DENIED',
++          message: result.error.toString(),
++        );
++
++      case AuthorizationStatus.cancelled:
++        throw PlatformException(
++          code: 'ERROR_ABORTED_BY_USER',
++          message: 'Sign in aborted by user',
++        );
++      default:
++        throw UnimplementedError();
++    }
++  }
++}
+Index: lib/screens/login_screen.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/screens/login_screen.dart b/lib/screens/login_screen.dart
+--- a/lib/screens/login_screen.dart	(revision 00dfe82bfcc4783f1ff8f740264dbab900b414d2)
++++ b/lib/screens/login_screen.dart	(date 1655294407792)
+@@ -1,7 +1,3 @@
+-
+-import 'dart:convert';
+-import 'dart:math';
+-
+ import 'package:firebase_auth/firebase_auth.dart';
+ import 'package:flutter/foundation.dart';
+ import 'package:flutter/material.dart';
+@@ -10,17 +6,20 @@
+ import 'package:google_fonts/google_fonts.dart';
+ import 'package:google_sign_in/google_sign_in.dart';
+ import 'package:newsdx/app_constants/string_constant.dart';
+-import 'package:newsdx/model/user_data.dart';
+ import 'package:newsdx/preference/user_preference.dart';
+ import 'package:newsdx/router/app_state.dart';
+ import 'package:newsdx/router/ui_pages.dart';
+ import 'package:newsdx/screens/home_screen.dart';
+ import 'package:newsdx/screens/otp_screen.dart';
+ import 'package:newsdx/widgets/app_bar.dart';
+-import 'package:newsdx/widgets/dialog.dart';
+ import 'package:provider/provider.dart';
+-import 'package:sign_button/constants.dart';
+-import 'package:sign_button/create_button.dart';
++// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
++import 'package:http/http.dart' as http;
++import 'package:the_apple_sign_in/the_apple_sign_in.dart';
++import 'package:universal_html/html.dart' as html;
++
++import '../apple/auth_service.dart';
++
+ 
+ class LoginScreen extends StatefulWidget {
+   const LoginScreen({Key? key}) : super(key: key);
+@@ -184,8 +183,7 @@
+                         child: const Text(MyConstant.signInButtonTitle),
+                         onPressed: () {
+                           if (email!.isNotEmpty) {
+-                          bool? isLogged = Prefs.getIsLoggedIn();
+-
++                            bool? isLogged = Prefs.getIsLoggedIn();
+                           }
+                           appState.currentAction = PageAction(
+                               state: PageState.addWidget,
+@@ -224,51 +222,75 @@
+                         TextButton(
+                             onPressed: () {
+                               Future<UserCredential> signIn =
+-                              signInWithGoogle();
++                                  signInWithGoogle();
+                               signIn
+-                                  .then((value) =>
+-                              {
+-                                if (value.user != null)
+-                                  {
+-                                    appState.login(true),
+-                                    appState.currentAction = PageAction(
+-                                        state: PageState.addWidget,
+-                                        widget: const HomeScreen(),
+-                                        page: HomePageConfig)
+-                                  }
+-                              })
+-                                  .onError((error, stackTrace) =>
+-                              {
+-                                // show snakeBar
+-                              });
++                                  .then((value) => {
++                                        if (value.user != null)
++                                          {
++                                            appState.login(true),
++                                            appState.currentAction = PageAction(
++                                                state: PageState.addWidget,
++                                                widget: const HomeScreen(),
++                                                page: HomePageConfig)
++                                          }
++                                      })
++                                  .onError((error, stackTrace) => {
++                                        // show snakeBar
++                                      });
+                             },
+                             child:
+-                            SvgPicture.asset("assets/google_logo_new.svg")),
++                                SvgPicture.asset("assets/google_logo_new.svg")), // Google ion
+                         TextButton(
+                             onPressed: () {
+                               Future<UserCredential?> signIn =
+-                              signInWithFacebook();
++                                  signInWithFacebook();
+                               signIn
+-                                  .then((value) =>
+-                              {
+-                                if (value?.user != null)
+-                                  {
+-                                    appState.login(true),
+-                                    appState.currentAction = PageAction(
+-                                        state: PageState.addWidget,
+-                                        widget: const HomeScreen(),
+-                                        page: HomePageConfig)
+-                                  }
+-                              })
+-                                  .onError((error, stackTrace) =>
+-                              {
+-                                // show snakeBar
+-                              });
++                                  .then((value) => {
++                                        if (value?.user != null)
++                                          {
++                                            appState.login(true),
++                                            appState.currentAction = PageAction(
++                                                state: PageState.addWidget,
++                                                widget: const HomeScreen(),
++                                                page: HomePageConfig)
++                                          }
++                                      })
++                                  .onError((error, stackTrace) => {
++                                        // show snakeBar
++                                      });
+                             },
+-                            child: Image.asset("assets/facebook.png")),
++                            child: Image.asset("assets/facebook.png"),), // Facebook icon
+                         TextButton(
+-                            onPressed: () {},
+-                            child: Image.asset("assets/apple.png")),
++                          onPressed: () async {
++                            _signInWithApple(context);
++                            // final appleIdCredential =
++                            // await SignInWithApple.getAppleIDCredential(
++                            //   scopes: [
++                            //     AppleIDAuthorizationScopes.email,
++                            //     AppleIDAuthorizationScopes.fullName,
++                            //   ],
++                            //
++                            //   webAuthenticationOptions:WebAuthenticationOptions(
++                            //     clientId:"NewsDXV3",
++                            //
++                            //     redirectUri:Uri.parse("https://ndx-v3.firebaseapp.com/__/auth/handler"),
++                            //
++                            //   ),
++                            // );
++                            //
++                            //
++                            // final credential =
++                            // OAuthProvider('apple.com').credential(
++                            //   idToken: appleIdCredential.identityToken,
++                            //   accessToken: appleIdCredential.authorizationCode,
++                            // );
++                            //
++                            // //("kanhai apple -> $credential");
++                            //
++                            // await FirebaseAuth.instance.signInWithCredential(credential);
++                          },
++                          child: Image.asset("assets/apple.png"),
++                        ), // Apple icon
+                       ],
+                     ),
+                   ),
+@@ -330,7 +352,7 @@
+   Future<UserCredential> signInWithGoogle() async {
+     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+     final GoogleSignInAuthentication? googleAuth =
+-    await googleUser?.authentication;
++        await googleUser?.authentication;
+     final credential = GoogleAuthProvider.credential(
+       accessToken: googleAuth?.accessToken,
+       idToken: googleAuth?.idToken,
+@@ -339,16 +361,26 @@
+   }
+ 
+   Future<UserCredential?> signInWithFacebook() async {
+-    final LoginResult result = await FacebookAuth.instance.login(
+-      permissions: ['public_profile', 'email', 'user_friends']
+-    );
+-    if(result.status == LoginStatus.success) {
++    final LoginResult result = await FacebookAuth.instance
++        .login(permissions: ['public_profile', 'email', 'user_friends']);
++    if (result.status == LoginStatus.success) {
+       // Create a credential from the access token
+-      final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.token);
++      final OAuthCredential credential =
++          FacebookAuthProvider.credential(result.accessToken!.token);
+       // Once signed in, return the UserCredential
+       return await FirebaseAuth.instance.signInWithCredential(credential);
+     }
+     return null;
+   }
+ 
+-}
+\ No newline at end of file
++  Future<void> _signInWithApple(BuildContext context) async {
++    try {
++      final authService = Provider.of<AuthService>(context, listen: false);
++      final user = await authService.signInWithApple([Scope.email, Scope.fullName]);
++      print('uid: ${user.uid}');
++    } catch (e) {
++      // TODO: Show alert here
++      print(e);
++    }
++  }
++}
+Index: lib/screens/home_screen.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/screens/home_screen.dart b/lib/screens/home_screen.dart
+--- a/lib/screens/home_screen.dart	(revision 00dfe82bfcc4783f1ff8f740264dbab900b414d2)
++++ b/lib/screens/home_screen.dart	(date 1655356669585)
+@@ -11,6 +11,11 @@
+ import 'package:newsdx/app_constants/string_constant.dart';
+ import 'dart:developer' as developer;
+ import 'package:http/http.dart' as http;
++import 'package:newsdx/router/ui_pages.dart';
++import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
++import 'package:provider/provider.dart';
++
++import '../router/app_state.dart';
+ 
+ 
+ class HomeScreen extends StatefulWidget {
+@@ -24,32 +29,42 @@
+ 
+   @override
+   Widget build(BuildContext context) {
++    final appState = Provider.of<AppState>(context, listen: false);
+     return Scaffold(
+       appBar: AppBar(
+         leading: const Icon(Icons.menu),
+         title: Row(
+           children: const [
+-            Icon(Icons.ac_unit),
++            Icon(Icons.ac_unit,),
+             Text(MyConstant.appName),
+           ],
+         ),
+         actions: [
+           Padding(
+             padding: const EdgeInsets.only(right: 16.0),
+-            child: Container(
+-              width: 30,
+-              height: 30,
+-              decoration: const BoxDecoration(
+-                shape: BoxShape.circle,
+-                color: Colors.white,
+-              ),
+-              child: CachedNetworkImage(
+-                width: 120,
+-                height: 120,
+-                fit: BoxFit.cover,
+-                imageUrl: "https://picsum.photos/250?image=9",
+-                placeholder: (context, url) => const CircularProgressIndicator(
++            child: InkWell(
++              onTap: (){
++                appState.currentAction = PageAction(
++                    state: PageState.addWidget,
++                    widget: const SubscriptionPlanScreen(),
++                    page: SubscriptionPlanPageConfig);
++              },
++              child: Container(
++                width: 30,
++                height: 30,
++                decoration: const BoxDecoration(
++                  shape: BoxShape.circle,
++                  color: Colors.white,
++
++                ),
++                child: CachedNetworkImage(
++                  width: 120,
++                  height: 120,
++                  fit: BoxFit.cover,
++                  imageUrl: "https://picsum.photos/250?image=9",
++                  placeholder: (context, url) => const CircularProgressIndicator(
+ 
++                  ),
+                 ),
+               ),
+             ),
+Index: pubspec.lock
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pubspec.lock b/pubspec.lock
+--- a/pubspec.lock	(revision 00dfe82bfcc4783f1ff8f740264dbab900b414d2)
++++ b/pubspec.lock	(date 1655294723662)
+@@ -71,6 +71,13 @@
+       url: "https://pub.dartlang.org"
+     source: hosted
+     version: "3.0.2"
++  csslib:
++    dependency: transitive
++    description:
++      name: csslib
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "0.17.2"
+   cupertino_icons:
+     dependency: "direct main"
+     description:
+@@ -247,6 +254,13 @@
+       url: "https://pub.dartlang.org"
+     source: hosted
+     version: "0.10.1+3"
++  html:
++    dependency: "direct main"
++    description:
++      name: html
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "0.15.0"
+   http:
+     dependency: "direct main"
+     description:
+@@ -269,7 +283,7 @@
+     source: hosted
+     version: "0.17.0"
+   js:
+-    dependency: transitive
++    dependency: "direct main"
+     description:
+       name: js
+       url: "https://pub.dartlang.org"
+@@ -513,27 +527,6 @@
+       url: "https://pub.dartlang.org"
+     source: hosted
+     version: "2.0.2"
+-  sign_in_with_apple:
+-    dependency: "direct main"
+-    description:
+-      name: sign_in_with_apple
+-      url: "https://pub.dartlang.org"
+-    source: hosted
+-    version: "4.0.0"
+-  sign_in_with_apple_platform_interface:
+-    dependency: transitive
+-    description:
+-      name: sign_in_with_apple_platform_interface
+-      url: "https://pub.dartlang.org"
+-    source: hosted
+-    version: "1.0.0"
+-  sign_in_with_apple_web:
+-    dependency: transitive
+-    description:
+-      name: sign_in_with_apple_web
+-      url: "https://pub.dartlang.org"
+-    source: hosted
+-    version: "1.0.1"
+   simple_connection_checker:
+     dependency: "direct main"
+     description:
+@@ -616,6 +609,13 @@
+       url: "https://pub.dartlang.org"
+     source: hosted
+     version: "0.4.9"
++  the_apple_sign_in:
++    dependency: "direct main"
++    description:
++      name: the_apple_sign_in
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "1.1.1"
+   typed_data:
+     dependency: transitive
+     description:
+@@ -644,6 +644,13 @@
+       url: "https://pub.dartlang.org"
+     source: hosted
+     version: "0.1.0"
++  universal_html:
++    dependency: "direct main"
++    description:
++      name: universal_html
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "2.0.8"
+   universal_io:
+     dependency: transitive
+     description:
+@@ -651,6 +658,62 @@
+       url: "https://pub.dartlang.org"
+     source: hosted
+     version: "2.0.4"
++  url_launcher:
++    dependency: "direct main"
++    description:
++      name: url_launcher
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "6.1.3"
++  url_launcher_android:
++    dependency: transitive
++    description:
++      name: url_launcher_android
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "6.0.17"
++  url_launcher_ios:
++    dependency: transitive
++    description:
++      name: url_launcher_ios
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "6.0.17"
++  url_launcher_linux:
++    dependency: transitive
++    description:
++      name: url_launcher_linux
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "3.0.1"
++  url_launcher_macos:
++    dependency: transitive
++    description:
++      name: url_launcher_macos
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "3.0.1"
++  url_launcher_platform_interface:
++    dependency: transitive
++    description:
++      name: url_launcher_platform_interface
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "2.0.5"
++  url_launcher_web:
++    dependency: transitive
++    description:
++      name: url_launcher_web
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "2.0.12"
++  url_launcher_windows:
++    dependency: transitive
++    description:
++      name: url_launcher_windows
++      url: "https://pub.dartlang.org"
++    source: hosted
++    version: "3.0.1"
+   uuid:
+     dependency: transitive
+     description:
+Index: pubspec.yaml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pubspec.yaml b/pubspec.yaml
+--- a/pubspec.yaml	(revision 00dfe82bfcc4783f1ff8f740264dbab900b414d2)
++++ b/pubspec.yaml	(date 1655292969414)
+@@ -51,8 +51,12 @@
+   flutter_facebook_auth: ^3.5.3
+ #  sign_in_with_apple: ^4.0.0
+ #  the_apple_sign_in: any
+-  sign_in_with_apple: ^4.0.0
+-
++#  sign_in_with_apple: ^4.0.0
++  the_apple_sign_in: ^1.1.1
++  url_launcher: any
++  html: ^0.15.0
++  js: ^0.6.2
++  universal_html: ^2.0.8
+ 
+ dev_dependencies:
+   flutter_test:
+Index: android/app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/android/app/src/main/AndroidManifest.xml b/android/app/src/main/AndroidManifest.xml
+--- a/android/app/src/main/AndroidManifest.xml	(revision 00dfe82bfcc4783f1ff8f740264dbab900b414d2)
++++ b/android/app/src/main/AndroidManifest.xml	(date 1655287467040)
+@@ -56,5 +56,17 @@
+             android:name="com.facebook.sdk.ApplicationId"
+             android:value="@string/facebook_app_id" />
+ 
++        <activity android:name= "com.aboutyou.dart_packages.sign_in_with_apple.SignInWithAppleCallback"
++            android:exported="true">
++        <intent-filter>
++            <action android:name="android.intent.action.VIEW" />
++            <category android:name="android.intent.category.DEFAULT" />
++            <category android:name="android.intent.category.BROWSABLE" />
++
++            <data android:scheme="signinwithapple" />
++            <data android:path="callback" />
++        </intent-filter>
++    </activity>
++
+     </application>
+ </manifest>
+Index: ios/Podfile.lock
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ios/Podfile.lock b/ios/Podfile.lock
+--- a/ios/Podfile.lock	(revision 00dfe82bfcc4783f1ff8f740264dbab900b414d2)
++++ b/ios/Podfile.lock	(date 1655283782844)
+@@ -94,6 +94,8 @@
+     - FMDB (>= 2.7.5)
+   - uni_links (0.0.1):
+     - Flutter
++  - url_launcher_ios (0.0.1):
++    - Flutter
+ 
+ DEPENDENCIES:
+   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
+@@ -106,6 +108,7 @@
+   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
+   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+   - uni_links (from `.symlinks/plugins/uni_links/ios`)
++  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+ 
+ SPEC REPOS:
+   trunk:
+@@ -148,6 +151,8 @@
+     :path: ".symlinks/plugins/sqflite/ios"
+   uni_links:
+     :path: ".symlinks/plugins/uni_links/ios"
++  url_launcher_ios:
++    :path: ".symlinks/plugins/url_launcher_ios/ios"
+ 
+ SPEC CHECKSUMS:
+   AppAuth: 80317d99ac7ff2801a2f18ff86b48cd315ed465d
+@@ -177,6 +182,7 @@
+   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
+   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
++  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
+ 
+ PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
+ 
+Index: lib/userprofile/subscriprion_plan_screen.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/userprofile/subscriprion_plan_screen.dart b/lib/userprofile/subscriprion_plan_screen.dart
+new file mode 100644
+--- /dev/null	(date 1655356316243)
++++ b/lib/userprofile/subscriprion_plan_screen.dart	(date 1655356316243)
+@@ -0,0 +1,15 @@
++import 'package:flutter/material.dart';
++
++class SubscriptionPlanScreen extends StatefulWidget {
++  const SubscriptionPlanScreen({Key? key}) : super(key: key);
++
++  @override
++  State<SubscriptionPlanScreen> createState() => _SubscriptionPlanScreenState();
++}
++
++class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
++  @override
++  Widget build(BuildContext context) {
++    return Container();
++  }
++}
+Index: lib/subscription/subscriprtion_plan_screen.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/subscription/subscriprtion_plan_screen.dart b/lib/subscription/subscriprtion_plan_screen.dart
+--- a/lib/subscription/subscriprtion_plan_screen.dart	(revision 00dfe82bfcc4783f1ff8f740264dbab900b414d2)
++++ b/lib/subscription/subscriprtion_plan_screen.dart	(date 1655358815442)
+@@ -12,7 +12,7 @@
+   @override
+   Widget build(BuildContext context) {
+     return Scaffold(
+-      appBar: AppBar(title: Text("Subscription List")),
++      appBar: AppBar(title: Text("Subscriptions List")),
+       body: PageView(
+         children: [
+           Container()
+Index: lib/apple/apple_sign_in_available.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/apple/apple_sign_in_available.dart b/lib/apple/apple_sign_in_available.dart
+new file mode 100644
+--- /dev/null	(date 1655293392406)
++++ b/lib/apple/apple_sign_in_available.dart	(date 1655293392406)
+@@ -0,0 +1,10 @@
++import 'package:the_apple_sign_in/the_apple_sign_in.dart';
++
++class AppleSignInAvailable {
++  AppleSignInAvailable(this.isAvailable);
++  final bool isAvailable;
++
++  static Future<AppleSignInAvailable> check() async {
++    return AppleSignInAvailable(await TheAppleSignIn.isAvailable());
++  }
++}
+\ No newline at end of file
+Index: lib/router/ui_pages.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/router/ui_pages.dart b/lib/router/ui_pages.dart
+--- a/lib/router/ui_pages.dart	(revision 00dfe82bfcc4783f1ff8f740264dbab900b414d2)
++++ b/lib/router/ui_pages.dart	(date 1655356316268)
+@@ -10,12 +10,14 @@
+ const String LoginPath = '/login';
+ const String OtpPath = '/otp';
+ const String HomePath = '/home';
++const String SubscriptionPlanScreenPath = '/subscription';
+ 
+ enum Pages {
+       Splash,
+       Login,
+       Otp,
+-      Home
++      Home,
++      SubscriptionPlan,
+ }
+ 
+ class PageConfiguration {
+@@ -35,4 +37,5 @@
+ PageConfiguration LoginPageConfig = PageConfiguration(key: 'login', path: SplashPath, uiPage: Pages.Login, currentPageAction: null);
+ PageConfiguration OtpPageConfig = PageConfiguration(key: 'otp', path: SplashPath, uiPage: Pages.Otp, currentPageAction: null);
+ PageConfiguration HomePageConfig = PageConfiguration(key: 'home', path: SplashPath, uiPage: Pages.Home, currentPageAction: null);
++PageConfiguration SubscriptionPlanPageConfig = PageConfiguration(key: 'subscription', path: SplashPath, uiPage: Pages.SubscriptionPlan, currentPageAction: null);
+ 
+Index: lib/router/router_delegate.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/router/router_delegate.dart b/lib/router/router_delegate.dart
+--- a/lib/router/router_delegate.dart	(revision 00dfe82bfcc4783f1ff8f740264dbab900b414d2)
++++ b/lib/router/router_delegate.dart	(date 1655356316283)
+@@ -11,6 +11,8 @@
+ import 'package:newsdx/screens/splash_screen.dart';
+ import 'dart:developer' as developer;
+ 
++import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
++
+ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
+     with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
+   final List<Page> _pages = [];
+@@ -151,6 +153,9 @@
+         break;
+       case Pages.Home:
+         HomePageConfig.currentPageAction = action;
++        break;
++      case Pages.SubscriptionPlan:
++        SubscriptionPlanPageConfig.currentPageAction = action;
+         break;
+       default:
+         break;
+@@ -178,6 +183,10 @@
+         case Pages.Home:
+           _addPageData(HomeScreen(), HomePageConfig);
+           break;
++
++        case Pages.SubscriptionPlan:
++          _addPageData(SubscriptionPlanScreen(),SubscriptionPlanPageConfig);
++          break;
+ 
+         default:
+           break;

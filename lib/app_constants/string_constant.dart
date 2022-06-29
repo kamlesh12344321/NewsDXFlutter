@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 class MyConstant{
   static const String appName = "NewsDX";
+  static const String propertyKey = "0a415906df2fd643733b865167adb19d";
   static const double appbarHeight = 50.0;
   static const String noTitle = "";
   static const String appType = "NEWS";
@@ -19,13 +20,24 @@ class MyConstant{
   static const String fontFamily = "Montserrat";
   static const String otp_sent = "The secure 6 digit OTP is sent to your registered";
   static const String otp_mail_id = "email ID : ";
+  static const String PLACE_HOLDER = "http://hindumysqlstaging.ninestars.in/admin/assets/images/icons/th/Light/hdpi/ads.png";
+  static const String ARTICLE_LIST = "https://api.newsdx.io/V1/articles/getArticles";
+  static const String SECTION_LIST = "https://api.newsdx.io/V1/sections/getSections";
+  static const String send_id_token = "https://api.newsdx.io/V1/end_users/verify_idTokenString";
+  static const String home_section = "https://api.newsdx.io/V1/home/getHomeSection";
+  static const String PLACE_HOLDER_SMALL = "http://hindumysqlstaging.ninestars.in/admin/assets/images/icons/th/Light/xxhdpi/widget-b.png";
+  static const String propertyToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0aW1lIjoxNjU1NzA5MTA4LCJwcm9wZXJ0eUtleSI6IjBhNDE1OTA2ZGYyZmQ2NDM3MzNiODY1MTY3YWRiMTlkIn0.DveZXEDBB2OJIUU31KlHexj-1L1nYEx1Uxisv45Q0oU";
+  static const String bookMarkScreenDes = "Kindly bookmark to view the "
+      "\n \n             "
+      "       data here";
+
+  // Facebook console details
 
 
 
-  // Preference key string
 
-static const String firebaseUserData = "user_data";
-  static const String isLoggedInKey = "isLoggedIn";
+
+// Preference key string
 
 
 }
