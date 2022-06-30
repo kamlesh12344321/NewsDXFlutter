@@ -1,6 +1,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:newsdx/onbarding/onboarding_screen.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/router_delegate.dart';
@@ -196,6 +197,10 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
 
         case Pages.UserProfileInfo:
           _addPageData(UserProfileInfoScreen(), UserProfileInfoPageConfig);
+          break;
+
+        case Pages.OnBoarding:
+          _addPageData(OnBoardingScreen(), OnBoardingPageConfig);
           break;
 
         default:

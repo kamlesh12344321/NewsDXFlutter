@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/components/toggle/gf_toggle.dart';
 import 'package:getwidget/types/gf_toggle_type.dart';
@@ -278,7 +279,7 @@ class _MoreScreenState extends State<MoreScreen> {
               children: [
                 Padding(padding: const EdgeInsets.only(top: 150),
                     child: SizedBox(
-                      width: 75,
+                      width: 100,
                       height: 20 ,
                       child: Center(
                         child: Column(

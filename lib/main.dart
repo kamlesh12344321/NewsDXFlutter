@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
@@ -86,11 +87,30 @@ class _MyAppState extends State<MyApp> {
         Provider(create: (_) => AuthService())
       ],
       child: ThemeProvider(
-        themes: [
-          AppTheme.light(),
-          AppTheme.dark(),
+          saveThemesOnChange: true,
+          loadThemeOnInit: false,
+          onInitCallback: (controller, previouslySavedThemeFuture) async {
+            String? savedTheme = await previouslySavedThemeFuture;
+            if (savedTheme != null) {
+              controller.setTheme(savedTheme);
+            } else {
+              Brightness platformBrightness =
+                  SchedulerBinding.instance?.window.platformBrightness ??
+                      Brightness.light;
+              if (platformBrightness == Brightness.dark) {
+                controller.setTheme('dark');
+              } else {
+                controller.setTheme('light');
+              }
+              controller.forgetSavedTheme();
+            }
+          },
+        themes: <AppTheme> [
+          AppTheme.light(id: 'light'),
+          AppTheme.dark(id: 'dark'),
         ],
           child: ThemeConsumer(
+
               child: Builder(
                 builder: (themeContext) =>  MaterialApp.router(
                   routeInformationParser: parser,

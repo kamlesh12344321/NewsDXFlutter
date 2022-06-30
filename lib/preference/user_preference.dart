@@ -12,6 +12,7 @@ class Prefs  {
   static const String otpId = "otp_id";
   static const String accessToken = "accessToken";
   static const String isProfileImagePresent = "profile_image_present";
+  static const String onBoardingstatus = "onboarding";
 
   static Future<SharedPreferences?> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -32,8 +33,11 @@ class Prefs  {
 
   static Future<bool> saveIsProfileImagePre(bool value) async =>
       await _prefs!.setBool(isProfileImagePresent,value);
-
   static bool getProfilePre() => _prefs!.getBool(isProfileImagePresent) ?? false;
 
+
+  static Future<bool> saveOnbording(bool value) async =>
+      await _prefs!.setBool(onBoardingstatus, value);
+  static bool getOnBoarding() => _prefs!.getBool(onBoardingstatus) ?? false;
 
 }

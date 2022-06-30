@@ -11,7 +11,7 @@ class BookMarks extends StatefulWidget {
 }
 
 class _BookMarksState extends State<BookMarks> {
-  int size = 1;
+  int size = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -95,7 +95,6 @@ class _SplashState extends State<Splash> {
       _initialized = true;
       Timer(const Duration(milliseconds: 2000), () {
         appState.setSplashFinished();
-        appState.login(true);
       });
     }
   }
