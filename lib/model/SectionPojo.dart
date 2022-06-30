@@ -86,6 +86,7 @@ DataPojo copyWith({  String? currentpage,
 }
 class Articles {
   Articles({
+      bool? bookmarked,
       String? sectionname, 
       String? sectionid, 
       String? articleid, 
@@ -104,9 +105,11 @@ class Articles {
       // List<dynamic>? relatedarticles,
       String? shortdescription, 
       String? descpart1, 
-      int? publishdategmtmillis, 
+      int? publishdategmtmillis,
+     bool? premium,
       String? authorphoto, 
       String? guid,}){
+    _bookmarked = bookmarked;
     _sectionname = sectionname;
     _sectionid = sectionid;
     _articleid = articleid;
@@ -128,9 +131,11 @@ class Articles {
     _publishdategmtmillis = publishdategmtmillis;
     _authorphoto = authorphoto;
     _guid = guid;
+    _premium = premium;
 }
 
   Articles.fromJson(dynamic json) {
+    _bookmarked = json['bookmarked'];
     _sectionname = json['SECTION_NAME'];
     _sectionid = json['SECTION_ID'];
     _articleid = json['ARTICLE_ID'];
@@ -151,18 +156,20 @@ class Articles {
         _images?.add(Images.fromJson(v));
       });
     }
-    if (json['RELATED_ARTICLES'] != null) {
-      //_relatedarticles = [];
-      json['RELATED_ARTICLES'].forEach((v) {
-        //_relatedarticles?.add(Dynamic.fromJson(v));
-      });
-    }
+    // if (json['RELATED_ARTICLES'] != null) {
+    //   //_relatedarticles = [];
+    //   json['RELATED_ARTICLES'].forEach((v) {
+    //     //_relatedarticles?.add(Dynamic.fromJson(v));
+    //   });
+    // }
     _shortdescription = json['SHORT_DESCRIPTION'];
     _descpart1 = json['DESC_PART_1'];
     _publishdategmtmillis = json['PUBLISH_DATE_GMT_MILLIS'];
+    _premium = json['premium'];
     _authorphoto = json['AUTHOR_PHOTO'];
     _guid = json['guid'];
   }
+  bool? _bookmarked;
   String? _sectionname;
   String? _sectionid;
   String? _articleid;
@@ -182,51 +189,11 @@ class Articles {
   String? _shortdescription;
   String? _descpart1;
   int? _publishdategmtmillis;
+  bool? _premium;
   String? _authorphoto;
   String? _guid;
-Articles copyWith({  String? sectionname,
-  String? sectionid,
-  String? articleid,
-  String? propkey,
-  String? title,
-  String? leadtext,
-  String? link,
-  String? type,
-  String? category,
-  String? author,
-  String? audiourl,
-  String? videourl,
-  String? location,
-  String? publishdate,
-  List<Images>? images,
-  // List<dynamic>? relatedarticles,
-  String? shortdescription,
-  String? descpart1,
-  int? publishdategmtmillis,
-  String? authorphoto,
-  String? guid,
-}) => Articles(  sectionname: sectionname ?? _sectionname,
-  sectionid: sectionid ?? _sectionid,
-  articleid: articleid ?? _articleid,
-  propkey: propkey ?? _propkey,
-  title: title ?? _title,
-  leadtext: leadtext ?? _leadtext,
-  link: link ?? _link,
-  type: type ?? _type,
-  category: category ?? _category,
-  author: author ?? _author,
-  audiourl: audiourl ?? _audiourl,
-  videourl: videourl ?? _videourl,
-  location: location ?? _location,
-  publishdate: publishdate ?? _publishdate,
-  images: images ?? _images,
-  //relatedarticles: relatedarticles ?? _relatedarticles,
-  shortdescription: shortdescription ?? _shortdescription,
-  descpart1: descpart1 ?? _descpart1,
-  publishdategmtmillis: publishdategmtmillis ?? _publishdategmtmillis,
-  authorphoto: authorphoto ?? _authorphoto,
-  guid: guid ?? _guid,
-);
+
+  bool? get bookmarked => _bookmarked;
   String? get sectionname => _sectionname;
   String? get sectionid => _sectionid;
   String? get articleid => _articleid;
@@ -246,11 +213,18 @@ Articles copyWith({  String? sectionname,
   String? get shortdescription => _shortdescription;
   String? get descpart1 => _descpart1;
   int? get publishdategmtmillis => _publishdategmtmillis;
+  bool? get premium => _premium;
+
+  set bookmarked(bool? value) {
+    _bookmarked = value;
+  }
+
   String? get authorphoto => _authorphoto;
   String? get guid => _guid;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['bookmarked'] = _bookmarked;
     map['SECTION_NAME'] = _sectionname;
     map['SECTION_ID'] = _sectionid;
     map['ARTICLE_ID'] = _articleid;
@@ -265,6 +239,7 @@ Articles copyWith({  String? sectionname,
     map['VIDEO_URL'] = _videourl;
     map['LOCATION'] = _location;
     map['PUBLISH_DATE'] = _publishdate;
+    map['premium'] = _premium;
     if (_images != null) {
       map['IMAGES'] = _images?.map((v) => v.toJson()).toList();
     }
@@ -295,11 +270,7 @@ class Images {
   }
   String? _imageid;
   String? _caption;
-Images copyWith({  String? imageid,
-  String? caption,
-}) => Images(  imageid: imageid ?? _imageid,
-  caption: caption ?? _caption,
-);
+
   String? get imageid => _imageid;
   String? get caption => _caption;
 

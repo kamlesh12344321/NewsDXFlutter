@@ -57,6 +57,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
+    List<String> articleIdList = Prefs.getArticleStringList();
     _controller = ScrollController();
     _controllerBanner = ScrollController();
     homeSectionsViewModel = context.watch<HomeSectionsViewModel>();
@@ -209,6 +210,10 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                             itemCount: val?.articles?.length,
                             itemBuilder: (context, index) {
                               Articles? article = val?.articles?[index];
+                              bool isPresent = articleIdList.contains(article?.articleid!);
+                              if(isPresent){
+                                article!.bookmarked = true;
+                              }
                               return ListTile(
                                 tileColor: Colors.white,
                                 title: HomePageListItem(

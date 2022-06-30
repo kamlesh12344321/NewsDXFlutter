@@ -114,6 +114,7 @@ flutter:
     - assets/speaker.svg
     - assets/forward.svg
     - assets/dot.svg
+    - assets/bookmark_filled.svg
   fonts:
     - family: Montserrat
       fonts:
