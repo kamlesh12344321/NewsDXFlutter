@@ -16,7 +16,6 @@ import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
 import 'package:newsdx/userprofile/user_profile_info_screen.dart';
-import 'package:newsdx/screens/more.dart';
 import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
 import 'package:newsdx/viewmodel/generic_list_view_model.dart';
@@ -32,7 +31,6 @@ import 'package:newsdx/widgets/home_page_list_item.dart';
 import 'package:newsdx/widgets/nav_bar.dart';
 import 'package:newsdx/widgets/sport_star_item.dart';
 import 'package:newsdx/widgets/sport_stars.dart';
-import 'package:newsdx/widgets/subscribe_user.dart';
 import 'package:newsdx/widgets/top_picks_item.dart';
 import 'package:provider/provider.dart';
 import '../utils/CustomColors.dart';
@@ -92,7 +90,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                   scale: 1.2,
                   child: IconButton(
                       icon: SvgPicture.asset("assets/menu.svg"), onPressed: () {
-                    Scaffold.of(context).openDrawer();
+                    // Scaffold.of(context).openDrawer();
                   })),
               title: Transform.scale(
                 scale: 1,

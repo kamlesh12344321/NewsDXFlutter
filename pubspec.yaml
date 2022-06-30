@@ -66,8 +66,7 @@ dependencies:
   flutter_html: any
   theme_provider: ^0.5.0
   getwidget: ^3.0.1
-
-
+  modal_bottom_sheet: ^2.1.0
 
 dev_dependencies:
   flutter_test:

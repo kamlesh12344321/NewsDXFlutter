@@ -23,17 +23,16 @@ import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'dart:developer' as developer;
-
 import 'apple/apple_sign_in_available.dart';
 
-void main() async {
+Future<void> main() async {
   Loggy.initLoggy();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await Prefs.init();
   final appleSignInAvailable = await AppleSignInAvailable.check();
   runApp(Provider<AppleSignInAvailable>.value(value: appleSignInAvailable,
-  child: MyApp(),));
+  child: const MyApp(),));
 }
 
 class MyApp extends StatefulWidget {

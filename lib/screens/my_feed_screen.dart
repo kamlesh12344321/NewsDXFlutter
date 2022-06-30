@@ -1,21 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/components/toggle/gf_toggle.dart';
 import 'package:getwidget/types/gf_toggle_type.dart';
-import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/model/SectionList.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
 import 'package:provider/provider.dart';
 
-class MyFeed extends StatefulWidget {
-  const MyFeed({Key? key}) : super(key: key);
-
+class PremiumPage extends StatefulWidget {
   @override
-  State<MyFeed> createState() => _MyFeedState();
+  State<PremiumPage> createState() => _PremiumPageState();
 }
 
-class _MyFeedState extends State<MyFeed> {
+class _PremiumPageState extends State<PremiumPage> {
   late SectionsViewModel sectionsViewModel;
   late SectionsList? sectionsList;
   TextEditingController myController = TextEditingController();
@@ -33,14 +32,14 @@ class _MyFeedState extends State<MyFeed> {
         backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0.0,
-        leading: Transform.scale(
-          scale: 1.2,
-          child: IconButton(
-              icon: SvgPicture.asset("assets/back.svg"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }),
-        ),
+        // leading: Transform.scale(
+        //   scale: 1.2,
+        //   child: IconButton(
+        //       icon: SvgPicture.asset("assets/back.svg"),
+        //       onPressed: () {
+        //         Navigator.of(context).pop();
+        //       }),
+        // ),
         actions: [
           Padding(
               padding: const EdgeInsets.only(right: 16),
@@ -102,7 +101,7 @@ class _MyFeedState extends State<MyFeed> {
                     String? title = sectionsList?.data?[index].sectionName;
                     return Padding(
                       padding:
-                          const EdgeInsets.only(left: 0, right: 0, top: 20),
+                      const EdgeInsets.only(left: 0, right: 0, top: 20),
                       child: Column(
                         children: [
                           Row(
@@ -140,8 +139,8 @@ class _MyFeedState extends State<MyFeed> {
         ),
       ),
     );
-  }
 
+}
   @override
   void dispose() {
     myController.dispose();
@@ -156,4 +155,5 @@ class _MyFeedState extends State<MyFeed> {
     });
     super.initState();
   }
+
 }

@@ -51,85 +51,83 @@ class ArticleDetail extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children:  [
-                  Container(
-                    child: Row(
-                      children: const [ Padding(
-                        padding: EdgeInsets.only(top: 16, left: 16),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.brown,
-                          child: Text(
-                            "A",
-                            style: TextStyle(color: Colors.white),
-                          ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children:  [
+                Container(
+                  child: Row(
+                    children: const [ Padding(
+                      padding: EdgeInsets.only(top: 16, left: 16),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.brown,
+                        child: Text(
+                          "A",
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
-                        Padding(padding: EdgeInsets.only(left: 10, top: 10),
-                          child: Text("Kailash"),),],
                     ),
+                      Padding(padding: EdgeInsets.only(left: 10, top: 10),
+                        child: Text("Kailash"),),],
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Transform.scale(
-                            scale: 1,
-                            child: IconButton(
-                                icon: SvgPicture.asset("assets/share.svg"), onPressed: () {})),
-                        Transform.scale(
-                            scale: 1,
-                            child: IconButton(
-                                icon: SvgPicture.asset("assets/bi_bookmark.svg"), onPressed: () {}))
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Padding(padding: const EdgeInsets.only(top: 10, left: 16, right: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                 GestureDetector(
-                   onTap: ()  {
-                     if(isSpeaking){
-                       isSpeaking  = false;
-                       tts.stop();
-                     } else {
-                       isSpeaking  = true;
-                       tts.speak(removeAllHtmlTags(articleItem!.descpart1!) ?? "");
-                     }
-                   },
-                   child: Align(
-                     alignment: Alignment.topLeft,
-                     child :SvgPicture.asset("assets/speaker.svg", height: 20,width: 20,),
-                   ),
+                ),
+                Container(
+                  child: Row(
+                    children: [
+                      Transform.scale(
+                          scale: 1,
+                          child: IconButton(
+                              icon: SvgPicture.asset("assets/share.svg"), onPressed: () {})),
+                      Transform.scale(
+                          scale: 1,
+                          child: IconButton(
+                              icon: SvgPicture.asset("assets/bi_bookmark.svg"), onPressed: () {}))
+                    ],
+                  ),
+                )
+              ],
+            ),
+            Padding(padding: const EdgeInsets.only(top: 10, left: 16, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+               GestureDetector(
+                 onTap: ()  {
+                   if(isSpeaking){
+                     isSpeaking  = false;
+                     tts.stop();
+                   } else {
+                     isSpeaking  = true;
+                     tts.speak(removeAllHtmlTags(articleItem!.descpart1!) ?? "");
+                   }
+                 },
+                 child: Align(
+                   alignment: Alignment.topLeft,
+                   child :SvgPicture.asset("assets/speaker.svg", height: 20,width: 20,),
                  ),
-                   const SizedBox(
-                    width: 5,
-                  ),
-                  Flexible(
-                    child: Text(articleItem?.title ?? "", style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 28,
-                    ),),
-                  ),
-                ],
-              ),),
-              Padding(padding: const EdgeInsets.only(left: 16, top: 10),child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(result,),
-              ),),
-              Padding(padding: const EdgeInsets.only(top: 10, left: 16, right: 16,bottom: 5), child:
-                FullImageViewItemG(article: articleItem,),),
-              // Text( articleItem?.images?[0].caption ?? ""),
-              Padding(padding: const EdgeInsets.only(left: 16, right: 16,), child: Html(data: articleItem?.descpart1),),
-            ],
-          ),
+               ),
+                 const SizedBox(
+                  width: 5,
+                ),
+                Flexible(
+                  child: Text(articleItem?.title ?? "", style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 28,
+                  ),),
+                ),
+              ],
+            ),),
+            Padding(padding: const EdgeInsets.only(left: 16, top: 10),child: Align(
+              alignment: Alignment.topLeft,
+              child: Text(result,),
+            ),),
+            Padding(padding: const EdgeInsets.only(top: 10, left: 16, right: 16,bottom: 5), child:
+              FullImageViewItemG(article: articleItem,),),
+            // Text( articleItem?.images?[0].caption ?? ""),
+            Padding(padding: const EdgeInsets.only(left: 16, right: 16,), child: Html(data: articleItem?.descpart1),),
+          ],
         ),
       )
     );
@@ -144,4 +142,5 @@ class ArticleDetail extends StatelessWidget {
 
     return htmlText.replaceAll(exp, '');
   }
+
 }

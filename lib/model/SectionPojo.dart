@@ -84,7 +84,6 @@ DataPojo copyWith({  String? currentpage,
   }
 
 }
-
 class Articles {
   Articles({
       String? sectionname, 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newsdx/screens/bookmark.dart';
-import 'package:newsdx/screens/more.dart';
-import 'package:newsdx/screens/my_feed.dart';
+import 'package:newsdx/screens/my_feed_screen.dart';
 import 'package:newsdx/widgets/big_text.dart';
 
 class NavBar extends StatefulWidget {
@@ -28,7 +27,7 @@ class _NavBarState extends State<NavBar> {
              child:  const Text("MyFeed"),
              onPressed: () {
                Navigator.of(context).pop();
-               Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MyFeed()));
+               // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MyFeed()));
              },
            ),),
            Padding(padding: EdgeInsets.only(top: 20,left: 10, right: 10), child: ElevatedButton(
@@ -56,7 +55,7 @@ class _NavBarState extends State<NavBar> {
              child:  const Text("Setting"),
              onPressed: () {
                Navigator.of(context).pop();
-               Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MoreScreen()));
+               // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MoreScreen()));
              },
            ),),
          ],
