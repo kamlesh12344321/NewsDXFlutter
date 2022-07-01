@@ -1,5 +1,11 @@
+import 'package:objectbox/objectbox.dart';
 
-class BookmarkedArticleList{
-  final String articleId;
-  BookmarkedArticleList(this.articleId);
+@Entity()
+class BookmarkedArticleList {
+  int id;
+  String articleId;
+
+  BookmarkedArticleList({this.id = 0, required this.articleId});
 }
+
+

@@ -12,6 +12,9 @@ import 'package:newsdx/widgets/small_text.dart';
 import 'package:newsdx/model/SectionPojo.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 
+import '../utils/bookmark_method.dart';
+import '../utils/shared_method.dart';
+
 
 class HomePageListItem extends StatefulWidget {
   final Articles? articleItem;
@@ -85,22 +88,36 @@ class _HomePageListItemState extends State<HomePageListItem> {
                     ),
                     Row(
                       children: [
-                        SvgPicture.asset("assets/share.svg"),
+                         InkWell(
+                           child:  SvgPicture.asset("assets/share.svg"),
+                           onTap: (){
+                             Shared.onArticleShare(context,
+                                 widget.articleItem!.title!,
+                                 widget.articleItem!.link!);
+                           },
+                         ),
                          const SizedBox(
                           width: 18,
                           height: 17,
                         ),
                        InkWell(
                          child: bookmarked_local== true ? SvgPicture.asset("assets/bookmark_filled.svg") : SvgPicture.asset("assets/bi_bookmark.svg"),
-                         onTap: (){
-                           String articleId = widget.articleItem?.articleid ?? "";
+                         onTap: () async{
+                           var addBookMark = BookmarkedArticleList(articleId: widget.articleItem!.articleid!);
+                           int id = await BookMark.onAddBookMark(addBookMark);
+                           int cont = 0;
+                           await BookMark.onAllBookMark().then((value) => {
+                              cont = value.length
+                           });
+                           print("Sucessfull inserted an $cont object with $id");
+                           /*String articleId = widget.articleItem?.articleid ?? "";
                            List<String>? artiList = <String>[];
                            artiList.add(articleId);
                            Prefs.saveArticleBookedList(artiList);
                            widget.articleItem?.bookmarked == true;
                            setState(() {
                              bookmarked_local == true;
-                           });
+                           });*/
 
                          },
                        ),

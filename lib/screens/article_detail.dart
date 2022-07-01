@@ -4,9 +4,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:newsdx/model/SectionPojo.dart';
 import 'package:newsdx/model/home_section.dart';
+import 'package:newsdx/utils/bookmark_method.dart';
 import 'package:newsdx/widgets/article_detail_fullimage.dart';
 import 'package:newsdx/widgets/full_image_view_item.dart';
 import 'package:text_to_speech/text_to_speech.dart';
+
+import '../model/bookmark_article_list.dart';
+import '../utils/shared_method.dart';
 
 
 class ArticleDetail extends StatelessWidget {
@@ -77,14 +81,27 @@ class ArticleDetail extends StatelessWidget {
                       Transform.scale(
                           scale: 1,
                           child: IconButton(
-                              icon: SvgPicture.asset("assets/share.svg"), onPressed: () {})),
+                              icon: SvgPicture.asset("assets/share.svg"), onPressed: () {
+                            Shared.onArticleShare(context,
+                                articleItem!.title!,
+                                articleItem!.link!);
+                          })),
                       Transform.scale(
                           scale: 1,
                           child: IconButton(
-                              icon: SvgPicture.asset("assets/bi_bookmark.svg"), onPressed: () {}))
+                              icon: SvgPicture.asset("assets/bi_bookmark.svg"), onPressed: () async{
+                                var addBookMark = BookmarkedArticleList(articleId: articleItem!.articleid!);
+                            int id = await BookMark.onAddBookMark(addBookMark);
+                                int cont = 0;
+                                await BookMark.onAllBookMark().then((value) => {
+                                  cont = value.length
+                                });
+                                print("Sucessfull inserted an $cont object with $id");
+                          }))
                     ],
                   ),
                 )
+
               ],
             ),
             Padding(padding: const EdgeInsets.only(top: 10, left: 16, right: 10),
