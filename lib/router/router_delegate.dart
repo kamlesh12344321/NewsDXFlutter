@@ -163,6 +163,9 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
       case Pages.UserProfileInfo:
         UserProfileInfoPageConfig.currentPageAction = action;
         break;
+      case Pages.ArticleDe:
+        ArticleDetailPageConfig.currentPageAction = action;
+        break;
       default:
         break;
     }
@@ -175,11 +178,11 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
     if (shouldAddPage) {
       switch (pageConfig!.uiPage) {
         case Pages.Splash:
-          _addPageData(Splash(), SplashPageConfig);
+          _addPageData(const Splash(), SplashPageConfig);
           break;
 
         case Pages.Login:
-          _addPageData(LoginScreen(), LoginPageConfig);
+          _addPageData(const LoginScreen(), LoginPageConfig);
           break;
 
         case Pages.Otp:
@@ -187,15 +190,18 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
           break;
 
         case Pages.Home:
-          _addPageData(HomeScreen(), HomePageConfig);
+          _addPageData(const HomeScreen(), HomePageConfig);
           break;
 
         case Pages.SubscriptionPlan:
-          _addPageData(SubscriptionPlanScreen(),SubscriptionPlanPageConfig);
+          _addPageData(const SubscriptionPlanScreen(),SubscriptionPlanPageConfig);
           break;
 
         case Pages.UserProfileInfo:
-          _addPageData(UserProfileInfoScreen(), UserProfileInfoPageConfig);
+          _addPageData(const UserProfileInfoScreen(), UserProfileInfoPageConfig);
+          break;
+        case Pages.ArticleDe:
+          _addPageData(const ArticleDetail(), ArticleDetailPageConfig);
           break;
 
         default:

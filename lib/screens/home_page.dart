@@ -73,11 +73,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
     if (sectionsList?.data?[0].sectionName != "Home") {
       sectionsList?.data?.insert(0, homeSectionCreate);
     }
-    return WillPopScope(
-      onWillPop: () {
-        return Future.value(true); // or return Future.value(false);
-      },
-        child: DefaultTabController(
+    return  DefaultTabController(
           length: lengthValue,
           initialIndex: 0,
           child: Scaffold(
@@ -220,13 +216,10 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                   articleItem: article,
                                 ),
                                 onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticleDetail(articleItem: article,)));
-
-                                  // Navigator.push(context, MaterialPageRoute(
-                                 //     builder: (context) => ArticleDetail(
-                                 //         articleItem: article,
-                                 //     ),
-                                 // ));
+                                  appState.currentAction = PageAction(
+                                      state: PageState.addWidget,
+                                      widget: ArticleDetail(articleItem: article,),
+                                      page: ArticleDetailPageConfig);
                                 },
                               );
                             },
@@ -250,7 +243,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
               ),
             ),
           ),
-        ),
     );
   }
 
@@ -269,7 +261,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   Future<SectionPojo> getArticles(String? sectionId) async {
     String? getAccessToken = "Bearer ${MyConstant.propertyToken}";
     var url = Uri.parse(MyConstant.ARTICLE_LIST);
-
     final response = await http.post(
       url,
       body: {"sectionId": sectionId},
@@ -278,31 +269,9 @@ class _HomePageState extends State<HomePage> with UiLoggy {
       },
     );
 
-    print(
-        "######################################################################");
-    //String res = response.body;
-    //print(res);
-
     SectionPojo allSection = modelClassFromJson(response.body);
-
-    // AllSection allSection = allSectionFromJson(response.body);
-    // String? sectionName = allSection?.data?.articles![0].sectionName;
-
-    print(
-        "######################################################################");
-    // loggy.debug('Section ID :: $allSection?.data?.articles![0].sectionId');
-    // loggy.debug('Section ID :: $allSection?.data?.articles![0].sectionId.toString()');
-    // String? sectionIdd = allSection?.data?.articles![0].sectionid.toString();
-    // loggy.debug(sectionIdd);
-    // loggy.debug('Sec :: $sectionIdd');
-    /*print('Method Section ID :: $allSection?.status :: $sectionId');
-    print('Section ID :: $allSection?.data?.articles![0].sectionId');
-    print('Section Name :: $allSection?.data?.articles![0].sectionName');*/
-    // print('Status :: $allSection?.status');
-
     return allSection; //allSectionFromJson(response.body);
   }
-
   SectionPojo modelClassFromJson(String str) =>
       SectionPojo.fromJson(json.decode(str));
 }

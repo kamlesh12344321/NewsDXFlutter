@@ -23,7 +23,6 @@ class ArticleDetail extends StatelessWidget {
     var result = GetTimeAgo.parse(_convertedTimestamp);
     double _height = 1;
     bool isSpeaking = false;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

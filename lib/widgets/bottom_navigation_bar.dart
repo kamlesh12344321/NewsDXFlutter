@@ -48,6 +48,7 @@ class _TheHinduBottomNavState extends State<TheHinduBottomNav> {
         children: tabPages,
         onPageChanged: onPageChanged,
         controller: _pageController,
+        physics: NeverScrollableScrollPhysics(),
       ),
     );
   }
