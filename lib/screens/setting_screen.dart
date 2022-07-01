@@ -120,29 +120,29 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 )
               ],
             ),),
-            Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Personalise myFeed", style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),),
-                    SvgPicture.asset("assets/forward.svg")
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.grey,
-                )
-              ],
-            ),),
+            // Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
+            //   children: [
+            //     Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //       children: [
+            //         const Text("Personalise myFeed", style: TextStyle(
+            //           color: Colors.grey,
+            //           fontSize: 16,
+            //         ),),
+            //         SvgPicture.asset("assets/forward.svg")
+            //       ],
+            //     ),
+            //     const SizedBox(
+            //       height: 10,
+            //     ),
+            //
+            //     Container(
+            //       height: 1,
+            //       width: double.infinity,
+            //       color: Colors.grey,
+            //     )
+            //   ],
+            // ),),
             Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
               children: [
                 Row(
