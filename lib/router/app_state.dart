@@ -45,7 +45,7 @@ class AppState extends ChangeNotifier {
   }
 
   setSplashFinished() {
-    developer.log(Log_Tag , name: "#################################");
+    developer.log(Log_Tag , name: "###########################");
     developer.log(Log_Tag , name: "AppState :: setSplashFinished()");
     _splashFinished = true;
 
