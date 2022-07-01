@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'dart:developer' as developer;
 
+import 'package:newsdx/screens/bookmark.dart';
+
 class NewsDxRouteParser extends RouteInformationParser<PageConfiguration> {
   @override
   Future<PageConfiguration> parseRouteInformation(RouteInformation routeInformation) async {
@@ -30,6 +32,10 @@ class NewsDxRouteParser extends RouteInformationParser<PageConfiguration> {
         return UserProfileInfoPageConfig;
       case ArticleDe:
         return ArticleDetailPageConfig;
+      case BookMarkScreenPath:
+        return BookMarkPageConfig;
+      case NotificationScreenPath:
+        return NotificationPageConfig;
       default:
         return SplashPageConfig;
     }
@@ -51,6 +57,10 @@ class NewsDxRouteParser extends RouteInformationParser<PageConfiguration> {
         return const RouteInformation(location: SubscriptionPlanScreenPath);
       case Pages.ArticleDe:
         return const RouteInformation(location: ArticleDe);
+      case Pages.BookMark:
+        return const RouteInformation(location: BookMarkScreenPath );
+      case Pages.Notification:
+        return const RouteInformation(location: NotificationScreenPath);
 
       default: return const RouteInformation(location: SplashPath);
     }

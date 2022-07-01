@@ -12,7 +12,7 @@ class _TrendingPageState extends State<TrendingPage> {
   Widget build(BuildContext context) {
     return const Align(
       alignment: Alignment.center,
-      child: Text("Tranding"),
+      child: Text("Coming Soon"),
     );
   }
 }

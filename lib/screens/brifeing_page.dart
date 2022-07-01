@@ -12,7 +12,7 @@ class _BriefingPageState extends State<BriefingPage> {
   Widget build(BuildContext context) {
     return const Align(
       alignment: Alignment.center,
-      child: Text("Briefing"),
+      child: Text("Coming Soon"),
     );
   }
 }

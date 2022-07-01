@@ -5,6 +5,11 @@ import 'package:getwidget/types/gf_toggle_type.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/preference/user_preference.dart';
+import 'package:newsdx/router/app_state.dart';
+import 'package:newsdx/router/ui_pages.dart';
+import 'package:newsdx/screens/bookmark.dart';
+import 'package:newsdx/screens/notificaton_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class MyAccountPage extends StatefulWidget {
@@ -15,8 +20,10 @@ class MyAccountPage extends StatefulWidget {
 }
 
 class _MyAccountPageState extends State<MyAccountPage> {
+
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -181,94 +188,104 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 )
               ],
             ),),
-            Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: const [
-                        Text("Notifications", style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        // SvgPicture.asset("assets/dot.svg"),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        // 200 unread can be added notification
-                        const Text("",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14
+            InkWell(
+              onTap: (){
+                appState.currentAction = PageAction(
+                    state: PageState.addWidget,
+                    widget: const NotificationScreen(),
+                    page: NotificationPageConfig);
+              },
+              child: Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: const [
+                          Text("Notifications", style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16,
                           ),),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        SvgPicture.asset("assets/forward.svg"),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          // SvgPicture.asset("assets/dot.svg"),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          // 200 unread can be added notification
+                          const Text("",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14
+                            ),),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          SvgPicture.asset("assets/forward.svg"),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
 
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.grey,
-                )
-              ],
-            ),),
-            Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: const [
-                        Text("Bookmark", style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        // SvgPicture.asset("assets/dot.svg"),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        // 200 unread can be added for bookmark
-                        const Text("",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14
-                          ),),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        SvgPicture.asset("assets/forward.svg"),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.grey,
-                )
-              ],
-            ),),
+                  Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: Colors.grey,
+                  )
+                ],
+              ),),
+            ),
+           InkWell(
+             onTap: (){
+               appState.currentAction = PageAction(
+                   state: PageState.addWidget,
+                   widget: const BookMarks(),
+                   page: BookMarkPageConfig);
+             },
+             child:  Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
+               children: [
+                 Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     Row(
+                       children: const [
+                         Text("Bookmark", style: TextStyle(
+                           color: Colors.grey,
+                           fontSize: 16,
+                         ),),
+                         SizedBox(
+                           width: 4,
+                         ),
+                         // SvgPicture.asset("assets/dot.svg"),
+                       ],
+                     ),
+                     Row(
+                       children: [
+                         // 200 unread can be added for bookmark
+                         const Text("",
+                           style: TextStyle(
+                               color: Colors.grey,
+                               fontSize: 14
+                           ),),
+                         const SizedBox(
+                           width: 5,
+                         ),
+                         SvgPicture.asset("assets/forward.svg"),
+                       ],
+                     ),
+                   ],
+                 ),
+                 const SizedBox(
+                   height: 10,
+                 ),
+               ],
+             ),),
+           ),
             Column(
               children: [
                 Padding(padding: const EdgeInsets.only(top: 100),

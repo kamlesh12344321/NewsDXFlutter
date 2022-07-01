@@ -6,8 +6,10 @@ import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/router_delegate.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
+import 'package:newsdx/screens/bookmark.dart';
 import 'package:newsdx/screens/home_screen.dart';
 import 'package:newsdx/screens/login_screen.dart';
+import 'package:newsdx/screens/notificaton_screen.dart';
 import 'package:newsdx/screens/otp_screen.dart';
 import 'package:newsdx/screens/splash_screen.dart';
 import 'dart:developer' as developer;
@@ -166,6 +168,12 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
       case Pages.ArticleDe:
         ArticleDetailPageConfig.currentPageAction = action;
         break;
+      case Pages.BookMark:
+        BookMarkPageConfig.currentPageAction = action;
+        break;
+      case Pages.Notification:
+        NotificationPageConfig.currentPageAction = action;
+        break;
       default:
         break;
     }
@@ -202,6 +210,14 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
           break;
         case Pages.ArticleDe:
           _addPageData(const ArticleDetail(), ArticleDetailPageConfig);
+          break;
+
+        case Pages.BookMark:
+          _addPageData(const BookMarks(), BookMarkPageConfig);
+          break;
+
+        case Pages.Notification:
+          _addPageData(const NotificationScreen(), NotificationPageConfig);
           break;
 
         default:
