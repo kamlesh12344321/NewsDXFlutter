@@ -52,16 +52,16 @@ class Data {
     required this.htmlWidget,
   });
 
-  final List<Article> banner;
+  final List<HomeArticle> banner;
   final List<WidgetHome> widgets;
-  final List<Article> articles;
+  final List<HomeArticle> articles;
   final LiveWidget liveWidget;
   final HtmlWidget htmlWidget;
 
   Data copyWith({
-    required List<Article> banner,
+    required List<HomeArticle> banner,
     required List<WidgetHome> widgets,
-    required List<Article> articles,
+    required List<HomeArticle> articles,
     required LiveWidget liveWidget,
     required HtmlWidget htmlWidget,
   }) =>
@@ -74,9 +74,9 @@ class Data {
       );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    banner: List<Article>.from(json["BANNER"].map((x) => Article.fromJson(x))),
+    banner: List<HomeArticle>.from(json["BANNER"].map((x) => HomeArticle.fromJson(x))),
     widgets: List<WidgetHome>.from(json["WIDGETS"].map((x) => WidgetHome.fromJson(x))),
-    articles: List<Article>.from(json["ARTICLES"].map((x) => Article.fromJson(x))),
+    articles: List<HomeArticle>.from(json["ARTICLES"].map((x) => HomeArticle.fromJson(x))),
     liveWidget: LiveWidget.fromJson(json["LIVE_WIDGET"]),
     htmlWidget: HtmlWidget.fromJson(json["HTML_WIDGET"]),
   );
@@ -90,8 +90,8 @@ class Data {
   };
 }
 
-class Article {
-  Article({
+class HomeArticle {
+  HomeArticle({
       this.sectionName,
     required this.sectionId,
     required this.articleId,
@@ -137,7 +137,7 @@ class Article {
   final String authorPhoto;
   final String guid;
 
-  Article copyWith({
+  HomeArticle copyWith({
     required SectionName sectionName,
     required  String sectionId,
     required String articleId,
@@ -160,7 +160,7 @@ class Article {
     required String authorPhoto,
     required String guid,
   }) =>
-      Article(
+      HomeArticle(
         sectionName: sectionName ?? this.sectionName,
         sectionId: sectionId ?? this.sectionId,
         articleId: articleId ?? this.articleId,
@@ -184,7 +184,7 @@ class Article {
         guid: guid ?? this.guid,
       );
 
-  factory Article.fromJson(Map<String, dynamic> json) => Article(
+  factory HomeArticle.fromJson(Map<String, dynamic> json) => HomeArticle(
     sectionName: sectionNameValues!.map[json["SECTION_NAME"]],
     sectionId: json["SECTION_ID"],
     articleId: json["ARTICLE_ID"],
@@ -388,14 +388,14 @@ class WidgetHome {
    SectionName? sectionName;
   final int displayOrder;
   final String type;
-  final List<Article> articles;
+  final List<HomeArticle> articles;
 
   WidgetHome copyWith({
     required String sectionId,
     required SectionName sectionName,
     required int displayOrder,
     required String type,
-    required List<Article> articles,
+    required List<HomeArticle> articles,
   }) =>
       WidgetHome(
         sectionId: sectionId ?? this.sectionId,
@@ -410,7 +410,7 @@ class WidgetHome {
     sectionName: sectionNameValues.map[json["SECTION_NAME"]],
     displayOrder: json["DISPLAY_ORDER"],
     type: json["TYPE"],
-    articles: List<Article>.from(json["ARTICLES"].map((x) => Article.fromJson(x))),
+    articles: List<HomeArticle>.from(json["ARTICLES"].map((x) => HomeArticle.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {

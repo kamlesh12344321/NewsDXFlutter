@@ -116,7 +116,7 @@ class _PremiumPageState extends State<PremiumPage> {
                               ),
                               GFToggle(
                                 onChanged: (val) {},
-                                value: true,
+                                value: false,
                                 enabledTrackColor: Colors.blue,
                                 type: GFToggleType.ios,
                               ),

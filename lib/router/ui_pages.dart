@@ -16,6 +16,7 @@ const String ArticleDe = '/articleDetail';
 const String BookMarkScreenPath = '/bookmark';
 const String NotificationScreenPath = '/notification';
 const String OnBoarding = '/onbording';
+const String HomeArticlDetailPath = '/homeArticleDetail';
 
 enum Pages {
       Splash,
@@ -28,6 +29,7 @@ enum Pages {
       OnBoarding,
       BookMark,
       Notification,
+      HomeArticleDetail
 }
 
 class PageConfiguration {
@@ -53,4 +55,5 @@ PageConfiguration ArticleDetailPageConfig = PageConfiguration(key: 'articleDetai
 PageConfiguration BookMarkPageConfig = PageConfiguration(key: 'bookmark', path: SplashPath, uiPage: Pages.BookMark, currentPageAction: null);
 PageConfiguration NotificationPageConfig = PageConfiguration(key: 'notification', path: SplashPath, uiPage: Pages.Notification, currentPageAction: null);
 PageConfiguration OnBoardingPageConfig = PageConfiguration(key: 'onbording', path: SplashPath, uiPage: Pages.OnBoarding, currentPageAction: null);
+PageConfiguration HomeArticleDetailPageConfig = PageConfiguration(key: 'homeArticleDetail', path: SplashPath, uiPage: Pages.HomeArticleDetail, currentPageAction: null);
 

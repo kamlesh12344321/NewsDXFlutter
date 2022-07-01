@@ -9,6 +9,7 @@ import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
 import 'package:newsdx/screens/bookmark.dart';
 import 'package:newsdx/screens/home_screen.dart';
+import 'package:newsdx/screens/home_section_article_detail.dart';
 import 'package:newsdx/screens/login_screen.dart';
 import 'package:newsdx/screens/notificaton_screen.dart';
 import 'package:newsdx/screens/otp_screen.dart';
@@ -175,6 +176,9 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
       case Pages.Notification:
         NotificationPageConfig.currentPageAction = action;
         break;
+      case Pages.HomeArticleDetail:
+        HomeArticleDetailPageConfig.currentPageAction = action;
+        break;
       default:
         break;
     }
@@ -224,6 +228,10 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
         case Pages.OnBoarding:
           _addPageData(OnBoardingScreen(), OnBoardingPageConfig);
           break;
+
+        case Pages.HomeArticleDetail:
+          _addPageData(HomeSectionArticleDetail(), HomeArticleDetailPageConfig);
+              break;
 
         default:
           break;

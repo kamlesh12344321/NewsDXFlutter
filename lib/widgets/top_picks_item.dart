@@ -23,7 +23,7 @@ class _TopPicksViewState extends State<TopPicksView> {
           scrollDirection: Axis.horizontal,
           itemCount: widget.data?.length,
           itemBuilder: (context, index) {
-            Article? article = widget.data![index] as Article?;
+            HomeArticle? article = widget.data![index] as HomeArticle?;
               String imageUrl = article?.images![0] as String;
             return Container(
               margin: const EdgeInsets.only(top: 15, bottom: 10, left: 16, right: 10),
@@ -45,7 +45,7 @@ class _TopPicksViewState extends State<TopPicksView> {
                           imageBuilder: (context, imageProvider) => Container(
                             width: 149.0,
                             height: 112.0,
-                            margin: EdgeInsets.only(right: 10),
+                            margin: const EdgeInsets.only(right: 10),
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(20.0),
@@ -61,7 +61,7 @@ class _TopPicksViewState extends State<TopPicksView> {
                   Expanded(
                     child: Center(
                       child: Container(
-                        margin: EdgeInsets.only(top: 5,left: 4),
+                        margin: const EdgeInsets.only(top: 5,left: 4),
                         child: Text(
                           widget.data?[index].title ?? "",
                           maxLines: 2,

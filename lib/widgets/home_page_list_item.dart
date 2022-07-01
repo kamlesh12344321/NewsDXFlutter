@@ -41,7 +41,7 @@ class _HomePageListItemState extends State<HomePageListItem> {
     return Container(
       width: double.infinity,
       height: 112,
-      margin: const EdgeInsets.only(top: 12, bottom: 12, left: 16 , right: 16),
+      margin: const EdgeInsets.only(top: 12, bottom: 12, left: 0 , right: 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -66,10 +66,10 @@ class _HomePageListItemState extends State<HomePageListItem> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: widget.articleItem?.premium == true ? SvgPicture.asset("assets/dot.svg") : Container(child: Text(""),),
-                ),
+                // Align(
+                //   alignment: Alignment.topLeft,
+                //   child: widget.articleItem?.premium == true ? SvgPicture.asset("assets/dot.svg") : Container(child: Text(""),),
+                // ),
               ],
             ),
           ),

@@ -36,6 +36,8 @@ class NewsDxRouteParser extends RouteInformationParser<PageConfiguration> {
         return BookMarkPageConfig;
       case NotificationScreenPath:
         return NotificationPageConfig;
+      case HomeArticlDetailPath:
+        return HomeArticleDetailPageConfig;
       default:
         return SplashPageConfig;
     }
@@ -61,9 +63,9 @@ class NewsDxRouteParser extends RouteInformationParser<PageConfiguration> {
         return const RouteInformation(location: BookMarkScreenPath );
       case Pages.Notification:
         return const RouteInformation(location: NotificationScreenPath);
-
+      case Pages.HomeArticleDetail:
+        return const RouteInformation(location: HomeArticlDetailPath);
       default: return const RouteInformation(location: SplashPath);
     }
-
   }
 }
