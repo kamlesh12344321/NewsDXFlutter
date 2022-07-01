@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/model/SectionList.dart';
@@ -76,213 +77,231 @@ class _HomePageState extends State<HomePage> with UiLoggy {
     if (sectionsList?.data?[0].sectionName != "Home") {
       sectionsList?.data?.insert(0, homeSectionCreate);
     }
-    return  DefaultTabController(
-          length: lengthValue,
-          initialIndex: 0,
-          child: Scaffold(
-            drawer: const NavBar(),
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              centerTitle: true,
-              elevation: 0.0,
-              leading: Transform.scale(
-                  scale: 1.2,
-                  child: IconButton(
-                      icon: SvgPicture.asset("assets/menu.svg"), onPressed: () {
+    return DefaultTabController(
+      length: lengthValue,
+      initialIndex: 0,
+      child: Scaffold(
+        drawer: const NavBar(),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          elevation: 0.0,
+          leading: Transform.scale(
+              scale: 1.2,
+              child: IconButton(
+                  icon: SvgPicture.asset("assets/menu.svg"),
+                  onPressed: () {
                     // Scaffold.of(context).openDrawer();
                   })),
-              title: Row(
-                mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SvgPicture.asset("assets/app_logo_new.svg",height: 37,width: 37,),
-                    Column(
-                      children: const [
-                        Text("Alpine", style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20
-                        ), ),
-                        Text("NEWS"  ,style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w300,
-                            fontSize: 15
-                        ),)
-                      ],
-                    )
-                  ],
-                ),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: IconButton(
-                    icon: Transform.scale(
-                        scale: 1,
-                        child: SvgPicture.asset("assets/profile_placeholder.svg"),
-                  ),
-                    onPressed: (){
-                      appState.currentAction = PageAction(
-                          state: PageState.addWidget,
-                          widget: const UserProfileInfoScreen(),
-                          page: UserProfileInfoPageConfig);
-                    },
-                  ),
-                )
-              ],
-              bottom: TabBar(
-                isScrollable: true,
-                labelColor: Colors.blue,
-                unselectedLabelColor: Colors.black,
-                tabs: List<Widget>.generate(lengthValue, (int index) {
-                  return Tab(
-                    text: sectionsList?.data?[index].sectionName,
-                  );
-                }),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                "assets/app_logo_new.svg",
+                height: 37,
+                width: 37,
               ),
-            ),
-            body: TabBarView(
-              children: List<Widget>.generate(
-                lengthValue,
-                    (int index) {
-                  if (index == 0) {
-                    List<HomeArticle>? bannerList = homeSection?.data?.banner;
-                    List<WidgetHome>? widgetsList = homeSection?.data?.widgets;
-                    List<HomeArticle>? homeArticle3 =  homeSection?.data?.articles;
-                    LiveWidget? liveWidget =  homeSection?.data?.liveWidget;
-                    HtmlWidget? htmlWidget = homeSection?.data?.htmlWidget;
-                    int indexForAds = homeArticle3!.length -3;
+              Column(
+                children: [
+                  Text("Alpine",
+                      style: GoogleFonts.roboto(
+                          textStyle: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold))),
+                  Text(
+                    "NEWS",
+                    style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal)),
+                  )
+                ],
+              )
+            ],
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: IconButton(
+                icon: Transform.scale(
+                  scale: 1,
+                  child: SvgPicture.asset("assets/profile_placeholder.svg"),
+                ),
+                onPressed: () {
+                  appState.currentAction = PageAction(
+                      state: PageState.addWidget,
+                      widget: const UserProfileInfoScreen(),
+                      page: UserProfileInfoPageConfig);
+                },
+              ),
+            )
+          ],
+          bottom: TabBar(
+            isScrollable: true,
+            labelColor: Colors.blue,
+            unselectedLabelColor: Colors.black,
+            tabs: List<Widget>.generate(lengthValue, (int index) {
+              return Tab(
+                text: sectionsList?.data?[index].sectionName,
+              );
+            }),
+          ),
+        ),
+        body: TabBarView(
+          children: List<Widget>.generate(
+            lengthValue,
+            (int index) {
+              if (index == 0) {
+                List<HomeArticle>? bannerList = homeSection?.data?.banner;
+                List<WidgetHome>? widgetsList = homeSection?.data?.widgets;
+                List<HomeArticle>? homeArticle3 = homeSection?.data?.articles;
+                LiveWidget? liveWidget = homeSection?.data?.liveWidget;
+                HtmlWidget? htmlWidget = homeSection?.data?.htmlWidget;
+                int? indexForAds = homeArticle3?.length;
 
-                    int listSize = 0;
-                    if(bannerList != null ) {
-                      listSize++;
-                    }
-                    if(widgetsList != null) {
-                      listSize++;
-                    }
-                    if(homeArticle3!= null) {
-                      listSize++;
-                    }
-                    if(liveWidget != null) {
-                      listSize++;
-                    }
-                    if(htmlWidget!= null) {
-                      listSize++;
-                    }
-                    return ListView.builder(
-                        addAutomaticKeepAlives: true,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: listSize,
-                        controller: _controller,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return SizedBox(
-                              height: 260,
-                              width: double.infinity,
-                              child: PageView.builder(
-                                controller: PageController(
-                                  initialPage: _currentIndex,
-                                  keepPage: true,
-                                ),
-                                onPageChanged: (int index) {
-                                  _currentIndex = index;
-                                  FocusScope.of(context).requestFocus(FocusNode());
-                                },
-                                itemCount: bannerList!.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  HomeArticle? article = bannerList[index];
-                                  return InkWell(
-                                    onTap: () {
-                                      appState.currentAction = PageAction(
-                                          state: PageState.addWidget,
-                                          widget: HomeSectionArticleDetail(homeArticle : article,),
-                                          page: HomeArticleDetailPageConfig);
-                                    },
-                                    child: FullImageViewItem(
-                                      article: article,
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          } if (index == 1){
-                            return ListView.builder(
-                                addAutomaticKeepAlives: true,
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: homeArticle3!.length,
-                                controller: _controller,
-                                itemBuilder: (context, index){
-                                  HomeArticle? homeArticle = homeArticle3![index];
-                                  if(index == 4){
-                                    return BannerAds();
-                                  }
-                                  if(index == indexForAds){
-                                    return PoweredByAdsWidget();
-                                  }
-                                  return InkWell(
-                                    onTap: (){
-                                      appState.currentAction = PageAction(
-                                          state: PageState.addWidget,
-                                          widget: HomeSectionArticleDetail(homeArticle : homeArticle,),
-                                          page: HomeArticleDetailPageConfig);
-                                    },
-                                    child:  HomeArticleListItem(articleItem: homeArticle),
-                                  );
-                            });
-                          }
-                          return Container();
-                        });
-                  } else {
-                    return FutureBuilder<SectionPojo>(
-                      future: getArticles(sectionsList?.data?[index].id),
-                      builder: (context, snapShot) {
-                        if (snapShot.hasData) {
-                          DataPojo? val = snapShot.data?.data;
-                          List<Articles>? listValue = val?.articles;
-                          var sectionName = listValue![0].sectionname;
-                          var sectionId = listValue[0].sectionid;
-                          loggy.debug('SectionName :: $sectionName');
-                          return ListView.builder(
-                            itemCount: val?.articles?.length,
-                            itemBuilder: (context, index) {
-                              Articles? article = val?.articles?[index];
-                              bool isPresent = articleIdList.contains(article?.articleid!);
-                              if(isPresent){
-                                article!.bookmarked = true;
-                              }
-                              return ListTile(
-                                tileColor: Colors.white,
-                                title: HomePageListItem(
-                                  articleItem: article,
-                                ),
+                int listSize = 0;
+                if (bannerList != null) {
+                  listSize++;
+                }
+                if (widgetsList != null) {
+                  listSize++;
+                }
+                if (homeArticle3 != null) {
+                  listSize++;
+                }
+                if (liveWidget != null) {
+                  listSize++;
+                }
+                if (htmlWidget != null) {
+                  listSize++;
+                }
+                return ListView.builder(
+                    addAutomaticKeepAlives: true,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: listSize,
+                    controller: _controller,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return SizedBox(
+                          height: 260,
+                          width: double.infinity,
+                          child: PageView.builder(
+                            controller: PageController(
+                              initialPage: _currentIndex,
+                              keepPage: true,
+                            ),
+                            onPageChanged: (int index) {
+                              _currentIndex = index;
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            },
+                            itemCount: bannerList!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              HomeArticle? article = bannerList[index];
+                              return InkWell(
                                 onTap: () {
                                   appState.currentAction = PageAction(
                                       state: PageState.addWidget,
-                                      widget: ArticleDetail(articleItem: article,),
-                                      page: ArticleDetailPageConfig);
+                                      widget: HomeSectionArticleDetail(
+                                        homeArticle: article,
+                                      ),
+                                      page: HomeArticleDetailPageConfig);
                                 },
+                                child: FullImageViewItem(
+                                  article: article,
+                                ),
                               );
                             },
-                          );
-                        } else if (snapShot.hasError) {
-                          String? er = snapShot.hasError.toString();
-                          return Center(
-                            child: Text(
-                              "Error :: $er",
-                              style: const TextStyle(
-                                  color: Colors.red, fontWeight: FontWeight.bold),
+                          ),
+                        );
+                      }
+                      if (index == 1) {
+                        return ListView.builder(
+                            addAutomaticKeepAlives: true,
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: homeArticle3!.length,
+                            controller: _controller,
+                            itemBuilder: (context, index) {
+                              HomeArticle? homeArticle = homeArticle3[index];
+                              if (index == 4) {
+                                return BannerAds();
+                              }
+                              if (index == 12) {
+                                return PoweredByAdsWidget();
+                              }
+                              return InkWell(
+                                onTap: () {
+                                  appState.currentAction = PageAction(
+                                      state: PageState.addWidget,
+                                      widget: HomeSectionArticleDetail(
+                                        homeArticle: homeArticle,
+                                      ),
+                                      page: HomeArticleDetailPageConfig);
+                                },
+                                child: HomeArticleListItem(
+                                    articleItem: homeArticle),
+                              );
+                            });
+                      }
+                      return Container();
+                    });
+              } else {
+                return FutureBuilder<SectionPojo>(
+                  future: getArticles(sectionsList?.data?[index].id),
+                  builder: (context, snapShot) {
+                    if (snapShot.hasData) {
+                      DataPojo? val = snapShot.data?.data;
+                      List<Articles>? listValue = val?.articles;
+                      var sectionName = listValue![0].sectionname;
+                      var sectionId = listValue[0].sectionid;
+                      loggy.debug('SectionName :: $sectionName');
+                      return ListView.builder(
+                        itemCount: val?.articles?.length,
+                        itemBuilder: (context, index) {
+                          Articles? article = val?.articles?[index];
+                          bool isPresent =
+                              articleIdList.contains(article?.articleid!);
+                          if (isPresent) {
+                            article!.bookmarked = true;
+                          }
+                          return ListTile(
+                            tileColor: Colors.white,
+                            title: HomePageListItem(
+                              articleItem: article,
                             ),
+                            onTap: () {
+                              appState.currentAction = PageAction(
+                                  state: PageState.addWidget,
+                                  widget: ArticleDetail(
+                                    articleItem: article,
+                                  ),
+                                  page: ArticleDetailPageConfig);
+                            },
                           );
-                        } else {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    );
-                  }
-                },
-              ),
-            ),
+                        },
+                      );
+                    } else if (snapShot.hasError) {
+                      String? er = snapShot.hasError.toString();
+                      return Center(
+                        child: Text(
+                          "Error :: $er",
+                          style: const TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                );
+              }
+            },
           ),
+        ),
+      ),
     );
   }
 
@@ -312,6 +331,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
     SectionPojo allSection = modelClassFromJson(response.body);
     return allSection; //allSectionFromJson(response.body);
   }
+
   SectionPojo modelClassFromJson(String str) =>
       SectionPojo.fromJson(json.decode(str));
 }

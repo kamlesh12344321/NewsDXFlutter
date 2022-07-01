@@ -32,6 +32,7 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
       imageId = widget.homeArticle!.images[0].imageId;
     }
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
           centerTitle: true,

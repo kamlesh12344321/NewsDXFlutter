@@ -19,7 +19,7 @@ class _BannerAdsState extends State<BannerAds> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.white,
-          image: DecorationImage(
+          image: const DecorationImage(
               fit: BoxFit.fill,
               image: NetworkImage("http://hindumysqlstaging.ninestars.in/admin/assets/images/icons/th/Light/xxhdpi/ads.png"))),
     );
