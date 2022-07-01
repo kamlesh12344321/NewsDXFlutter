@@ -45,14 +45,22 @@ class AppState extends ChangeNotifier {
   }
 
   setSplashFinished() {
-    developer.log(Log_Tag , name: "#################################");
+    developer.log(Log_Tag , name: "###########################");
     developer.log(Log_Tag , name: "AppState :: setSplashFinished()");
     _splashFinished = true;
-    if(_loggedIn) {
+
+    bool onBoardingStatus =  Prefs.getOnBoarding();
+    if(onBoardingStatus) {
       _currentAction = PageAction(state: PageState.replaceAll, page: HomePageConfig);
+      /*if(_loggedIn) {
+        _currentAction = PageAction(state: PageState.replaceAll, page: HomePageConfig);
+      } else {
+        _currentAction = PageAction(state: PageState.replaceAll, page:OnBoardingPageConfig);
+      }*/
     } else {
-      _currentAction = PageAction(state: PageState.replaceAll, page:LoginPageConfig);
+      _currentAction = PageAction(state: PageState.replaceAll, page:OnBoardingPageConfig);
     }
+
     notifyListeners();
   }
 

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:newsdx/screens/brifeing_page.dart';
 import 'package:newsdx/screens/home_page.dart';
-import 'package:newsdx/screens/my_account_page.dart';
-import 'package:newsdx/screens/premium_page.dart';
-import 'package:newsdx/screens/trending_page.dart';
+import 'package:newsdx/screens/setting_screen.dart';
+import 'package:newsdx/screens/my_feed_screen.dart';
+import 'package:newsdx/screens/trending_screen.dart';
 import 'package:newsdx/widgets/nav_bar.dart';
-import 'package:newsdx/widgets/the_hindu_appbar.dart';
+import 'package:newsdx/widgets/appbar_with_back.dart';
 
 class TheHinduBottomNav extends StatefulWidget {
   const TheHinduBottomNav({Key? key}) : super(key: key);
@@ -48,6 +48,7 @@ class _TheHinduBottomNavState extends State<TheHinduBottomNav> {
         children: tabPages,
         onPageChanged: onPageChanged,
         controller: _pageController,
+        physics: NeverScrollableScrollPhysics(),
       ),
     );
   }

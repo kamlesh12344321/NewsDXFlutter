@@ -66,14 +66,19 @@ dependencies:
   flutter_html: any
   theme_provider: ^0.5.0
   getwidget: ^3.0.1
-
-
+  smooth_page_indicator: ^1.0.0+2
+  modal_bottom_sheet: ^2.1.0
+  share_plus: ^4.0.10
+  objectbox: ^1.6.0
+  objectbox_flutter_libs: any
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.1
   flutter_native_splash: ^2.2.3
+  build_runner: ^2.0.0
+  objectbox_generator: any
 # The following section is specific to Flutter packages.
 
 flutter_native_splash:
@@ -115,6 +120,7 @@ flutter:
     - assets/speaker.svg
     - assets/forward.svg
     - assets/dot.svg
+    - assets/bookmark_filled.svg
   fonts:
     - family: Montserrat
       fonts:

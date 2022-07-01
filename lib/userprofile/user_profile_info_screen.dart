@@ -25,155 +25,155 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
         leading: const Icon(Icons.arrow_back),
       ),
       body: SingleChildScrollView(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: Padding(padding: EdgeInsets.only(top: 30,left: 16, right: 16), child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              CircleAvatar(
-                backgroundImage:
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    backgroundImage:
                     NetworkImage('https://picsum.photos/id/237/200/300'),
-                radius: 30,
+                    radius: 30,
+                  ),
+                ],
               ),
-            ],
-          ),
-          Divider(
-            color: Colors.transparent,
-            height: 30,
-            thickness: 0.5,
-            indent: 10,
-            endIndent: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Column(
-                  children: [Text("Krishan"), Text("Kanhai")],
-                )
-              ],
-            ),
-          ),
-          ListTile(
-            title: Text(
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been",
-            ),
-          ),
-          ListTile(
-            title: Text(
-              '9999999999',
-            ),
-            leading: Icon(
-              Icons.phone,
-            ),
-            onTap: () => {},
-          ),
-          ListTile(
-            title: Text(
-              'newsdx@gmail.com',
-            ),
-            leading: Icon(
-              Icons.alternate_email,
-            ),
-            onTap: () => {},
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
+              Divider(
                 color: Colors.transparent,
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(5),
+                height: 30,
+                thickness: 0.5,
+                indent: 10,
+                endIndent: 10,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
+              Padding(
+                padding: const EdgeInsets.only(left: 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      "",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "1 Year",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
+                    Column(
+                      children: [Text("Krishan"), Text("Kanhai")],
+                    )
                   ],
                 ),
               ),
-            ),
-          ),
-          ListTile(
-            title: Text(
-              'Change Password',
-            ),
-            trailing: Icon(
-              Icons.arrow_forward_ios,
-            ),
-          ),
-          Divider(
-            color: Colors.black,
-            height: 20,
-            thickness: 0.5,
-            indent: 10,
-            endIndent: 10,
-          ),
-          ListTile(
-            title: Text(
-              'Payment History',
-            ),
-            trailing: Icon(
-              Icons.arrow_forward_ios,
-            ),
-            onTap: () => {},
-          ),
-          Divider(
-            color: Colors.black,
-            height: 20,
-            thickness: 0.5,
-            indent: 10,
-            endIndent: 10,
-          ),
-          ListTile(
-            title: Text(
-              'Change/Upgrade Plan',
-            ),
-            trailing: Icon(
-              Icons.arrow_forward_ios,
-            ),
-            onTap: () => {
-              appState.currentAction = PageAction(
-                  state: PageState.addWidget,
-                  widget: SubscriptionPlanScreen(),
-                  page: SubscriptionPlanPageConfig)
-            },
-          ),
-          SizedBox(
-            height: 40,
-          ),
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: Text('For support contact '),
-          ),
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: const Text(
-              'wecare@alpinenews.com',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ),
-          SizedBox(
-            height: 30,
-          )
-        ],
-      )),
+              ListTile(
+                title: Text(
+                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been",
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  '9999999999',
+                ),
+                leading: Icon(
+                  Icons.phone,
+                ),
+                onTap: () => {},
+              ),
+              ListTile(
+                title: Text(
+                  'newsdx@gmail.com',
+                ),
+                leading: Icon(
+                  Icons.alternate_email,
+                ),
+                onTap: () => {},
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 0, right: 0),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          "",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "1 Year",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  'Change Password',
+                ),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                ),
+              ),
+              Divider(
+                color: Colors.black,
+                height: 20,
+                thickness: 0.5,
+                indent: 10,
+                endIndent: 10,
+              ),
+              ListTile(
+                title: Text(
+                  'Payment History',
+                ),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                ),
+                onTap: () => {},
+              ),
+              Divider(
+                color: Colors.black,
+                height: 20,
+                thickness: 0.5,
+                indent: 10,
+                endIndent: 10,
+              ),
+              ListTile(
+                title: Text(
+                  'Change/Upgrade Plan',
+                ),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                ),
+                onTap: () => {
+                  appState.currentAction = PageAction(
+                      state: PageState.addWidget,
+                      widget: SubscriptionPlanScreen(),
+                      page: SubscriptionPlanPageConfig)
+                },
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              const Align(
+                alignment: Alignment.bottomCenter,
+                child: Text('For support contact '),
+              ),
+              const Align(
+                alignment: Alignment.bottomCenter,
+                child: const Text(
+                  'wecare@alpinenews.com',
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              )
+            ],
+          )),),
     );
   }
 

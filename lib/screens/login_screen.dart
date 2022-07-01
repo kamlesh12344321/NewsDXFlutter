@@ -389,7 +389,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
     }
   }
   Future<OtpSendStatus> getOtpSendStatus(String email) async {
-    String? getAccessToken = "Bearer ${MyConstant.propertyToken}";
+    String? getAccessToken = MyConstant.propertyToken;
     final response = await http.post(
         Uri.parse("https://api.newsdx.io/V1/end_users/send_email_otp"),
       headers: {

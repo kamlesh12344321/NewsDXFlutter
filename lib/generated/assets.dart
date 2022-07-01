@@ -8,7 +8,9 @@ class Assets {
   static const String assetsAppbarLogo = 'D:/NewsDX/assets/appbar_logo.png';
   static const String assetsApple = 'D:/NewsDX/assets/apple.svg';
   static const String assetsBack = 'D:/NewsDX/assets/back.svg';
+  static const String assetsBackArrow = 'D:/NewsDX/assets/back_arrow.svg';
   static const String assetsBiBookmark = 'D:/NewsDX/assets/bi_bookmark.svg';
+  static const String assetsBookmarkFilled = 'D:/NewsDX/assets/bookmark_filled.svg';
   static const String assetsDot = 'D:/NewsDX/assets/dot.svg';
   static const String assetsFacebook = 'D:/NewsDX/assets/facebook.svg';
   static const String assetsForward = 'D:/NewsDX/assets/forward.svg';
@@ -29,7 +31,9 @@ class Assets {
   static const String assetsProfilePlaceholder = 'D:/NewsDX/assets/profile_placeholder.svg';
   static const String assetsShare = 'D:/NewsDX/assets/share.svg';
   static const String assetsSpeaker = 'D:/NewsDX/assets/speaker.svg';
+  static const String assetsTick = 'D:/NewsDX/assets/tick.svg';
   static const String assetsTrending = 'D:/NewsDX/assets/trending.svg';
   static const String assetsTrendingSelected = 'D:/NewsDX/assets/trending_selected.svg';
+  static const String assetsUserProfile = 'D:/NewsDX/assets/user_profile.svg';
 
 }

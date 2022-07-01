@@ -1,13 +1,17 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:newsdx/onbarding/onboarding_screen.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/router_delegate.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
+import 'package:newsdx/screens/bookmark.dart';
 import 'package:newsdx/screens/home_screen.dart';
+import 'package:newsdx/screens/home_section_article_detail.dart';
 import 'package:newsdx/screens/login_screen.dart';
+import 'package:newsdx/screens/notificaton_screen.dart';
 import 'package:newsdx/screens/otp_screen.dart';
 import 'package:newsdx/screens/splash_screen.dart';
 import 'dart:developer' as developer;
@@ -163,6 +167,18 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
       case Pages.UserProfileInfo:
         UserProfileInfoPageConfig.currentPageAction = action;
         break;
+      case Pages.ArticleDe:
+        ArticleDetailPageConfig.currentPageAction = action;
+        break;
+      case Pages.BookMark:
+        BookMarkPageConfig.currentPageAction = action;
+        break;
+      case Pages.Notification:
+        NotificationPageConfig.currentPageAction = action;
+        break;
+      case Pages.HomeArticleDetail:
+        HomeArticleDetailPageConfig.currentPageAction = action;
+        break;
       default:
         break;
     }
@@ -175,11 +191,11 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
     if (shouldAddPage) {
       switch (pageConfig!.uiPage) {
         case Pages.Splash:
-          _addPageData(Splash(), SplashPageConfig);
+          _addPageData(const Splash(), SplashPageConfig);
           break;
 
         case Pages.Login:
-          _addPageData(LoginScreen(), LoginPageConfig);
+          _addPageData(const LoginScreen(), LoginPageConfig);
           break;
 
         case Pages.Otp:
@@ -187,16 +203,35 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
           break;
 
         case Pages.Home:
-          _addPageData(HomeScreen(), HomePageConfig);
+          _addPageData(const HomeScreen(), HomePageConfig);
           break;
 
         case Pages.SubscriptionPlan:
-          _addPageData(SubscriptionPlanScreen(),SubscriptionPlanPageConfig);
+          _addPageData(const SubscriptionPlanScreen(),SubscriptionPlanPageConfig);
           break;
 
         case Pages.UserProfileInfo:
-          _addPageData(UserProfileInfoScreen(), UserProfileInfoPageConfig);
+          _addPageData(const UserProfileInfoScreen(), UserProfileInfoPageConfig);
           break;
+        case Pages.ArticleDe:
+          _addPageData(const ArticleDetail(), ArticleDetailPageConfig);
+          break;
+
+        case Pages.BookMark:
+          _addPageData(const BookMarks(), BookMarkPageConfig);
+          break;
+
+        case Pages.Notification:
+          _addPageData(const NotificationScreen(), NotificationPageConfig);
+          break;
+
+        case Pages.OnBoarding:
+          _addPageData(OnBoardingScreen(), OnBoardingPageConfig);
+          break;
+
+        case Pages.HomeArticleDetail:
+          _addPageData(HomeSectionArticleDetail(), HomeArticleDetailPageConfig);
+              break;
 
         default:
           break;

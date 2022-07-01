@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/model/SectionList.dart';
@@ -15,8 +16,8 @@ import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
+import 'package:newsdx/screens/home_section_article_detail.dart';
 import 'package:newsdx/userprofile/user_profile_info_screen.dart';
-import 'package:newsdx/screens/more.dart';
 import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
 import 'package:newsdx/viewmodel/generic_list_view_model.dart';
@@ -28,14 +29,14 @@ import 'package:newsdx/widgets/banner_ads.dart';
 import 'package:newsdx/widgets/custom_tab_view.dart';
 import 'package:newsdx/widgets/full_image_view_item.dart';
 import 'package:newsdx/widgets/full_width_article.dart';
+import 'package:newsdx/widgets/home_article_list_item.dart';
 import 'package:newsdx/widgets/home_page_list_item.dart';
 import 'package:newsdx/widgets/nav_bar.dart';
+import 'package:newsdx/widgets/powered_widget.dart';
 import 'package:newsdx/widgets/sport_star_item.dart';
 import 'package:newsdx/widgets/sport_stars.dart';
-import 'package:newsdx/widgets/subscribe_user.dart';
 import 'package:newsdx/widgets/top_picks_item.dart';
 import 'package:provider/provider.dart';
-import '../router/app_state.dart';
 import '../utils/CustomColors.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
@@ -60,6 +61,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
+    List<String> articleIdList = Prefs.getArticleStringList();
     _controller = ScrollController();
     _controllerBanner = ScrollController();
     homeSectionsViewModel = context.watch<HomeSectionsViewModel>();
@@ -75,180 +77,231 @@ class _HomePageState extends State<HomePage> with UiLoggy {
     if (sectionsList?.data?[0].sectionName != "Home") {
       sectionsList?.data?.insert(0, homeSectionCreate);
     }
-    return WillPopScope(
-      onWillPop: () {
-        return Future.value(true); // or return Future.value(false);
-      },
-        child: DefaultTabController(
-          length: lengthValue,
-          initialIndex: 0,
-          child: Scaffold(
-            drawer: NavBar(),
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              centerTitle: true,
-              elevation: 0.0,
-
-              leading: Transform.scale(
-                  scale: 1.2,
-                  child: IconButton(
-                      icon: SvgPicture.asset("assets/menu.svg"), onPressed: () {
-                    Scaffold.of(context).openDrawer();
+    return DefaultTabController(
+      length: lengthValue,
+      initialIndex: 0,
+      child: Scaffold(
+        drawer: const NavBar(),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          elevation: 0.0,
+          leading: Transform.scale(
+              scale: 1.2,
+              child: IconButton(
+                  icon: SvgPicture.asset("assets/menu.svg"),
+                  onPressed: () {
+                    // Scaffold.of(context).openDrawer();
                   })),
-              title: Transform.scale(
-                scale: 1,
-                child: SvgPicture.asset("assets/app_log.svg"),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                "assets/app_logo_new.svg",
+                height: 37,
+                width: 37,
               ),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: IconButton(
-                    icon: Transform.scale(
-                        scale: 1,
-                        child: SvgPicture.asset("assets/profile_placeholder.svg"),
-                  ),
-                    onPressed: (){
-                      appState.currentAction = PageAction(
-                          state: PageState.addWidget,
-                          widget: const UserProfileInfoScreen(),
-                          page: UserProfileInfoPageConfig);
-                    },
-                  ),
-                )
-              ],
-              bottom: TabBar(
-                isScrollable: true,
-                labelColor: Colors.blue,
-                unselectedLabelColor: Colors.black,
-                tabs: List<Widget>.generate(lengthValue, (int index) {
-                  return Tab(
-                    text: sectionsList?.data?[index].sectionName,
-                  );
-                }),
-              ),
-            ),
-            body: TabBarView(
-              children: List<Widget>.generate(
-                lengthValue,
-                    (int index) {
-                  if (index == 0) {
-                    List<Article>? bannerList = homeSection?.data?.banner;
-                    List<WidgetHome>? widgetsList = homeSection?.data?.widgets;
-                    List<Article>? articles =  homeSection?.data?.articles;
-                    LiveWidget? liveWidget =  homeSection?.data?.liveWidget;
-                    HtmlWidget? htmlWidget = homeSection?.data?.htmlWidget;
-
-                    int listSize = 0;
-                    if(bannerList != null ) {
-                      listSize++;
-                    }
-                    if(widgetsList != null) {
-                      listSize++;
-                    }
-                    if(articles!= null) {
-                      listSize++;
-                    }
-                    if(liveWidget != null) {
-                      listSize++;
-                    }
-                    if(htmlWidget!= null) {
-                      listSize++;
-                    }
-                    return ListView.builder(
-                        addAutomaticKeepAlives: true,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: listSize,
-                        controller: _controller,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return SizedBox(
-                              height: 260,
-                              width: double.infinity,
-                              child: PageView.builder(
-                                controller: PageController(
-                                  initialPage: _currentIndex,
-                                  keepPage: true,
-                                ),
-                                onPageChanged: (int index) {
-                                  _currentIndex = index;
-                                  FocusScope.of(context).requestFocus(FocusNode());
-                                },
-                                itemCount: bannerList!.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  Article? article = bannerList[index];
-                                  return InkWell(
-                                    onTap: () {
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) => ArticleDetail(
-                                      //       articleItem: article,
-                                      //     ),
-                                      //   ),
-                                      // );
-                                    },
-                                    child: FullImageViewItem(
-                                      article: article,
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          }
-                          return Container();
-                        });
-                  } else {
-                    return FutureBuilder<SectionPojo>(
-                      future: getArticles(sectionsList?.data?[index].id),
-                      builder: (context, snapShot) {
-                        if (snapShot.hasData) {
-                          DataPojo? val = snapShot.data?.data;
-                          List<Articles>? listValue = val?.articles;
-                          var sectionName = listValue![0].sectionname;
-                          var sectionId = listValue[0].sectionid;
-                          loggy.debug('SectionName :: $sectionName');
-                          return ListView.builder(
-                            itemCount: val?.articles?.length,
-                            itemBuilder: (context, index) {
-                              Articles? article = val?.articles?[index];
-                              return ListTile(
-                                tileColor: Colors.white,
-                                title: HomePageListItem(
-                                  articleItem: article,
-                                ),
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticleDetail(articleItem: article,)));
-
-                                  // Navigator.push(context, MaterialPageRoute(
-                                 //     builder: (context) => ArticleDetail(
-                                 //         articleItem: article,
-                                 //     ),
-                                 // ));
-                                },
-                              );
-                            },
-                          );
-                        } else if (snapShot.hasError) {
-                          String? er = snapShot.hasError.toString();
-                          return Center(
-                            child: Text(
-                              "Error :: $er",
-                              style: const TextStyle(
-                                  color: Colors.red, fontWeight: FontWeight.bold),
-                            ),
-                          );
-                        } else {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    );
-                  }
+              Column(
+                children: [
+                  Text("Alpine",
+                      style: GoogleFonts.roboto(
+                          textStyle: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold))),
+                  Text(
+                    "NEWS",
+                    style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal)),
+                  )
+                ],
+              )
+            ],
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: IconButton(
+                icon: Transform.scale(
+                  scale: 1,
+                  child: SvgPicture.asset("assets/profile_placeholder.svg"),
+                ),
+                onPressed: () {
+                  appState.currentAction = PageAction(
+                      state: PageState.addWidget,
+                      widget: const UserProfileInfoScreen(),
+                      page: UserProfileInfoPageConfig);
                 },
               ),
-            ),
+            )
+          ],
+          bottom: TabBar(
+            isScrollable: true,
+            labelColor: Colors.blue,
+            unselectedLabelColor: Colors.black,
+            tabs: List<Widget>.generate(lengthValue, (int index) {
+              return Tab(
+                text: sectionsList?.data?[index].sectionName,
+              );
+            }),
           ),
         ),
+        body: TabBarView(
+          children: List<Widget>.generate(
+            lengthValue,
+            (int index) {
+              if (index == 0) {
+                List<HomeArticle>? bannerList = homeSection?.data?.banner;
+                List<WidgetHome>? widgetsList = homeSection?.data?.widgets;
+                List<HomeArticle>? homeArticle3 = homeSection?.data?.articles;
+                LiveWidget? liveWidget = homeSection?.data?.liveWidget;
+                HtmlWidget? htmlWidget = homeSection?.data?.htmlWidget;
+                int? indexForAds = homeArticle3?.length;
+
+                int listSize = 0;
+                if (bannerList != null) {
+                  listSize++;
+                }
+                if (widgetsList != null) {
+                  listSize++;
+                }
+                if (homeArticle3 != null) {
+                  listSize++;
+                }
+                if (liveWidget != null) {
+                  listSize++;
+                }
+                if (htmlWidget != null) {
+                  listSize++;
+                }
+                return ListView.builder(
+                    addAutomaticKeepAlives: true,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: listSize,
+                    controller: _controller,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return SizedBox(
+                          height: 260,
+                          width: double.infinity,
+                          child: PageView.builder(
+                            controller: PageController(
+                              initialPage: _currentIndex,
+                              keepPage: true,
+                            ),
+                            onPageChanged: (int index) {
+                              _currentIndex = index;
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            },
+                            itemCount: bannerList!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              HomeArticle? article = bannerList[index];
+                              return InkWell(
+                                onTap: () {
+                                  appState.currentAction = PageAction(
+                                      state: PageState.addWidget,
+                                      widget: HomeSectionArticleDetail(
+                                        homeArticle: article,
+                                      ),
+                                      page: HomeArticleDetailPageConfig);
+                                },
+                                child: FullImageViewItem(
+                                  article: article,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }
+                      if (index == 1) {
+                        return ListView.builder(
+                            addAutomaticKeepAlives: true,
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: homeArticle3!.length,
+                            controller: _controller,
+                            itemBuilder: (context, index) {
+                              HomeArticle? homeArticle = homeArticle3[index];
+                              if (index == 4) {
+                                return BannerAds();
+                              }
+                              if (index == 12) {
+                                return PoweredByAdsWidget();
+                              }
+                              return InkWell(
+                                onTap: () {
+                                  appState.currentAction = PageAction(
+                                      state: PageState.addWidget,
+                                      widget: HomeSectionArticleDetail(
+                                        homeArticle: homeArticle,
+                                      ),
+                                      page: HomeArticleDetailPageConfig);
+                                },
+                                child: HomeArticleListItem(
+                                    articleItem: homeArticle),
+                              );
+                            });
+                      }
+                      return Container();
+                    });
+              } else {
+                return FutureBuilder<SectionPojo>(
+                  future: getArticles(sectionsList?.data?[index].id),
+                  builder: (context, snapShot) {
+                    if (snapShot.hasData) {
+                      DataPojo? val = snapShot.data?.data;
+                      List<Articles>? listValue = val?.articles;
+                      var sectionName = listValue![0].sectionname;
+                      var sectionId = listValue[0].sectionid;
+                      loggy.debug('SectionName :: $sectionName');
+                      return ListView.builder(
+                        itemCount: val?.articles?.length,
+                        itemBuilder: (context, index) {
+                          Articles? article = val?.articles?[index];
+                          bool isPresent =
+                              articleIdList.contains(article?.articleid!);
+                          if (isPresent) {
+                            article!.bookmarked = true;
+                          }
+                          return ListTile(
+                            tileColor: Colors.white,
+                            title: HomePageListItem(
+                              articleItem: article,
+                            ),
+                            onTap: () {
+                              appState.currentAction = PageAction(
+                                  state: PageState.addWidget,
+                                  widget: ArticleDetail(
+                                    articleItem: article,
+                                  ),
+                                  page: ArticleDetailPageConfig);
+                            },
+                          );
+                        },
+                      );
+                    } else if (snapShot.hasError) {
+                      String? er = snapShot.hasError.toString();
+                      return Center(
+                        child: Text(
+                          "Error :: $er",
+                          style: const TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                );
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -265,9 +318,8 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   }
 
   Future<SectionPojo> getArticles(String? sectionId) async {
-    String? getAccessToken = "Bearer ${MyConstant.propertyToken}";
+    String? getAccessToken = MyConstant.propertyToken;
     var url = Uri.parse(MyConstant.ARTICLE_LIST);
-
     final response = await http.post(
       url,
       body: {"sectionId": sectionId},
@@ -276,28 +328,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
       },
     );
 
-    print(
-        "######################################################################");
-    //String res = response.body;
-    //print(res);
-
     SectionPojo allSection = modelClassFromJson(response.body);
-
-    // AllSection allSection = allSectionFromJson(response.body);
-    // String? sectionName = allSection?.data?.articles![0].sectionName;
-
-    print(
-        "######################################################################");
-    // loggy.debug('Section ID :: $allSection?.data?.articles![0].sectionId');
-    // loggy.debug('Section ID :: $allSection?.data?.articles![0].sectionId.toString()');
-    // String? sectionIdd = allSection?.data?.articles![0].sectionid.toString();
-    // loggy.debug(sectionIdd);
-    // loggy.debug('Sec :: $sectionIdd');
-    /*print('Method Section ID :: $allSection?.status :: $sectionId');
-    print('Section ID :: $allSection?.data?.articles![0].sectionId');
-    print('Section Name :: $allSection?.data?.articles![0].sectionName');*/
-    // print('Status :: $allSection?.status');
-
     return allSection; //allSectionFromJson(response.body);
   }
 

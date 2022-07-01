@@ -19,6 +19,7 @@ import 'package:newsdx/viewmodel/sections_list_view_model.dart';
 import 'package:newsdx/viewmodel/sport_stars_view_model.dart';
 import 'package:newsdx/widgets/bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
 
   @override
   Widget build(BuildContext context) {

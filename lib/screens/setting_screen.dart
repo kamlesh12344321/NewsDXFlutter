@@ -1,44 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/components/toggle/gf_toggle.dart';
 import 'package:getwidget/types/gf_toggle_type.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/preference/user_preference.dart';
+import 'package:newsdx/router/app_state.dart';
+import 'package:newsdx/router/ui_pages.dart';
+import 'package:newsdx/screens/bookmark.dart';
+import 'package:newsdx/screens/notificaton_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 
-class MoreScreen extends StatefulWidget {
-  const MoreScreen({Key? key}) : super(key: key);
+class MyAccountPage extends StatefulWidget {
+  const MyAccountPage({Key? key}) : super(key: key);
 
   @override
-  State<MoreScreen> createState() => _MoreScreenState();
+  State<MyAccountPage> createState() => _MyAccountPageState();
 }
 
-class _MoreScreenState extends State<MoreScreen> {
+class _MyAccountPageState extends State<MyAccountPage> {
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    final appState = Provider.of<AppState>(context, listen: false);
+    return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0.0,
-        leading: Transform.scale(
-            scale: 1.2,
-            child: IconButton(
-                icon: SvgPicture.asset("assets/back.svg"), onPressed: () {
-                  Navigator.of(context).pop();
-            }),),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: CircleAvatar(
-              radius: 16.0,
-              child: ClipRect(
-                child: Prefs.getProfilePre() ? Image.network('https://picsum.photos/250?image=9') : SvgPicture.asset("assets/profile_placeholder.svg"),
-              ),
-            )
+              padding: const EdgeInsets.only(right: 16),
+              child: CircleAvatar(
+                radius: 16.0,
+                child: ClipRect(
+                  child: Prefs.getProfilePre() ? Image.network('https://picsum.photos/250?image=9') : SvgPicture.asset("assets/profile_placeholder.svg"),
+                ),
+              )
           )
         ],
       ),
@@ -51,9 +52,9 @@ class _MoreScreenState extends State<MoreScreen> {
                 children: [
                   SvgPicture.asset("assets/more.svg", height: 20, width: 20,),
                   const Text(" More", style: TextStyle(
-                    fontSize: 38,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.black
+                      fontSize: 38,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.black
                   ),),
                 ],
               ),
@@ -88,48 +89,25 @@ class _MoreScreenState extends State<MoreScreen> {
             ),),
             Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
               children: [
-               GestureDetector(
-                 child:  Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     const Text("Dark mode", style: TextStyle(
-                       color: Colors.grey,
-                       fontSize: 16,
-                     ),),
-                     GFToggle(
-                       onChanged: (val){},
-                       value: true,
-                       enabledTrackColor: Colors.blue,
-                       type: GFToggleType.ios,
-                     )
-                   ],
-                 ),
-                 onTap: (){
-                   ThemeProvider.controllerOf(context).nextTheme();
-                 },
-               ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.grey,
-                )
-              ],
-            ),),
-            Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Personalise myFeed", style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),),
-                    SvgPicture.asset("assets/forward.svg")
-                  ],
+                GestureDetector(
+                  child:  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Dark mode", style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),),
+                      GFToggle(
+                        onChanged: (val){},
+                        value: true,
+                        enabledTrackColor: Colors.blue,
+                        type: GFToggleType.ios,
+                      )
+                    ],
+                  ),
+                  onTap: (){
+                    ThemeProvider.controllerOf(context).nextTheme();
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -142,6 +120,29 @@ class _MoreScreenState extends State<MoreScreen> {
                 )
               ],
             ),),
+            // Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
+            //   children: [
+            //     Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //       children: [
+            //         const Text("Personalise myFeed", style: TextStyle(
+            //           color: Colors.grey,
+            //           fontSize: 16,
+            //         ),),
+            //         SvgPicture.asset("assets/forward.svg")
+            //       ],
+            //     ),
+            //     const SizedBox(
+            //       height: 10,
+            //     ),
+            //
+            //     Container(
+            //       height: 1,
+            //       width: double.infinity,
+            //       color: Colors.grey,
+            //     )
+            //   ],
+            // ),),
             Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
               children: [
                 Row(
@@ -188,97 +189,109 @@ class _MoreScreenState extends State<MoreScreen> {
                 )
               ],
             ),),
-            Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                   Row(
-                     children: [
-                       const Text("Notifications", style: TextStyle(
-                         color: Colors.grey,
-                         fontSize: 16,
-                       ),),
-                       const SizedBox(
-                         width: 4,
-                       ),
-                       SvgPicture.asset("assets/dot.svg"),
-                     ],
-                   ),
-                   Row(
-                     children: [
-                       const Text("200 unread",
-                       style: TextStyle(
-                         color: Colors.grey,
-                         fontSize: 14
-                       ),),
-                       const SizedBox(
-                         width: 5,
-                       ),
-                       SvgPicture.asset("assets/forward.svg"),
-                     ],
-                   ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.grey,
-                )
-              ],
-            ),),
-            Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const Text("Bookmark", style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        SvgPicture.asset("assets/dot.svg"),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text("200 unread",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14
+            InkWell(
+              onTap: (){
+                appState.currentAction = PageAction(
+                    state: PageState.addWidget,
+                    widget: const NotificationScreen(),
+                    page: NotificationPageConfig);
+              },
+              child: Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: const [
+                          Text("Notifications", style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16,
                           ),),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        SvgPicture.asset("assets/forward.svg"),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          // SvgPicture.asset("assets/dot.svg"),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          // 200 unread can be added notification
+                          const Text("",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14
+                            ),),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          SvgPicture.asset("assets/forward.svg"),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
 
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.grey,
-                )
-              ],
-            ),),
+                  Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: Colors.grey,
+                  )
+                ],
+              ),),
+            ),
+           InkWell(
+             onTap: (){
+               appState.currentAction = PageAction(
+                   state: PageState.addWidget,
+                   widget: const BookMarks(),
+                   page: BookMarkPageConfig);
+             },
+             child:  Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
+               children: [
+                 Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     Row(
+                       children: const [
+                         Text("Bookmark", style: TextStyle(
+                           color: Colors.grey,
+                           fontSize: 16,
+                         ),),
+                         SizedBox(
+                           width: 4,
+                         ),
+                         // SvgPicture.asset("assets/dot.svg"),
+                       ],
+                     ),
+                     Row(
+                       children: [
+                         // 200 unread can be added for bookmark
+                         const Text("",
+                           style: TextStyle(
+                               color: Colors.grey,
+                               fontSize: 14
+                           ),),
+                         const SizedBox(
+                           width: 5,
+                         ),
+                         SvgPicture.asset("assets/forward.svg"),
+                       ],
+                     ),
+                   ],
+                 ),
+                 const SizedBox(
+                   height: 10,
+                 ),
+               ],
+             ),),
+           ),
             Column(
               children: [
-                Padding(padding: const EdgeInsets.only(top: 150),
+                Padding(padding: const EdgeInsets.only(top: 100),
                     child: SizedBox(
-                      width: 75,
+                      width: 100,
                       height: 20 ,
                       child: Center(
                         child: Column(

@@ -4,7 +4,7 @@ import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/widgets/article_list.dart';
 
 class FullImageViewItem extends StatefulWidget {
- final Article? article;
+ final HomeArticle? article;
 
   const FullImageViewItem({Key? key, this. article}) : super(key: key);
 

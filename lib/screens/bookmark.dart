@@ -11,11 +11,11 @@ class BookMarks extends StatefulWidget {
 }
 
 class _BookMarksState extends State<BookMarks> {
-  int size = 1;
+  int size = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(MyConstant.noTitle),
+      appBar: AppBarWidget(MyConstant.noTitle,),
       body: size == 0 ? const EmptyBookMarkContainer() : const BookMarkFilledContainer(),
     );
   }
