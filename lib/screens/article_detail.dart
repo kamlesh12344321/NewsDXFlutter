@@ -9,6 +9,8 @@ import 'package:newsdx/widgets/article_detail_fullimage.dart';
 import 'package:newsdx/widgets/full_image_view_item.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 
+import '../utils/shared_method.dart';
+
 class ArticleDetail extends StatelessWidget {
   final Articles? articleItem;
 
@@ -92,7 +94,11 @@ class ArticleDetail extends StatelessWidget {
                             scale: 1,
                             child: IconButton(
                                 icon: SvgPicture.asset("assets/share.svg"),
-                                onPressed: () {})),
+                                onPressed: () {
+                                  Shared.onArticleShare(context,
+                                      articleItem!.title!,
+                                      articleItem!.link!);
+                                })),
                         Transform.scale(
                             scale: 1,
                             child: IconButton(

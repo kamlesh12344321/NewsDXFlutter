@@ -6,6 +6,8 @@ import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/widgets/article_detail_fullimage.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 
+import '../utils/shared_method.dart';
+
 
 class HomeSectionArticleDetail extends StatefulWidget {
   final HomeArticle? homeArticle;
@@ -86,7 +88,12 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
                         Transform.scale(
                             scale: 1,
                             child: IconButton(
-                                icon: SvgPicture.asset("assets/share.svg"), onPressed: () {})),
+                                icon: SvgPicture.asset("assets/share.svg"),
+                                onPressed: () {
+                              Shared.onArticleShare(context,
+                                  widget.homeArticle!.title!,
+                                  widget.homeArticle!.link!);
+                            })),
                         Transform.scale(
                             scale: 1,
                             child: IconButton(
