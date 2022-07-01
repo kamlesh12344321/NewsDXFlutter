@@ -15,6 +15,7 @@ import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
+import 'package:newsdx/screens/home_section_article_detail.dart';
 import 'package:newsdx/userprofile/user_profile_info_screen.dart';
 import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
@@ -27,8 +28,10 @@ import 'package:newsdx/widgets/banner_ads.dart';
 import 'package:newsdx/widgets/custom_tab_view.dart';
 import 'package:newsdx/widgets/full_image_view_item.dart';
 import 'package:newsdx/widgets/full_width_article.dart';
+import 'package:newsdx/widgets/home_article_list_item.dart';
 import 'package:newsdx/widgets/home_page_list_item.dart';
 import 'package:newsdx/widgets/nav_bar.dart';
+import 'package:newsdx/widgets/powered_widget.dart';
 import 'package:newsdx/widgets/sport_star_item.dart';
 import 'package:newsdx/widgets/sport_stars.dart';
 import 'package:newsdx/widgets/top_picks_item.dart';
@@ -82,17 +85,32 @@ class _HomePageState extends State<HomePage> with UiLoggy {
               backgroundColor: Colors.white,
               centerTitle: true,
               elevation: 0.0,
-
               leading: Transform.scale(
                   scale: 1.2,
                   child: IconButton(
                       icon: SvgPicture.asset("assets/menu.svg"), onPressed: () {
                     // Scaffold.of(context).openDrawer();
                   })),
-              title: Transform.scale(
-                scale: 1,
-                child: SvgPicture.asset("assets/app_log.svg"),
-              ),
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset("assets/app_logo_new.svg",height: 37,width: 37,),
+                    Column(
+                      children: const [
+                        Text("Alpine", style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20
+                        ), ),
+                        Text("NEWS"  ,style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 15
+                        ),)
+                      ],
+                    )
+                  ],
+                ),
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 16),
@@ -126,11 +144,12 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                 lengthValue,
                     (int index) {
                   if (index == 0) {
-                    List<Article>? bannerList = homeSection?.data?.banner;
+                    List<HomeArticle>? bannerList = homeSection?.data?.banner;
                     List<WidgetHome>? widgetsList = homeSection?.data?.widgets;
-                    List<Article>? articles =  homeSection?.data?.articles;
+                    List<HomeArticle>? homeArticle3 =  homeSection?.data?.articles;
                     LiveWidget? liveWidget =  homeSection?.data?.liveWidget;
                     HtmlWidget? htmlWidget = homeSection?.data?.htmlWidget;
+                    int indexForAds = homeArticle3!.length -3;
 
                     int listSize = 0;
                     if(bannerList != null ) {
@@ -139,7 +158,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                     if(widgetsList != null) {
                       listSize++;
                     }
-                    if(articles!= null) {
+                    if(homeArticle3!= null) {
                       listSize++;
                     }
                     if(liveWidget != null) {
@@ -170,17 +189,13 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                 },
                                 itemCount: bannerList!.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  Article? article = bannerList[index];
+                                  HomeArticle? article = bannerList[index];
                                   return InkWell(
                                     onTap: () {
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) => ArticleDetail(
-                                      //       articleItem: article,
-                                      //     ),
-                                      //   ),
-                                      // );
+                                      appState.currentAction = PageAction(
+                                          state: PageState.addWidget,
+                                          widget: HomeSectionArticleDetail(homeArticle : article,),
+                                          page: HomeArticleDetailPageConfig);
                                     },
                                     child: FullImageViewItem(
                                       article: article,
@@ -189,6 +204,31 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                 },
                               ),
                             );
+                          } if (index == 1){
+                            return ListView.builder(
+                                addAutomaticKeepAlives: true,
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: homeArticle3!.length,
+                                controller: _controller,
+                                itemBuilder: (context, index){
+                                  HomeArticle? homeArticle = homeArticle3![index];
+                                  if(index == 4){
+                                    return BannerAds();
+                                  }
+                                  if(index == indexForAds){
+                                    return PoweredByAdsWidget();
+                                  }
+                                  return InkWell(
+                                    onTap: (){
+                                      appState.currentAction = PageAction(
+                                          state: PageState.addWidget,
+                                          widget: HomeSectionArticleDetail(homeArticle : homeArticle,),
+                                          page: HomeArticleDetailPageConfig);
+                                    },
+                                    child:  HomeArticleListItem(articleItem: homeArticle),
+                                  );
+                            });
                           }
                           return Container();
                         });

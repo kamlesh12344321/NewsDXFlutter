@@ -123,7 +123,7 @@ class ArticleDetail extends StatelessWidget {
               child: Text(result,),
             ),),
             Padding(padding: const EdgeInsets.only(top: 10, left: 16, right: 16,bottom: 5), child:
-              FullImageViewItemG(article: articleItem,),),
+              FullImageViewItemG(articleImage: articleItem?.images?[0].imageid,),),
             // Text( articleItem?.images?[0].caption ?? ""),
             Padding(padding: const EdgeInsets.only(left: 16, right: 16,), child: Html(data: articleItem?.descpart1),),
           ],

@@ -3,9 +3,9 @@ import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/model/SectionPojo.dart';
 
 class FullImageViewItemG extends StatefulWidget {
-  final Articles? article;
+  final String? articleImage;
 
-  const FullImageViewItemG({Key? key, this. article}) : super(key: key);
+  const FullImageViewItemG({Key? key, this. articleImage}) : super(key: key);
 
   @override
   State<FullImageViewItemG> createState() => _FullImageViewItemState();
@@ -16,8 +16,8 @@ class _FullImageViewItemState extends State<FullImageViewItemG> {
   @override
   Widget build(BuildContext context) {
     String imageUrl = "";
-    if(widget.article!.images!.isNotEmpty){
-      imageUrl = "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.article!.images![0].imageid}_600.jpg";
+    if(widget.articleImage!.isNotEmpty){
+      imageUrl = "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleImage}_600.jpg";
     }
     print(imageUrl);
     return Container(
