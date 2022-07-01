@@ -12,7 +12,7 @@ import 'package:newsdx/widgets/sport_stars.dart';
 
 class SectionServices {
   static Future<Object> getSections() async {
-    String? getAccessToken = "Bearer ${MyConstant.propertyToken}";
+    String? getAccessToken = MyConstant.propertyToken;
     try {
       var url = Uri.parse(MyConstant.SECTION_LIST);
       final response = await http.get(
@@ -35,7 +35,7 @@ class SectionServices {
   }
 
   static Future<Object> getArticles() async {
-    String? getAccessToken = "Bearer ${MyConstant.propertyToken}";
+    String? getAccessToken = MyConstant.propertyToken;
     try {
       var url = Uri.parse(MyConstant.ARTICLE_LIST);
       var response = await http.post(url,
@@ -58,7 +58,7 @@ class SectionServices {
   }
 
   static Future<Object> getHomeSection() async {
-    String? getAccessToken = "Bearer ${MyConstant.propertyToken}";
+    String? getAccessToken = MyConstant.propertyToken;
     try {
       var url = Uri.parse(MyConstant.home_section);
       var response = await http.post(url,

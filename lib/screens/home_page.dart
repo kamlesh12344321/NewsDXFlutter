@@ -259,7 +259,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   }
 
   Future<SectionPojo> getArticles(String? sectionId) async {
-    String? getAccessToken = "Bearer ${MyConstant.propertyToken}";
+    String? getAccessToken = MyConstant.propertyToken;
     var url = Uri.parse(MyConstant.ARTICLE_LIST);
     final response = await http.post(
       url,
