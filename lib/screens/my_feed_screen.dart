@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/components/toggle/gf_toggle.dart';
 import 'package:getwidget/types/gf_toggle_type.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/model/SectionList.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
@@ -67,13 +68,14 @@ class _PremiumPageState extends State<PremiumPage> {
                 const SizedBox(
                   width: 5,
                 ),
-                const Text(
+                 Text(
                   "myFeed",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900),
-                )
+                  style:  GoogleFonts.roboto(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black
+                  ),
+                 ),
               ],
             ),
             const SizedBox(
@@ -109,10 +111,11 @@ class _PremiumPageState extends State<PremiumPage> {
                             children: [
                               Text(
                                 title ?? "",
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
-                                ),
+                                style:   GoogleFonts.roboto(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black54
+                                )
                               ),
                               GFToggle(
                                 onChanged: (val) {},

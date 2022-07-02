@@ -3,10 +3,15 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:newsdx/model/SectionPojo.dart';
 import 'package:newsdx/model/home_section.dart';
+import 'package:newsdx/router/app_state.dart';
+import 'package:newsdx/router/ui_pages.dart';
+import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
 import 'package:newsdx/widgets/article_detail_fullimage.dart';
 import 'package:newsdx/widgets/full_image_view_item.dart';
+import 'package:provider/provider.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 
 class ArticleDetail extends StatelessWidget {
@@ -16,6 +21,7 @@ class ArticleDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
     TextToSpeech tts = TextToSpeech();
     double volume = 1.0;
     String? _timestamp =
@@ -30,6 +36,121 @@ class ArticleDetail extends StatelessWidget {
       imageId = "";
     } else {
       imageId = articleItem!.images![0].imageid;
+    }
+    bool? isPremium = articleItem!.premium;
+    if (isPremium == true) {
+      showMaterialModalBottomSheet(
+          context: context,
+          expand: false,
+          builder: (context) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 100,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                        colors: [
+                          (Colors.transparent.withAlpha(0)),
+                          Colors.transparent.withAlpha(10)
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )),
+                    ),
+                    Text(
+                      "Read Premium Content",
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                        fontSize: 24,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 16, right: 16),
+                      child: Center(
+                        child: Text(
+                          "You will get access to all the premium and personalised contents with AD free experience",
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
+                        ),
+                      )
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Starts at 10.99/month",
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        minimumSize: const Size.fromHeight(50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
+                      child: const Text("View Plans"),
+                      onPressed: () {
+                        appState.currentAction = PageAction(
+                            state: PageState.addWidget,
+                            widget: const SubscriptionPlanScreen(),
+                            page: SubscriptionPlanPageConfig);
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Already  Subscribed ? ",
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.blueAccent,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Text(
+                      "For support contact",
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      "wecare@alpinenews.com ",
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.blueAccent,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
     }
     return Scaffold(
         backgroundColor: Colors.white,
@@ -136,12 +257,10 @@ class ArticleDetail extends StatelessWidget {
                       child: Text(
                         articleItem?.title ?? "",
                         style: GoogleFonts.roboto(
-                          textStyle: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30
-                          )
-                        ),
+                            textStyle: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 26)),
                       ),
                     ),
                   ],
@@ -169,7 +288,17 @@ class ArticleDetail extends StatelessWidget {
                   left: 16,
                   right: 16,
                 ),
-                child: Html(data: articleItem?.descpart1),
+                child: Html(
+                  data: articleItem?.descpart1,
+                  //     style: {
+                  //   "body" : Style(
+                  //     fontSize: FontSize(18.0),
+                  //     fontWeight: FontWeight.w300,
+                  //     fontFamily: "Roboto",
+                  //     height: 1.4,
+                  //   )
+                  // },
+                ),
               ),
             ],
           ),
@@ -181,4 +310,25 @@ class ArticleDetail extends StatelessWidget {
 
     return htmlText.replaceAll(exp, '');
   }
+}
+
+class FadingEffect extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Rect rect =
+        Rect.fromPoints(const Offset(0, 0), Offset(size.width, size.height));
+    LinearGradient lg = const LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          //create 2 white colors, one transparent
+          Color.fromARGB(0, 255, 255, 255),
+          Color.fromARGB(255, 255, 255, 255)
+        ]);
+    Paint paint = Paint()..shader = lg.createShader(rect);
+    canvas.drawRect(rect, paint);
+  }
+
+  @override
+  bool shouldRepaint(FadingEffect linePainter) => false;
 }

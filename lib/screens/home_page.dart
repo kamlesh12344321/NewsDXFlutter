@@ -141,7 +141,12 @@ class _HomePageState extends State<HomePage> with UiLoggy {
           bottom: TabBar(
             isScrollable: true,
             labelColor: Colors.blue,
-            unselectedLabelColor: Colors.black,
+            unselectedLabelColor: Colors.black,labelStyle: GoogleFonts.roboto(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14
+            )
+          ),
             tabs: List<Widget>.generate(lengthValue, (int index) {
               return Tab(
                 text: sectionsList?.data?[index].sectionName,
@@ -288,8 +293,10 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                       return Center(
                         child: Text(
                           "Error :: $er",
-                          style: const TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.roboto(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          )
                         ),
                       );
                     } else {

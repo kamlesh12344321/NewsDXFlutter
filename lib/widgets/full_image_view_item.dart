@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/widgets/article_list.dart';
@@ -37,11 +38,11 @@ class _FullImageViewItemState extends State<FullImageViewItem> {
         padding: const EdgeInsets.all(10),
         child: Text(
           widget.article?.title ?? "",
-          style: const TextStyle(
-            color: Colors.white,
+          style: GoogleFonts.roboto(
             fontSize: 16,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
-          ),
+          )
         ),
       ),
     );

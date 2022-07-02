@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_time_ago/get_time_ago.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/widgets/article_detail_fullimage.dart';
 import 'package:text_to_speech/text_to_speech.dart';
@@ -119,10 +120,9 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
                       width: 5,
                     ),
                     Flexible(
-                      child: Text(widget.homeArticle!.title ?? "", style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 28,
+                      child: Text(widget.homeArticle!.title ?? "", style: GoogleFonts.roboto(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w700,
                       ),),
                     ),
                   ],
@@ -134,7 +134,16 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
               Padding(padding: const EdgeInsets.only(top: 10, left: 16, right: 16,bottom: 5), child:
               FullImageViewItemG(articleImage: imageId,),),
               // // Text( articleItem?.images?[0].caption ?? ""),
-              Padding(padding: const EdgeInsets.only(left: 16, right: 16,), child: Html(data: widget.homeArticle?.descPart1),),
+              Padding(padding: const EdgeInsets.only(left: 16, right: 16,), child: Html(data: widget.homeArticle?.descPart1,
+              //   style: {
+              //   "data": Style(
+              //     fontWeight: FontWeight.w300,
+              //     fontSize: const FontSize(18.0),
+              //     fontFamily: "Roboto",
+              //     height: 1.4,
+              //   )
+              // },
+              ),),
             ],
           ),
         )

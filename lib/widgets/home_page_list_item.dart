@@ -37,7 +37,7 @@ class _HomePageListItemState extends State<HomePageListItem> {
     }
     return Container(
       width: double.infinity,
-      height: 112,
+      height: 100,
       margin: const EdgeInsets.only(top: 12, bottom: 12, left: 0 , right: 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,12 +47,12 @@ class _HomePageListItemState extends State<HomePageListItem> {
               children: [
                 SizedBox(
                   width: 149.0,
-                  height: 112.0,
+                  height: 100.0,
                   child: CachedNetworkImage(
                     imageUrl: imageUrl,
                     imageBuilder: (context, imageProvider) => Container(
                       width: 149.0,
-                      height: 112.0,
+                      height: 100.0,
                       margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
