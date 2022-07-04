@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/internet_connectivity/internet_status.dart';
 import 'package:newsdx/bookmark/model/bookmark_article.dart';
 import 'package:newsdx/model/SectionList.dart';
 import 'package:newsdx/model/SectionPojo.dart';
@@ -157,7 +158,12 @@ class _HomePageState extends State<HomePage> with UiLoggy {
           bottom: TabBar(
             isScrollable: true,
             labelColor: Colors.blue,
-            unselectedLabelColor: Colors.black,
+            unselectedLabelColor: Colors.black,labelStyle: GoogleFonts.roboto(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14
+            )
+          ),
             tabs: List<Widget>.generate(lengthValue, (int index) {
               return Tab(
                 text: sectionsList?.data?[index].sectionName,
@@ -304,8 +310,10 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                       return Center(
                         child: Text(
                           "Error :: $er",
-                          style: const TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.roboto(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          )
                         ),
                       );
                     } else {

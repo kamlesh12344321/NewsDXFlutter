@@ -51,10 +51,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
               child: Row(
                 children: [
                   SvgPicture.asset("assets/more.svg", height: 20, width: 20,),
-                  const Text(" More", style: TextStyle(
-                      fontSize: 38,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.black
+                   Text(" More", style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.w700,
+                     fontSize: 30,
                   ),),
                 ],
               ),
@@ -64,10 +63,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Notification", style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),),
+                     Text("Notification", style: GoogleFonts.roboto(
+                       fontSize: 16,
+                       fontWeight: FontWeight.w400,
+                       color: Colors.black54
+                     ),),
                     GFToggle(
                       onChanged: (val){},
                       value: true,
@@ -93,9 +93,10 @@ class _MyAccountPageState extends State<MyAccountPage> {
                   child:  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Dark mode", style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16,
+                       Text("Dark mode", style:  GoogleFonts.roboto(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black54
                       ),),
                       GFToggle(
                         onChanged: (val){},
@@ -148,10 +149,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("GDPR", style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),),
+                     Text("GDPR", style:  GoogleFonts.roboto(
+                         fontSize: 16,
+                         fontWeight: FontWeight.w400,
+                         color: Colors.black54
+                     ),),
                     SvgPicture.asset("assets/forward.svg")
                   ],
                 ),
@@ -171,10 +173,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Text to Speech ", style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),),
+                     Text("Text to Speech ", style:  GoogleFonts.roboto(
+                         fontSize: 16,
+                         fontWeight: FontWeight.w400,
+                         color: Colors.black54
+                     ),),
                     SvgPicture.asset("assets/forward.svg")
                   ],
                 ),
@@ -202,12 +205,13 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
-                        children: const [
-                          Text("Notifications", style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
+                        children:  [
+                          Text("Notifications", style: GoogleFonts.roboto(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black54
                           ),),
-                          SizedBox(
+                          const SizedBox(
                             width: 4,
                           ),
                           // SvgPicture.asset("assets/dot.svg"),
@@ -216,10 +220,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       Row(
                         children: [
                           // 200 unread can be added notification
-                          const Text("",
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14
+                           Text("",
+                            style:  GoogleFonts.roboto(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black54
                             ),),
                           const SizedBox(
                             width: 5,
@@ -254,12 +259,13 @@ class _MyAccountPageState extends State<MyAccountPage> {
                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                    children: [
                      Row(
-                       children: const [
-                         Text("Bookmark", style: TextStyle(
-                           color: Colors.grey,
-                           fontSize: 16,
+                       children:  [
+                         Text("Bookmark", style:  GoogleFonts.roboto(
+                             fontSize: 16,
+                             fontWeight: FontWeight.w400,
+                             color: Colors.black54
                          ),),
-                         SizedBox(
+                         const SizedBox(
                            width: 4,
                          ),
                          // SvgPicture.asset("assets/dot.svg"),
@@ -268,10 +274,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
                      Row(
                        children: [
                          // 200 unread can be added for bookmark
-                         const Text("",
-                           style: TextStyle(
-                               color: Colors.grey,
-                               fontSize: 14
+                          Text("",
+                           style:  GoogleFonts.roboto(
+                               fontSize: 16,
+                               fontWeight: FontWeight.w400,
+                               color: Colors.black54
                            ),),
                          const SizedBox(
                            width: 5,
@@ -289,37 +296,54 @@ class _MyAccountPageState extends State<MyAccountPage> {
            ),
             Column(
               children: [
-                Padding(padding: const EdgeInsets.only(top: 100),
+                Padding(padding: const EdgeInsets.only(top: 110),
                     child: SizedBox(
-                      width: 100,
+                      width: 80,
                       height: 20 ,
                       child: Center(
                         child: Column(
                           children: [
-                            Row(
-                              children: const [
-                                Text("Version "),
-                                Text("1.0.1", style: TextStyle(
-                                    color: Colors.blue
-                                ),)
+                           FittedBox(
+                             child:  Row(
+                               children:  [
+                                 Text("Version ", style:  GoogleFonts.roboto(
+                                     fontSize: 16,
+                                     fontWeight: FontWeight.w400,
+                                     color: Colors.black54
+                                 ),),
+                                 Text("1.0.1", style:  GoogleFonts.roboto(
+                                     fontSize: 16,
+                                     fontWeight: FontWeight.w400,
+                                     color: Colors.blueAccent
+                                 ),)
 
-                              ],
-                            ),
+                               ],
+                             ),
+                           )
                           ],
                         ),
                       ),
                     )
                 ),
-                Padding(padding: const EdgeInsets.only(top: 20),
+                Padding(padding: const EdgeInsets.only(top: 20, bottom: 50),
                     child: SizedBox(
                       width: 300,
                       height: 50 ,
                       child: Center(
                         child: Column(
-                          children: const [
-                            Text("For support contact"),
-                            Text("wecare@alpinenews.com", style: TextStyle(
-                                color: Colors.blue
+                          children:  [
+                            Text("For support contact", style:  GoogleFonts.roboto(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black54
+                            ),),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text("wecare@alpinenews.com", style:  GoogleFonts.roboto(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.blueAccent
                             ),),
                           ],
                         ),

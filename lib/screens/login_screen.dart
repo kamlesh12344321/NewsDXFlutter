@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/internet_connectivity/internet_status.dart';
 import 'package:newsdx/model/otp_status.dart';
 import 'package:newsdx/model/user_data.dart';
 import 'package:newsdx/preference/user_preference.dart';
@@ -61,7 +62,6 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-
     return Scaffold(
       appBar: AppBarWidget(MyConstant.noTitle),
       backgroundColor: Colors.white,

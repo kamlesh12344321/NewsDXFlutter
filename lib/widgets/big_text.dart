@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BigText extends StatelessWidget {
   final String text;
@@ -12,12 +13,10 @@ class BigText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(
-        color: color,
+      style : GoogleFonts.roboto(
+        fontWeight: FontWeight.w500,
         fontSize: size,
-        wordSpacing: wordSpacing,
-        fontWeight: FontWeight.bold,
-        fontFamily: "FiraSans"
+        color: color,
       ),
       maxLines: 3,
     );

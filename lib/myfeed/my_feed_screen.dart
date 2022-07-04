@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/components/toggle/gf_toggle.dart';
 import 'package:getwidget/types/gf_toggle_type.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/model/SectionList.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
@@ -20,6 +21,8 @@ class _PremiumPageState extends State<PremiumPage> {
   TextEditingController myController = TextEditingController();
   String? article_title = "";
   bool rememberMe = false;
+  List<Section>?  sectionSList = [];
+  List<Section>?  filteredList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +35,6 @@ class _PremiumPageState extends State<PremiumPage> {
         backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0.0,
-        // leading: Transform.scale(
-        //   scale: 1.2,
-        //   child: IconButton(
-        //       icon: SvgPicture.asset("assets/back.svg"),
-        //       onPressed: () {
-        //         Navigator.of(context).pop();
-        //       }),
-        // ),
         actions: [
           Padding(
               padding: const EdgeInsets.only(right: 16),
@@ -67,13 +62,14 @@ class _PremiumPageState extends State<PremiumPage> {
                 const SizedBox(
                   width: 5,
                 ),
-                const Text(
+                 Text(
                   "myFeed",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900),
-                )
+                  style:  GoogleFonts.roboto(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black
+                  ),
+                 ),
               ],
             ),
             const SizedBox(
@@ -93,47 +89,50 @@ class _PremiumPageState extends State<PremiumPage> {
               },
             ),
             Expanded(
-              child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: lengthValue + 1,
-                  itemBuilder: (context, index) {
-                    String? title = sectionsList?.data?[index].sectionName;
-                    return Padding(
-                      padding:
-                      const EdgeInsets.only(left: 0, right: 0, top: 20),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                title ?? "",
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
+              child: SingleChildScrollView(
+                child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: lengthValue,
+                    itemBuilder: (context, index) {
+                      String? title = sectionsList?.data?[index].sectionName;
+                      return Padding(
+                        padding:
+                        const EdgeInsets.only(left: 0, right: 0, top: 20),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                    title ?? "",
+                                    style:   GoogleFonts.roboto(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black54
+                                    )
                                 ),
-                              ),
-                              GFToggle(
-                                onChanged: (val) {},
-                                value: false,
-                                enabledTrackColor: Colors.blue,
-                                type: GFToggleType.ios,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            height: 1,
-                            width: double.infinity,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
+                                GFToggle(
+                                  onChanged: (val) {},
+                                  value: false,
+                                  enabledTrackColor: Colors.blue,
+                                  type: GFToggleType.ios,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              height: 1,
+                              width: double.infinity,
+                              color: Colors.grey,
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+              ),
             ),
           ],
         ),

@@ -71,6 +71,7 @@ dependencies:
   share_plus: ^4.0.10
   objectbox: ^1.6.0
   objectbox_flutter_libs: any
+  connectivity_plus: ^2.3.5
 
 dev_dependencies:
   flutter_test:
@@ -121,6 +122,7 @@ flutter:
     - assets/forward.svg
     - assets/dot.svg
     - assets/bookmark_filled.svg
+    - assets/logout.svg
   fonts:
     - family: Montserrat
       fonts:
