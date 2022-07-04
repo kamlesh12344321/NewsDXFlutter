@@ -63,15 +63,15 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   int _currentIndex = 0;
 
   Store? _store;
-  Box<BookMarkArticleModel>? orderBox;
-  late BookMarkArticleModel bookMarkArticleModel;
+  late Box<BookMarkArticleModel> bookmarkBox;
+  BookMarkArticleModel? bookMarkArticleModel;
 
   @override
   void initState() {
     super.initState();
     openStore().then((Store store) {
       _store = store;
-      orderBox = store.box<BookMarkArticleModel>();
+      bookmarkBox = store.box<BookMarkArticleModel>();
     });
   }
 
@@ -264,7 +264,11 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                       page: HomeArticleDetailPageConfig);
                                 },
                                 child: HomeArticleListItem(
-                                    articleItem: homeArticle),
+                                    articleItem: homeArticle,
+                                  bookmarkStatus: getBookMarkStatus(homeArticle.articleId),
+                                  bookmarkBox: bookmarkBox,
+                                  bookMarkArticleModel: bookMarkArticleModel,
+                                ),
                               );
                             });
                       }
@@ -366,29 +370,13 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   }
 
 
-  void onBookmark(String articleId) {
-    final query = orderBox
-        ?.query(BookMarkArticleModel_.articleId
-        .equals(articleId))
-        .build();
-    final people = query?.find();
-    debugPrint(people.toString());
-    if (people!.length == 0) {
-      onAddBookMark(articleId);
+  bool getBookMarkStatus(String articleId) {
+    final bookMarkQuery = bookmarkBox?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
+    final bookMarkArticle = bookMarkQuery?.find();
+    if (bookMarkArticle!.length == 0) {
+      return false;
     } else {
-      onRemoveBookMark(people.first.id);
+      return true;
     }
-    setState(() {});
-  }
-
-  void onAddBookMark(String articleId) {
-    bookMarkArticleModel =
-        BookMarkArticleModel(articleId: articleId);
-    int id = orderBox!.put(bookMarkArticleModel);
-    debugPrint("kk id -> $id");
-  }
-
-  void onRemoveBookMark(int id) {
-    orderBox!.remove(id);
   }
 }
