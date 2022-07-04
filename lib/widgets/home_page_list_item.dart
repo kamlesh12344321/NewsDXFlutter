@@ -6,15 +6,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:newsdx/model/SectionPojo.dart';
 import 'package:newsdx/model/bookmark_article_list.dart';
-import 'package:newsdx/preference/user_preference.dart';import 'package:newsdx/widgets/big_text.dart';
+import 'package:newsdx/preference/user_preference.dart';
+import 'package:newsdx/widgets/big_text.dart';
 import 'package:newsdx/widgets/small_icon_article.dart';
 import 'package:newsdx/widgets/small_text.dart';
 import 'package:newsdx/model/SectionPojo.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 
-
 class HomePageListItem extends StatefulWidget {
   final Articles? articleItem;
+
   HomePageListItem({required this.articleItem});
 
   @override
@@ -22,23 +23,27 @@ class HomePageListItem extends StatefulWidget {
 }
 
 class _HomePageListItemState extends State<HomePageListItem> {
-  late bool? bookmarked_local = false;
+  bool selected = false;
+
   @override
   Widget build(BuildContext context) {
     String imageUrl = "";
-    String? _timestamp = widget.articleItem!.publishdate; // [DateTime] formatted as String.
-    var _convertedTimestamp = DateTime.parse(_timestamp!); // Converting into [DateTime] object
+    String? _timestamp =
+        widget.articleItem!.publishdate; // [DateTime] formatted as String.
+    var _convertedTimestamp =
+        DateTime.parse(_timestamp!); // Converting into [DateTime] object
     var result = GetTimeAgo.parse(_convertedTimestamp);
 
-    if(widget.articleItem!.images!.isNotEmpty) {
-       imageUrl = "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageid}_100.jpg";
-    } else{
+    if (widget.articleItem!.images!.isNotEmpty) {
+      imageUrl =
+          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageid}_100.jpg";
+    } else {
       imageUrl = "https://via.placeholder.com/600x340";
     }
     return Container(
       width: double.infinity,
       height: 100,
-      margin: const EdgeInsets.only(top: 12, bottom: 12, left: 0 , right: 0),
+      margin: const EdgeInsets.only(top: 12, bottom: 12, left: 0, right: 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -74,36 +79,33 @@ class _HomePageListItemState extends State<HomePageListItem> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                BigText(16, Colors.black, 1, widget.articleItem?.title ?? ""),
+                BigText(14, Colors.black, 1, widget.articleItem?.title ?? ""),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
-                        SmallText(result , 12, Colors.black, 1.0),
+                        SmallText(result, 12, Colors.black, 1.0),
                       ],
                     ),
                     Row(
                       children: [
                         SvgPicture.asset("assets/share.svg"),
-                         const SizedBox(
+                        const SizedBox(
                           width: 18,
                           height: 17,
                         ),
-                       InkWell(
-                         child: bookmarked_local== true ? SvgPicture.asset("assets/bookmark_filled.svg") : SvgPicture.asset("assets/bi_bookmark.svg"),
-                         onTap: (){
-                           String articleId = widget.articleItem?.articleid ?? "";
-                           List<String>? artiList = <String>[];
-                           artiList.add(articleId);
-                           Prefs.saveArticleBookedList(artiList);
-                           widget.articleItem?.bookmarked == true;
-                           setState(() {
-                             bookmarked_local == true;
-                           });
-
-                         },
-                       ),
+                        IconButton(
+                          icon: selected
+                              ? SvgPicture.asset("assets/bookmark_filled.svg")
+                              : SvgPicture.asset("assets/bi_bookmark.svg"),
+                          onPressed: () {
+                            widget.articleItem?.bookmarked == true;
+                            setState(() {
+                              selected = !selected;
+                            });
+                          },
+                        ),
                       ],
                     ),
                   ],

@@ -14,30 +14,35 @@ import 'package:newsdx/widgets/full_image_view_item.dart';
 import 'package:provider/provider.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 
-class ArticleDetail extends StatelessWidget {
+class ArticleDetail extends StatefulWidget {
   final Articles? articleItem;
 
   const ArticleDetail({Key? key, this.articleItem}) : super(key: key);
 
+  @override
+  State<ArticleDetail> createState() => _ArticleDetailState();
+}
+
+class _ArticleDetailState extends State<ArticleDetail> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
     TextToSpeech tts = TextToSpeech();
     double volume = 1.0;
     String? _timestamp =
-        articleItem!.publishdate; // [DateTime] formatted as String.
+        widget.articleItem!.publishdate; // [DateTime] formatted as String.
     var _convertedTimestamp =
         DateTime.parse(_timestamp!); // Converting into [DateTime] object
     var result = GetTimeAgo.parse(_convertedTimestamp);
     double _height = 1;
     bool isSpeaking = false;
     String? imageId = "";
-    if (articleItem?.images?.length == 0) {
+    if (widget.articleItem?.images?.length == 0) {
       imageId = "";
     } else {
-      imageId = articleItem!.images![0].imageid;
+      imageId = widget.articleItem!.images![0].imageid;
     }
-    bool? isPremium = articleItem!.premium;
+    bool? isPremium = widget.articleItem!.premium;
     if (isPremium == true) {
       showMaterialModalBottomSheet(
           context: context,
@@ -238,7 +243,7 @@ class ArticleDetail extends StatelessWidget {
                         } else {
                           isSpeaking = true;
                           tts.speak(
-                              removeAllHtmlTags(articleItem!.descpart1!) ?? "");
+                              removeAllHtmlTags(widget.articleItem!.descpart1!) ?? "");
                         }
                       },
                       child: Align(
@@ -255,7 +260,7 @@ class ArticleDetail extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                        articleItem?.title ?? "",
+                        widget.articleItem?.title ?? "",
                         style: GoogleFonts.roboto(
                             textStyle: const TextStyle(
                                 color: Colors.black,
@@ -289,7 +294,7 @@ class ArticleDetail extends StatelessWidget {
                   right: 16,
                 ),
                 child: Html(
-                  data: articleItem?.descpart1,
+                  data: widget.articleItem?.descpart1,
                   //     style: {
                   //   "body" : Style(
                   //     fontSize: FontSize(18.0),

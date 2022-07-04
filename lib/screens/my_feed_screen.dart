@@ -21,6 +21,8 @@ class _PremiumPageState extends State<PremiumPage> {
   TextEditingController myController = TextEditingController();
   String? article_title = "";
   bool rememberMe = false;
+  List<Section>?  sectionSList = [];
+  List<Section>?  filteredList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +35,6 @@ class _PremiumPageState extends State<PremiumPage> {
         backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0.0,
-        // leading: Transform.scale(
-        //   scale: 1.2,
-        //   child: IconButton(
-        //       icon: SvgPicture.asset("assets/back.svg"),
-        //       onPressed: () {
-        //         Navigator.of(context).pop();
-        //       }),
-        // ),
         actions: [
           Padding(
               padding: const EdgeInsets.only(right: 16),
@@ -95,48 +89,50 @@ class _PremiumPageState extends State<PremiumPage> {
               },
             ),
             Expanded(
-              child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: lengthValue + 1,
-                  itemBuilder: (context, index) {
-                    String? title = sectionsList?.data?[index].sectionName;
-                    return Padding(
-                      padding:
-                      const EdgeInsets.only(left: 0, right: 0, top: 20),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                title ?? "",
-                                style:   GoogleFonts.roboto(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black54
-                                )
-                              ),
-                              GFToggle(
-                                onChanged: (val) {},
-                                value: false,
-                                enabledTrackColor: Colors.blue,
-                                type: GFToggleType.ios,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            height: 1,
-                            width: double.infinity,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
+              child: SingleChildScrollView(
+                child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: lengthValue,
+                    itemBuilder: (context, index) {
+                      String? title = sectionsList?.data?[index].sectionName;
+                      return Padding(
+                        padding:
+                        const EdgeInsets.only(left: 0, right: 0, top: 20),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                    title ?? "",
+                                    style:   GoogleFonts.roboto(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black54
+                                    )
+                                ),
+                                GFToggle(
+                                  onChanged: (val) {},
+                                  value: false,
+                                  enabledTrackColor: Colors.blue,
+                                  type: GFToggleType.ios,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              height: 1,
+                              width: double.infinity,
+                              color: Colors.grey,
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+              ),
             ),
           ],
         ),

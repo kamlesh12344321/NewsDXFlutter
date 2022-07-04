@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/internet_connectivity/internet_status.dart';
 import 'package:newsdx/model/SectionList.dart';
 import 'package:newsdx/model/SectionPojo.dart';
 import 'package:newsdx/model/home_section.dart';

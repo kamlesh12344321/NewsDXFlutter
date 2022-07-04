@@ -303,21 +303,23 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       child: Center(
                         child: Column(
                           children: [
-                            Row(
-                              children:  [
-                                Text("Version ", style:  GoogleFonts.roboto(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black54
-                                ),),
-                                Text("1.0.1", style:  GoogleFonts.roboto(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.blueAccent
-                                ),)
+                           FittedBox(
+                             child:  Row(
+                               children:  [
+                                 Text("Version ", style:  GoogleFonts.roboto(
+                                     fontSize: 16,
+                                     fontWeight: FontWeight.w400,
+                                     color: Colors.black54
+                                 ),),
+                                 Text("1.0.1", style:  GoogleFonts.roboto(
+                                     fontSize: 16,
+                                     fontWeight: FontWeight.w400,
+                                     color: Colors.blueAccent
+                                 ),)
 
-                              ],
-                            ),
+                               ],
+                             ),
+                           )
                           ],
                         ),
                       ),
