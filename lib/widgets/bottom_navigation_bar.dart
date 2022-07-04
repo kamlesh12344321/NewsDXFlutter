@@ -22,7 +22,7 @@ class _TheHinduBottomNavState extends State<TheHinduBottomNav> {
     const HomePage(),
     const BriefingPage(),
     const TrendingPage(),
-      PremiumPage(),
+    MyFeedScreen(),
     const MyAccountPage()
   ];
 

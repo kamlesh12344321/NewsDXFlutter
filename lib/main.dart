@@ -80,8 +80,6 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(create: (_) => SectionsViewModel()),
         ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
-        // ChangeNotifierProvider(create: (_) => SportStarsViewModel()),
-        // ChangeNotifierProvider(create: (_) => GenericViewModel()),
         ChangeNotifierProvider(create: (_) => HomeSectionsViewModel()),
         Provider(create: (_) => AuthService())
       ],
