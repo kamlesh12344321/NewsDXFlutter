@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:newsdx/screens/brifeing_page.dart';
-import 'package:newsdx/screens/home_page.dart';
+import 'package:newsdx/screens/home_list.dart';
 import 'package:newsdx/screens/setting_screen.dart';
 import 'package:newsdx/myfeed/my_feed_screen.dart';
 import 'package:newsdx/screens/trending_screen.dart';

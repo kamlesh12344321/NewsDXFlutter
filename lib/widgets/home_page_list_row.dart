@@ -15,6 +15,8 @@ import 'package:newsdx/model/SectionPojo.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 
 import '../bookmark/bookmark_method.dart';
+import '../bookmark/model/bookmark_article.dart';
+import '../objectbox.g.dart';
 import '../shared/shared_method.dart';
 
 
@@ -29,8 +31,25 @@ class HomePageListItem extends StatefulWidget {
 class _HomePageListItemState extends State<HomePageListItem> {
   bool selected = false;
 
+  Store? _store;
+  Box<BookMarkArticleModel>? orderBox;
+  late BookMarkArticleModel bookMarkArticleModel;
+
+  @override
+  void initState() {
+    super.initState();
+    openStore().then((Store store) {
+      _store = store;
+      orderBox = store.box<BookMarkArticleModel>();
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
+
+
+
     String imageUrl = "";
     String? _timestamp =
         widget.articleItem!.publishdate; // [DateTime] formatted as String.
@@ -44,6 +63,7 @@ class _HomePageListItemState extends State<HomePageListItem> {
     } else {
       imageUrl = "https://via.placeholder.com/600x340";
     }
+
     return Container(
       width: double.infinity,
       height: 100,
@@ -111,10 +131,8 @@ class _HomePageListItemState extends State<HomePageListItem> {
                               ? SvgPicture.asset("assets/bookmark_filled.svg")
                               : SvgPicture.asset("assets/bi_bookmark.svg"),
                           onPressed: () {
-                            widget.articleItem?.bookmarked == true;
-                            setState(() {
-                              selected = !selected;
-                            });
+                            // widget.articleItem?.bookmarked == true;
+                            onBookmark(widget.articleItem!.articleid!);
                           },
                         ),
                       ],
@@ -127,5 +145,43 @@ class _HomePageListItemState extends State<HomePageListItem> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _store?.close();
+    super.dispose();
+  }
+
+  void onBookmark(String articleId) {
+    final query = orderBox
+        ?.query(BookMarkArticleModel_.articleId.equals(articleId))
+        .build();
+
+    final people = query?.find();
+
+    debugPrint(people.toString());
+    if (people!.length == 0) {
+      setState(() {
+        selected = !selected;
+      });
+      onAddBookMark(articleId);
+    } else {
+      setState(() {
+        selected = !selected;
+      });
+      onRemoveBookMark(people.first.id);
+    }
+    setState(() {});
+  }
+
+  void onAddBookMark(String articleId) {
+    bookMarkArticleModel = BookMarkArticleModel(articleId: articleId);
+    int id = orderBox!.put(bookMarkArticleModel);
+    debugPrint("kk id -> $id");
+  }
+
+  void onRemoveBookMark(int id) {
+    orderBox!.remove(id);
   }
 }
