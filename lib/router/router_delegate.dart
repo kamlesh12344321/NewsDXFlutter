@@ -214,7 +214,7 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
           _addPageData(const UserProfileInfoScreen(), UserProfileInfoPageConfig);
           break;
         case Pages.ArticleDe:
-          _addPageData(const ArticleDetail(), ArticleDetailPageConfig);
+          _addPageData(ArticleDetail(), ArticleDetailPageConfig);
           break;
 
         case Pages.BookMark:

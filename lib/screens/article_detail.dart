@@ -5,20 +5,30 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:newsdx/model/SectionPojo.dart';
-import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
 import 'package:newsdx/widgets/article_detail_fullimage.dart';
-import 'package:newsdx/widgets/full_image_view_item.dart';
 import 'package:provider/provider.dart';
 import 'package:text_to_speech/text_to_speech.dart';
+import '../bookmark/model/bookmark_article.dart';
+import '../objectbox.g.dart';
 import '../shared/shared_method.dart';
 
 class ArticleDetail extends StatefulWidget {
   final Articles? articleItem;
 
-  const ArticleDetail({Key? key, this.articleItem}) : super(key: key);
+  bool? bookmarkStatus;
+  Box<BookMarkArticleModel>? bookmarkBox;
+  BookMarkArticleModel? bookMarkArticleModel;
+
+  ArticleDetail({
+    Key? key,
+    this.articleItem,
+    this.bookmarkStatus,
+    this.bookmarkBox,
+    this.bookMarkArticleModel
+  }) : super(key: key);
 
   @override
   State<ArticleDetail> createState() => _ArticleDetailState();
@@ -227,9 +237,21 @@ class _ArticleDetailState extends State<ArticleDetail> {
                         Transform.scale(
                             scale: 1,
                             child: IconButton(
-                                icon:
-                                    SvgPicture.asset("assets/bi_bookmark.svg"),
-                                onPressed: () {}))
+                              icon:  widget.bookmarkStatus!
+                                  ? SvgPicture.asset("assets/bookmark_filled.svg")
+                                  : SvgPicture.asset("assets/bi_bookmark.svg"),
+                              onPressed: () {
+                                setState(() {
+                                  if( widget.bookmarkStatus == true){
+                                    widget.bookmarkStatus = false;
+                                  } else {
+                                    widget.bookmarkStatus = true;
+                                  }
+                                });
+                                onBookmark(widget.articleItem!.articleid!);
+                              },
+                            ),
+                        ),
                       ],
                     ),
                   )
@@ -319,6 +341,39 @@ class _ArticleDetailState extends State<ArticleDetail> {
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
 
     return htmlText.replaceAll(exp, '');
+  }
+
+
+  void onBookmark(String articleId) {
+
+    final query = widget.bookmarkBox
+        ?.query(BookMarkArticleModel_.articleId.equals(articleId))
+        .build();
+    final people = query?.find();
+    debugPrint("bookmark check ->"+people.toString());
+    if (people == null) {
+      debugPrint("Bookmark Added 0");
+      onAddBookMark(articleId);
+    } else {
+      if (people?.length == 0) {
+        debugPrint("Bookmark Added 1");
+        onAddBookMark(articleId);
+      } else {
+        debugPrint("Bookmark remove");
+        onRemoveBookMark(people.first.id);
+      }}
+    setState(() {});
+  }
+
+  void onAddBookMark(String articleId) {
+    debugPrint("kk id insert -> $articleId");
+    var bookMarkArticleModel = BookMarkArticleModel(articleId: articleId);
+    int id = widget.bookmarkBox!.put(bookMarkArticleModel!);
+    debugPrint("kk id -> $id");
+  }
+
+  void onRemoveBookMark(int id) {
+    widget.bookmarkBox?.remove(id);
   }
 }
 
