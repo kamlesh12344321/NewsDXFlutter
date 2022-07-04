@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/bookmark/model/bookmark_article.dart';
 import 'package:newsdx/model/SectionList.dart';
 import 'package:newsdx/model/SectionPojo.dart';
 import 'package:newsdx/model/home_section.dart';
@@ -37,9 +38,11 @@ import 'package:newsdx/widgets/sport_star_item.dart';
 import 'package:newsdx/widgets/sport_stars.dart';
 import 'package:newsdx/widgets/top_picks_item.dart';
 import 'package:provider/provider.dart';
+import '../objectbox.g.dart';
 import '../utils/CustomColors.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -57,6 +60,19 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   late HomeSectionsViewModel homeSectionsViewModel;
   HomeSection? homeSection;
   int _currentIndex = 0;
+
+  Store? _store;
+  Box<BookMarkArticleModel>? orderBox;
+  late BookMarkArticleModel bookMarkArticleModel;
+
+  @override
+  void initState() {
+    super.initState();
+    openStore().then((Store store) {
+      _store = store;
+      orderBox = store.box<BookMarkArticleModel>();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -334,4 +350,37 @@ class _HomePageState extends State<HomePage> with UiLoggy {
 
   SectionPojo modelClassFromJson(String str) =>
       SectionPojo.fromJson(json.decode(str));
+
+  @override
+  void dispose() {
+    _store?.close();
+    super.dispose();
+  }
+
+
+  void onBookmark(String articleId) {
+    final query = orderBox
+        ?.query(BookMarkArticleModel_.articleId
+        .equals(articleId))
+        .build();
+    final people = query?.find();
+    debugPrint(people.toString());
+    if (people!.length == 0) {
+      onAddBookMark(articleId);
+    } else {
+      onRemoveBookMark(people.first.id);
+    }
+    setState(() {});
+  }
+
+  void onAddBookMark(String articleId) {
+    bookMarkArticleModel =
+        BookMarkArticleModel(articleId: articleId);
+    int id = orderBox!.put(bookMarkArticleModel);
+    debugPrint("kk id -> $id");
+  }
+
+  void onRemoveBookMark(int id) {
+    orderBox!.remove(id);
+  }
 }

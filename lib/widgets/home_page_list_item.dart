@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:newsdx/model/SectionPojo.dart';
-import 'package:newsdx/model/bookmark_article_list.dart';
 import 'package:newsdx/preference/user_preference.dart';import 'package:newsdx/widgets/big_text.dart';
 import 'package:newsdx/widgets/small_icon_article.dart';
 import 'package:newsdx/widgets/small_text.dart';
 import 'package:newsdx/model/SectionPojo.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 
-import '../utils/bookmark_method.dart';
-import '../utils/shared_method.dart';
+import '../bookmark/bookmark_method.dart';
+import '../shared/shared_method.dart';
 
 
 class HomePageListItem extends StatefulWidget {
@@ -103,13 +102,14 @@ class _HomePageListItemState extends State<HomePageListItem> {
                        InkWell(
                          child: bookmarked_local== true ? SvgPicture.asset("assets/bookmark_filled.svg") : SvgPicture.asset("assets/bi_bookmark.svg"),
                          onTap: () async{
-                           var addBookMark = BookmarkedArticleList(articleId: widget.articleItem!.articleid!);
+                           /*var addBookMark = BookmarkedArticleList(articleId: widget.articleItem!.articleid!);
                            int id = await BookMark.onAddBookMark(addBookMark);
                            int cont = 0;
                            await BookMark.onAllBookMark().then((value) => {
                               cont = value.length
                            });
-                           print("Sucessfull inserted an $cont object with $id");
+                           print("Sucessfull inserted an $cont object with $id"); */
+
                            /*String articleId = widget.articleItem?.articleid ?? "";
                            List<String>? artiList = <String>[];
                            artiList.add(articleId);

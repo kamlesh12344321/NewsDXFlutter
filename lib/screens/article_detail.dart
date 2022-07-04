@@ -9,12 +9,14 @@ import 'package:newsdx/widgets/article_detail_fullimage.dart';
 import 'package:newsdx/widgets/full_image_view_item.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 
-import '../utils/shared_method.dart';
+import '../shared/shared_method.dart';
 
 class ArticleDetail extends StatelessWidget {
   final Articles? articleItem;
 
   const ArticleDetail({Key? key, this.articleItem}) : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {

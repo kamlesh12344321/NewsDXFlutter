@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newsdx/screens/bookmark.dart';
-import 'package:newsdx/screens/my_feed_screen.dart';
+import 'package:newsdx/myfeed/my_feed_screen.dart';
 import 'package:newsdx/widgets/big_text.dart';
 
 class NavBar extends StatefulWidget {

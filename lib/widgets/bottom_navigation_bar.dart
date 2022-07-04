@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:newsdx/screens/brifeing_page.dart';
 import 'package:newsdx/screens/home_page.dart';
 import 'package:newsdx/screens/setting_screen.dart';
-import 'package:newsdx/screens/my_feed_screen.dart';
+import 'package:newsdx/myfeed/my_feed_screen.dart';
 import 'package:newsdx/screens/trending_screen.dart';
 import 'package:newsdx/widgets/nav_bar.dart';
 import 'package:newsdx/widgets/appbar_with_back.dart';

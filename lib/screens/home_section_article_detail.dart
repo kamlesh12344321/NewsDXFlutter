@@ -6,7 +6,10 @@ import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/widgets/article_detail_fullimage.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 
-import '../utils/shared_method.dart';
+import '../bookmark/model/bookmark_article.dart';
+import '../objectbox.g.dart';
+import '../shared/shared_method.dart';
+import 'package:path_provider/path_provider.dart';
 
 
 class HomeSectionArticleDetail extends StatefulWidget {
@@ -18,8 +21,22 @@ class HomeSectionArticleDetail extends StatefulWidget {
 }
 
 class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
+  Store? _store;
+  Box<BookMarkArticleModel>? orderBox;
+  late BookMarkArticleModel bookMarkArticleModel;
+
+  @override
+  void initState() {
+    super.initState();
+    openStore().then((Store store) {
+      _store = store;
+      orderBox = store.box<BookMarkArticleModel>();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool isBookMarkState = false;
     TextToSpeech tts = TextToSpeech();
     double volume = 1.0;
     String? _timestamp = widget.homeArticle?.publishDate.toString(); // [DateTime] formatted as String.
@@ -33,6 +50,9 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
     } else{
       imageId = widget.homeArticle!.images[0].imageId;
     }
+
+    // onBookmark();
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -94,10 +114,15 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
                                   widget.homeArticle!.title!,
                                   widget.homeArticle!.link!);
                             })),
-                        Transform.scale(
+                        Transform.scale( // 8296545235
                             scale: 1,
                             child: IconButton(
-                                icon: SvgPicture.asset("assets/bi_bookmark.svg"), onPressed: () {}))
+                                icon:  isBookMarkState ? SvgPicture.asset("assets/bi_bookmark.svg") : SvgPicture.asset("assets/bi_bookmark.svg") , onPressed: () {
+                                  setState((){
+                                    isBookMarkState = !isBookMarkState;
+                                  });
+                                  onBookmark();
+                            }))
                       ],
                     ),
                   )
@@ -156,5 +181,37 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
     );
 
     return htmlText.replaceAll(exp, '');
+  }
+
+  @override
+  void dispose() {
+    _store?.close();
+    super.dispose();
+  }
+
+  void onBookmark() {
+    final query = orderBox
+        ?.query(BookMarkArticleModel_.articleId
+            .equals(widget.homeArticle!.articleId))
+        .build();
+    final people = query?.find();
+    debugPrint(people.toString());
+    if (people!.length == 0) {
+      onAddBookMark();
+    } else {
+      onRemoveBookMark(people.first.id);
+    }
+    setState(() {});
+  }
+
+  void onAddBookMark() {
+    bookMarkArticleModel =
+        BookMarkArticleModel(articleId: widget.homeArticle!.articleId);
+    int id = orderBox!.put(bookMarkArticleModel);
+    debugPrint("kk id -> $id");
+  }
+
+  void onRemoveBookMark(int id) {
+    orderBox!.remove(id);
   }
 }
