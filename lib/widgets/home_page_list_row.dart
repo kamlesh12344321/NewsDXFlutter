@@ -14,14 +14,14 @@ class HomePageListItem extends StatefulWidget {
   final Articles? articleItem;
   bool? bookmarkStatus;
 
-  final Box<BookMarkArticleModel> bookmarkBox;
+  final Box<BookMarkArticleModel>? bookmarkBox;
   final BookMarkArticleModel? bookMarkArticleModel;
 
   HomePageListItem({
     Key? key,
     required this.articleItem,
     this.bookmarkStatus,
-    required this.bookmarkBox,
+     this.bookmarkBox,
     this.bookMarkArticleModel
   }) : super(key: key);
 
@@ -165,6 +165,6 @@ class _HomePageListItemState extends State<HomePageListItem> {
   }
 
   void onRemoveBookMark(int id) {
-    widget.bookmarkBox.remove(id);
+    widget.bookmarkBox?.remove(id);
   }
 }

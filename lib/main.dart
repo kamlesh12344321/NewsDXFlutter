@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
@@ -27,15 +29,48 @@ import 'package:uni_links/uni_links.dart';
 import 'dart:developer' as developer;
 import 'apple/apple_sign_in_available.dart';
 
+AndroidNotificationChannel channel = const AndroidNotificationChannel(
+  'high_importance_channel', //id
+  'High importance notification',
+  importance: Importance.high,
+  playSound: true,
+);
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
+final Completer<Store> _storeCompleter = Completer<Store>();
+Future<void> initStore() async {
+  if (!_storeCompleter.isCompleted) {
+    final store = await openStore();
+    _storeCompleter.complete(store);
+  }
+}
+Future<Store> getStore() async {
+  return await _storeCompleter.future;
+}
 
 Future<void> main() async {
   Loggy.initLoggy();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+  ?.createNotificationChannel(channel);
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
   await Prefs.init();
+  await initStore();
   final appleSignInAvailable = await AppleSignInAvailable.check();
-  runApp(Provider<AppleSignInAvailable>.value(value: appleSignInAvailable,
-  child: const MyApp(),));
+  runApp(Provider<AppleSignInAvailable>.value(
+    value: appleSignInAvailable,
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -62,6 +97,47 @@ class _MyAppState extends State<MyApp> {
   initState() {
     super.initState();
     initPlatformState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message){
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if(notification !=null && android != null){
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              color: Colors.blue,
+              playSound: true,
+              icon: '@mipmap/ic_launcher',
+            )
+          )
+        );
+
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if(notification !=null && android != null){
+        showDialog(context: context, builder: (_){
+          return AlertDialog(
+            title: Text(notification.title!),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(notification.body!)
+                ],
+              ),
+            ),
+          );
+        });
+      }
+    });
   }
 
   @override
@@ -76,53 +152,49 @@ class _MyAppState extends State<MyApp> {
     developer.log(Log_Tag, name: "MyApp2State :: build()");
 
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => appState,
-        ),
-        ChangeNotifierProvider(create: (_) => SectionsViewModel()),
-        ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
-        ChangeNotifierProvider(create: (_) => HomeSectionsViewModel()),
-        Provider(create: (_) => AuthService())
-      ],
-      child: ThemeProvider(
-          saveThemesOnChange: true,
-          loadThemeOnInit: false,
-          onInitCallback: (controller, previouslySavedThemeFuture) async {
-            String? savedTheme = await previouslySavedThemeFuture;
-            if (savedTheme != null) {
-              controller.setTheme(savedTheme);
-            } else {
-              Brightness platformBrightness =
-                  SchedulerBinding.instance?.window.platformBrightness ??
-                      Brightness.light;
-              if (platformBrightness == Brightness.dark) {
-                controller.setTheme('dark');
-              } else {
-                controller.setTheme('light');
-              }
-              controller.forgetSavedTheme();
-            }
-          },
-        themes: <AppTheme> [
-          AppTheme.light(id: 'light'),
-          AppTheme.dark(id: 'dark'),
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => appState,
+          ),
+          ChangeNotifierProvider(create: (_) => SectionsViewModel()),
+          ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
+          ChangeNotifierProvider(create: (_) => HomeSectionsViewModel()),
+          Provider(create: (_) => AuthService())
         ],
-          child: ThemeConsumer(
-
-              child: Builder(
-                builder: (themeContext) =>  MaterialApp.router(
-                  routeInformationParser: parser,
-                  routerDelegate: delegate,
-                  backButtonDispatcher: backButtonDispatcher,
-                  debugShowCheckedModeBanner: false,
-                  title: MyConstant.appName,
-                  theme: ThemeProvider.themeOf(themeContext).data,
-                ),
-              )
-          )
-      )
-    );
+        child: ThemeProvider(
+            saveThemesOnChange: true,
+            loadThemeOnInit: false,
+            onInitCallback: (controller, previouslySavedThemeFuture) async {
+              String? savedTheme = await previouslySavedThemeFuture;
+              if (savedTheme != null) {
+                controller.setTheme(savedTheme);
+              } else {
+                Brightness platformBrightness =
+                    SchedulerBinding.instance?.window.platformBrightness ??
+                        Brightness.light;
+                if (platformBrightness == Brightness.dark) {
+                  controller.setTheme('dark');
+                } else {
+                  controller.setTheme('light');
+                }
+                controller.forgetSavedTheme();
+              }
+            },
+            themes: <AppTheme>[
+              AppTheme.light(id: 'light'),
+              AppTheme.dark(id: 'dark'),
+            ],
+            child: ThemeConsumer(
+                child: Builder(
+              builder: (themeContext) => MaterialApp.router(
+                routeInformationParser: parser,
+                routerDelegate: delegate,
+                backButtonDispatcher: backButtonDispatcher,
+                debugShowCheckedModeBanner: false,
+                title: MyConstant.appName,
+                theme: ThemeProvider.themeOf(themeContext).data,
+              ),
+            ))));
   }
 
   Future<void> initPlatformState() async {

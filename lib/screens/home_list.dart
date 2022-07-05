@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   int _currentIndex = 0;
 
   Store? _store;
-  late Box<BookMarkArticleModel> bookmarkBox;
+  late Box<BookMarkArticleModel>? bookmarkBox;
   BookMarkArticleModel? bookMarkArticleModel;
 
   @override
@@ -378,8 +378,8 @@ class _HomePageState extends State<HomePage> with UiLoggy {
 
 
   bool getBookMarkStatus(String articleId) {
-    final bookMarkQuery = bookmarkBox.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
-    final bookMarkArticle = bookMarkQuery.find();
+    final bookMarkQuery = bookmarkBox?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
+    final bookMarkArticle = bookMarkQuery?.find();
 
     if (bookMarkArticle!.length == 0) {
       return false;
