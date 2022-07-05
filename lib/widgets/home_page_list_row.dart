@@ -1,20 +1,10 @@
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:newsdx/model/SectionPojo.dart';
-import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/widgets/big_text.dart';
-import 'package:newsdx/preference/user_preference.dart';
-import 'package:newsdx/widgets/big_text.dart';
-import 'package:newsdx/widgets/small_icon_article.dart';
 import 'package:newsdx/widgets/small_text.dart';
-import 'package:newsdx/model/SectionPojo.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-
-import '../bookmark/bookmark_method.dart';
 import '../bookmark/model/bookmark_article.dart';
 import '../objectbox.g.dart';
 import '../shared/shared_method.dart';
@@ -22,34 +12,27 @@ import '../shared/shared_method.dart';
 
 class HomePageListItem extends StatefulWidget {
   final Articles? articleItem;
-  HomePageListItem({required this.articleItem});
+  bool? bookmarkStatus;
+
+  final Box<BookMarkArticleModel> bookmarkBox;
+  final BookMarkArticleModel? bookMarkArticleModel;
+
+  HomePageListItem({
+    Key? key,
+    required this.articleItem,
+    this.bookmarkStatus,
+    required this.bookmarkBox,
+    this.bookMarkArticleModel
+  }) : super(key: key);
 
   @override
   State<HomePageListItem> createState() => _HomePageListItemState();
 }
 
 class _HomePageListItemState extends State<HomePageListItem> {
-  bool selected = false;
-
-  Store? _store;
-  Box<BookMarkArticleModel>? orderBox;
-  late BookMarkArticleModel bookMarkArticleModel;
-
-  @override
-  void initState() {
-    super.initState();
-    openStore().then((Store store) {
-      _store = store;
-      orderBox = store.box<BookMarkArticleModel>();
-    });
-
-  }
 
   @override
   Widget build(BuildContext context) {
-
-
-
     String imageUrl = "";
     String? _timestamp =
         widget.articleItem!.publishdate; // [DateTime] formatted as String.
@@ -127,11 +110,17 @@ class _HomePageListItemState extends State<HomePageListItem> {
                           height: 17,
                         ),
                         IconButton(
-                          icon: selected
+                          icon:  widget.bookmarkStatus!
                               ? SvgPicture.asset("assets/bookmark_filled.svg")
                               : SvgPicture.asset("assets/bi_bookmark.svg"),
                           onPressed: () {
-                            // widget.articleItem?.bookmarked == true;
+                            setState(() {
+                              if( widget.bookmarkStatus == true){
+                                widget.bookmarkStatus = false;
+                              } else {
+                                widget.bookmarkStatus = true;
+                              }
+                            });
                             onBookmark(widget.articleItem!.articleid!);
                           },
                         ),
@@ -147,41 +136,35 @@ class _HomePageListItemState extends State<HomePageListItem> {
     );
   }
 
-  @override
-  void dispose() {
-    _store?.close();
-    super.dispose();
-  }
-
   void onBookmark(String articleId) {
-    final query = orderBox
+
+    final query = widget.bookmarkBox
         ?.query(BookMarkArticleModel_.articleId.equals(articleId))
         .build();
-
     final people = query?.find();
-
-    debugPrint(people.toString());
-    if (people!.length == 0) {
-      setState(() {
-        selected = !selected;
-      });
+    debugPrint("bookmark check ->"+people.toString());
+    if (people == null) {
+      debugPrint("Bookmark Added 0");
       onAddBookMark(articleId);
     } else {
-      setState(() {
-        selected = !selected;
-      });
-      onRemoveBookMark(people.first.id);
-    }
+      if (people?.length == 0) {
+        debugPrint("Bookmark Added 1");
+        onAddBookMark(articleId);
+      } else {
+        debugPrint("Bookmark remove");
+        onRemoveBookMark(people.first.id);
+      }}
     setState(() {});
   }
 
   void onAddBookMark(String articleId) {
-    bookMarkArticleModel = BookMarkArticleModel(articleId: articleId);
-    int id = orderBox!.put(bookMarkArticleModel);
+    debugPrint("kk id insert -> $articleId");
+    var bookMarkArticleModel = BookMarkArticleModel(articleId: articleId);
+    int id = widget.bookmarkBox!.put(bookMarkArticleModel!);
     debugPrint("kk id -> $id");
   }
 
   void onRemoveBookMark(int id) {
-    orderBox!.remove(id);
+    widget.bookmarkBox.remove(id);
   }
 }

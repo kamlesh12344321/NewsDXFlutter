@@ -228,6 +228,9 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                       state: PageState.addWidget,
                                       widget: HomeSectionArticleDetail(
                                         homeArticle: article,
+                                        bookmarkStatus: getBookMarkStatus(article.articleId),
+                                        bookmarkBox: bookmarkBox,
+                                        bookMarkArticleModel: bookMarkArticleModel,
                                       ),
                                       page: HomeArticleDetailPageConfig);
                                 },
@@ -260,14 +263,17 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                       state: PageState.addWidget,
                                       widget: HomeSectionArticleDetail(
                                         homeArticle: homeArticle,
+                                        bookmarkStatus: getBookMarkStatus(homeArticle.articleId),
+                                        bookmarkBox: bookmarkBox,
+                                        bookMarkArticleModel: bookMarkArticleModel,
                                       ),
                                       page: HomeArticleDetailPageConfig);
                                 },
                                 child: HomeArticleListItem(
                                     articleItem: homeArticle,
-                                  bookmarkStatus: getBookMarkStatus(homeArticle.articleId),
-                                  bookmarkBox: bookmarkBox,
-                                  bookMarkArticleModel: bookMarkArticleModel,
+                                    bookmarkStatus: getBookMarkStatus(homeArticle.articleId),
+                                    bookmarkBox: bookmarkBox,
+                                    bookMarkArticleModel: bookMarkArticleModel,
                                 ),
                               );
                             });
@@ -292,12 +298,18 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                             tileColor: Colors.white,
                             title: HomePageListItem(
                               articleItem: article,
+                              bookmarkStatus: getBookMarkStatus(article!.articleid!),
+                              bookmarkBox: bookmarkBox,
+                              bookMarkArticleModel: bookMarkArticleModel,
                             ),
                             onTap: () {
                               appState.currentAction = PageAction(
                                   state: PageState.addWidget,
                                   widget: ArticleDetail(
                                     articleItem: article,
+                                    bookmarkStatus: getBookMarkStatus(article!.articleid!),
+                                    bookmarkBox: bookmarkBox,
+                                    bookMarkArticleModel: bookMarkArticleModel,
                                   ),
                                   page: ArticleDetailPageConfig);
                             },
@@ -368,6 +380,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   bool getBookMarkStatus(String articleId) {
     final bookMarkQuery = bookmarkBox?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
     final bookMarkArticle = bookMarkQuery?.find();
+
     if (bookMarkArticle!.length == 0) {
       return false;
     } else {
