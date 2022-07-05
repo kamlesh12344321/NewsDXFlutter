@@ -20,18 +20,18 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <ModelEntity>[
   ModelEntity(
-      id: const IdUid(1, 4586477047874600517),
+      id: const IdUid(1, 5787358165828066903),
       name: 'BookMarkArticleModel',
-      lastPropertyId: const IdUid(2, 5205165249645213984),
+      lastPropertyId: const IdUid(2, 1711704305945313691),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
-            id: const IdUid(1, 7771584749308858386),
+            id: const IdUid(1, 316588613299122189),
             name: 'id',
             type: 6,
             flags: 1),
         ModelProperty(
-            id: const IdUid(2, 5205165249645213984),
+            id: const IdUid(2, 1711704305945313691),
             name: 'articleId',
             type: 9,
             flags: 0)
@@ -39,18 +39,18 @@ final _entities = <ModelEntity>[
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[]),
   ModelEntity(
-      id: const IdUid(2, 7449306546235731241),
+      id: const IdUid(2, 4734191368875372909),
       name: 'MyFeedModel',
-      lastPropertyId: const IdUid(2, 234215929782624199),
+      lastPropertyId: const IdUid(2, 100400799877701503),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
-            id: const IdUid(1, 1441143994161783671),
+            id: const IdUid(1, 2765259668246174308),
             name: 'id',
             type: 6,
             flags: 1),
         ModelProperty(
-            id: const IdUid(2, 234215929782624199),
+            id: const IdUid(2, 100400799877701503),
             name: 'sectionId',
             type: 9,
             flags: 0)
@@ -79,7 +79,7 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(2, 7449306546235731241),
+      lastEntityId: const IdUid(2, 4734191368875372909),
       lastIndexId: const IdUid(0, 0),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),

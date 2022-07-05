@@ -106,7 +106,7 @@ class _HomePageListItemState extends State<HomePageListItem> {
                            },
                          ),
                          const SizedBox(
-                          width: 18,
+                          width: 14,
                           height: 17,
                         ),
                         IconButton(

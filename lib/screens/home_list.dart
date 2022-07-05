@@ -252,10 +252,10 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                             itemBuilder: (context, index) {
                               HomeArticle? homeArticle = homeArticle3[index];
                               if (index == 4) {
-                                return BannerAds();
+                                return const BannerAds();
                               }
                               if (index == 12) {
-                                return PoweredByAdsWidget();
+                                return const PoweredByAdsWidget();
                               }
                               return InkWell(
                                 onTap: () {
@@ -294,11 +294,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                         itemCount: val?.articles?.length,
                         itemBuilder: (context, index) {
                           Articles? article = val?.articles?[index];
-                          bool isPresent =
-                              articleIdList.contains(article?.articleid!);
-                          if (isPresent) {
-                            article!.bookmarked = true;
-                          }
                           return ListTile(
                             tileColor: Colors.white,
                             title: HomePageListItem(
@@ -369,7 +364,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
     );
 
     SectionPojo allSection = modelClassFromJson(response.body);
-    return allSection; //allSectionFromJson(response.body);
+    return allSection;
   }
 
   SectionPojo modelClassFromJson(String str) =>
@@ -390,5 +385,12 @@ class _HomePageState extends State<HomePage> with UiLoggy {
     } else {
       return true;
     }
+  }
+
+  showProgressIndication(bool isVisible){
+    Visibility(visible: isVisible,child:  const Center(
+      child: CircularProgressIndicator(),
+    ),);
+
   }
 }

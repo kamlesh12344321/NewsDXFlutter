@@ -22,7 +22,7 @@ class _TheHinduBottomNavState extends State<TheHinduBottomNav> {
     const HomePage(),
     const BriefingPage(),
     const TrendingPage(),
-      PremiumPage(),
+    MyFeedScreen(),
     const MyAccountPage()
   ];
 
@@ -45,10 +45,10 @@ class _TheHinduBottomNavState extends State<TheHinduBottomNav> {
         ],
       ),
       body: PageView(
-        children: tabPages,
         onPageChanged: onPageChanged,
         controller: _pageController,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
+        children: tabPages,
       ),
     );
   }

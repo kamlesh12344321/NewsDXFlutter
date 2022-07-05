@@ -10,17 +10,18 @@ import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
 import 'package:provider/provider.dart';
 
-class PremiumPage extends StatefulWidget {
+class MyFeedScreen extends StatefulWidget {
   @override
-  State<PremiumPage> createState() => _PremiumPageState();
+  State<MyFeedScreen> createState() => _MyFeedScreenState();
 }
 
-class _PremiumPageState extends State<PremiumPage> {
+class _MyFeedScreenState extends State<MyFeedScreen> {
   late SectionsViewModel sectionsViewModel;
   late SectionsList? sectionsList;
   TextEditingController myController = TextEditingController();
   String? article_title = "";
   bool rememberMe = false;
+  List<String> selectedArticleList = [];
   List<Section>?  sectionSList = [];
   List<Section>?  filteredList = [];
 
@@ -28,7 +29,9 @@ class _PremiumPageState extends State<PremiumPage> {
   Widget build(BuildContext context) {
     sectionsViewModel = context.watch<SectionsViewModel>();
     sectionsList = sectionsViewModel?.sectionList;
+    sectionsList?.data?.removeAt(0);
     int? lengthValue = sectionsList?.data?.length ?? 0;
+    String filter = "";
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -90,48 +93,76 @@ class _PremiumPageState extends State<PremiumPage> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: lengthValue,
-                    itemBuilder: (context, index) {
-                      String? title = sectionsList?.data?[index].sectionName;
-                      return Padding(
-                        padding:
-                        const EdgeInsets.only(left: 0, right: 0, top: 20),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  children: [
+                    ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: lengthValue,
+                        itemBuilder: (context, index) {
+                          String? title = sectionsList?.data?[index].sectionName;
+                          return Padding(
+                            padding:
+                            const EdgeInsets.only(left: 0, right: 0, top: 20),
+                            child: Column(
                               children: [
-                                Text(
-                                    title ?? "",
-                                    style:   GoogleFonts.roboto(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black54
-                                    )
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                        title ?? "",
+                                        style:   GoogleFonts.roboto(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.black54
+                                        )
+                                    ),
+                                    GFToggle(
+                                      onChanged: (val) {
+                                        addOrRemoveSectionId(title!);
+                                      },
+                                      value: false,
+                                      enabledTrackColor: Colors.blue,
+                                      type: GFToggleType.ios,
+                                    ),
+                                  ],
                                 ),
-                                GFToggle(
-                                  onChanged: (val) {},
-                                  value: false,
-                                  enabledTrackColor: Colors.blue,
-                                  type: GFToggleType.ios,
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  height: 1,
+                                  width: double.infinity,
+                                  color: Colors.grey,
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              height: 1,
-                              width: double.infinity,
-                              color: Colors.grey,
-                            ),
-                          ],
+                          );
+                        }),
+                    const SizedBox(height: 40,),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        minimumSize: const Size.fromHeight(50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
                         ),
-                      );
-                    }),
+                      ),
+                      child:  Text("Save",
+                      style: GoogleFonts.roboto(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),),
+                      onPressed: () {
+
+                      },
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    )
+                  ],
+                ),
               ),
             ),
           ],
@@ -155,4 +186,11 @@ class _PremiumPageState extends State<PremiumPage> {
     super.initState();
   }
 
+  addOrRemoveSectionId(String id){
+    if(selectedArticleList.contains(id)){
+      selectedArticleList.add(id);
+    } else{
+      selectedArticleList.remove(id);
+    }
+  }
 }

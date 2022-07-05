@@ -108,8 +108,8 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
                                 icon: SvgPicture.asset("assets/share.svg"),
                                 onPressed: () {
                               Shared.onArticleShare(context,
-                                  widget.homeArticle!.title!,
-                                  widget.homeArticle!.link!);
+                                  widget.homeArticle?.title ?? "",
+                                  widget.homeArticle?.link ?? "");
                             })),
                         Transform.scale( // 8296545235
                             scale: 1,

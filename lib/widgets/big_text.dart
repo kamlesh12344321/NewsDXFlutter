@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class BigText extends StatelessWidget {
   final String text;
-  double? size = 16;
+  double? size = 14;
   Color? color = Colors.black12;
   double? wordSpacing = 2.0;
 
