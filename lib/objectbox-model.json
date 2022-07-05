@@ -4,18 +4,18 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:4586477047874600517",
-      "lastPropertyId": "2:5205165249645213984",
+      "id": "1:5787358165828066903",
+      "lastPropertyId": "2:1711704305945313691",
       "name": "BookMarkArticleModel",
       "properties": [
         {
-          "id": "1:7771584749308858386",
+          "id": "1:316588613299122189",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:5205165249645213984",
+          "id": "2:1711704305945313691",
           "name": "articleId",
           "type": 9
         }
@@ -23,18 +23,18 @@
       "relations": []
     },
     {
-      "id": "2:7449306546235731241",
-      "lastPropertyId": "2:234215929782624199",
+      "id": "2:4734191368875372909",
+      "lastPropertyId": "2:100400799877701503",
       "name": "MyFeedModel",
       "properties": [
         {
-          "id": "1:1441143994161783671",
+          "id": "1:2765259668246174308",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:234215929782624199",
+          "id": "2:100400799877701503",
           "name": "sectionId",
           "type": 9
         }
@@ -42,7 +42,7 @@
       "relations": []
     }
   ],
-  "lastEntityId": "2:7449306546235731241",
+  "lastEntityId": "2:4734191368875372909",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

@@ -364,7 +364,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
     );
 
     SectionPojo allSection = modelClassFromJson(response.body);
-    return allSection; //allSectionFromJson(response.body);
+    return allSection;
   }
 
   SectionPojo modelClassFromJson(String str) =>
@@ -378,8 +378,8 @@ class _HomePageState extends State<HomePage> with UiLoggy {
 
 
   bool getBookMarkStatus(String articleId) {
-    final bookMarkQuery = bookmarkBox?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
-    final bookMarkArticle = bookMarkQuery?.find();
+    final bookMarkQuery = bookmarkBox.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
+    final bookMarkArticle = bookMarkQuery.find();
 
     if (bookMarkArticle!.length == 0) {
       return false;

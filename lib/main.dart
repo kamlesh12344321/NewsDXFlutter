@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/apple/auth_service.dart';
+import 'package:newsdx/objectbox.g.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/back_dispatcher.dart';
@@ -25,6 +26,7 @@ import 'package:theme_provider/theme_provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'dart:developer' as developer;
 import 'apple/apple_sign_in_available.dart';
+
 
 Future<void> main() async {
   Loggy.initLoggy();
