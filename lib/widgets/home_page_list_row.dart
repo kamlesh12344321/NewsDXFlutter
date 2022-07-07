@@ -106,8 +106,7 @@ class _HomePageListItemState extends State<HomePageListItem> {
                            },
                          ),
                          const SizedBox(
-                          width: 14,
-                          height: 17,
+                          width: 6,
                         ),
                         IconButton(
                           icon:  widget.bookmarkStatus!

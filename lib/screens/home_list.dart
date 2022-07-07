@@ -1,49 +1,30 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
-import 'package:newsdx/internet_connectivity/internet_status.dart';
 import 'package:newsdx/bookmark/model/bookmark_article.dart';
 import 'package:newsdx/model/SectionList.dart';
 import 'package:newsdx/model/SectionPojo.dart';
 import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/preference/user_preference.dart';
-import 'package:newsdx/repo/api_status.dart';
-import 'package:newsdx/repo/section_service.dart';
 import 'package:newsdx/router/app_state.dart';
-import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
 import 'package:newsdx/screens/home_section_article_detail.dart';
 import 'package:newsdx/userprofile/user_profile_info_screen.dart';
-import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
-import 'package:newsdx/viewmodel/generic_list_view_model.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
-import 'package:newsdx/viewmodel/sport_stars_view_model.dart';
-import 'package:newsdx/widgets/AllSportsView.dart';
-import 'package:newsdx/widgets/article_list.dart';
 import 'package:newsdx/widgets/banner_ads.dart';
-import 'package:newsdx/widgets/custom_tab_view.dart';
 import 'package:newsdx/widgets/full_image_view_item.dart';
-import 'package:newsdx/widgets/full_width_article.dart';
 import 'package:newsdx/widgets/home_article_list_row.dart';
 import 'package:newsdx/widgets/home_page_list_row.dart';
 import 'package:newsdx/widgets/nav_bar.dart';
 import 'package:newsdx/widgets/powered_widget.dart';
-import 'package:newsdx/widgets/sport_star_item.dart';
-import 'package:newsdx/widgets/sport_stars.dart';
-import 'package:newsdx/widgets/top_picks_item.dart';
 import 'package:provider/provider.dart';
 import '../objectbox.g.dart';
-import '../utils/CustomColors.dart';
 import 'package:http/http.dart' as http;
-import 'package:loggy/loggy.dart';
-import 'package:path_provider/path_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -78,7 +59,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-    List<String> articleIdList = Prefs.getArticleStringList();
     _controller = ScrollController();
     _controllerBanner = ScrollController();
     homeSectionsViewModel = context.watch<HomeSectionsViewModel>();
@@ -86,7 +66,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
     homeSection = homeSectionsViewModel.homeSectionList;
     sectionsList = sectionsViewModel?.sectionList;
     int? lengthValue = sectionsList?.data?.length ?? 0;
-    int onScrolledPosition = 0;
     Section homeSectionCreate = Section(
       id: "40",
       sectionName: "Home",
@@ -368,7 +347,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   }
 
   SectionPojo modelClassFromJson(String str) =>
-      SectionPojo.fromJson(json.decode(str));
+      SectionPojo.fromJson(jsonDecode(str));
 
   @override
   void dispose() {
@@ -380,7 +359,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   bool getBookMarkStatus(String articleId) {
     final bookMarkQuery = bookmarkBox?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
     final bookMarkArticle = bookMarkQuery?.find();
-
     if (bookMarkArticle!.length == 0) {
       return false;
     } else {

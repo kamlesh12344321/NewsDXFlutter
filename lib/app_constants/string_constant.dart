@@ -25,6 +25,8 @@ class MyConstant{
   static const String SECTION_LIST = "https://api.newsdx.io/V1/sections/getSections";
   static const String send_id_token = "https://api.newsdx.io/V1/end_users/verify_idTokenString";
   static const String home_section = "https://api.newsdx.io/V1/home/getHomeSection";
+  static const String Fcm_token = "https://api.newsdx.io/V1/pushNotifications/registerToken";
+  static const String articleDetail = "https://api.newsdx.io/V1/articles/getArticleDetail";
   static const String PLACE_HOLDER_SMALL = "http://hindumysqlstaging.ninestars.in/admin/assets/images/icons/th/Light/xxhdpi/widget-b.png";
   static const String propertyToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0aW1lIjoxNjU1NzA5MTA4LCJwcm9wZXJ0eUtleSI6IjBhNDE1OTA2ZGYyZmQ2NDM3MzNiODY1MTY3YWRiMTlkIn0.DveZXEDBB2OJIUU31KlHexj-1L1nYEx1Uxisv45Q0oU";
   static const String bookMarkScreenDes = "Kindly bookmark to view the "
