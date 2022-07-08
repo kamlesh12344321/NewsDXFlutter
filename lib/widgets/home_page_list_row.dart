@@ -16,8 +16,6 @@ class HomePageListItem extends StatefulWidget {
   final Box<BookMarkArticleModel>? bookmarkBox;
   final BookMarkArticleModel? bookMarkArticleModel;
 
-
-
   HomePageListItem({
     Key? key,
     required this.articleItem,
@@ -43,7 +41,7 @@ class _HomePageListItemState extends State<HomePageListItem> {
 
     if (widget.articleItem!.images!.isNotEmpty) {
       imageUrl =
-          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageid}_100.jpg";
+          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageid}_300.jpg";
     } else {
       imageUrl = "https://via.placeholder.com/600x340";
     }
@@ -107,8 +105,7 @@ class _HomePageListItemState extends State<HomePageListItem> {
                            },
                          ),
                          const SizedBox(
-                          width: 14,
-                          height: 17,
+                          width: 6,
                         ),
                         IconButton(
                           icon:  widget.bookmarkStatus!
@@ -144,13 +141,13 @@ class _HomePageListItemState extends State<HomePageListItem> {
         .build();
     final people = query?.find();
     debugPrint("bookmark check ->"+people.toString());
-      if (people?.length == 0) {
-        debugPrint("Bookmark Added 1");
-        onAddBookMark(articleId);
-      } else {
-        debugPrint("Bookmark remove");
-        onRemoveBookMark(people!.first.id);
-      }
+    if (people?.length == 0) {
+      debugPrint("Bookmark Added 1");
+      onAddBookMark(articleId);
+    } else {
+      debugPrint("Bookmark remove");
+      onRemoveBookMark(people!.first.id);
+    }
     setState(() {});
   }
 

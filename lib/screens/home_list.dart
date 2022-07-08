@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -63,7 +61,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   int _currentIndex = 0;
 
   Store? _store;
-  late Box<BookMarkArticleModel> bookmarkBox;
+  late Box<BookMarkArticleModel>? bookmarkBox;
   BookMarkArticleModel? bookMarkArticleModel;
 
   @override
@@ -77,8 +75,8 @@ class _HomePageState extends State<HomePage> with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
+    bookmarkBox = _store?.box<BookMarkArticleModel>();
     final appState = Provider.of<AppState>(context, listen: false);
-    List<String> articleIdList = Prefs.getArticleStringList();
     _controller = ScrollController();
     _controllerBanner = ScrollController();
     homeSectionsViewModel = context.watch<HomeSectionsViewModel>();
@@ -86,7 +84,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
     homeSection = homeSectionsViewModel.homeSectionList;
     sectionsList = sectionsViewModel?.sectionList;
     int? lengthValue = sectionsList?.data?.length ?? 0;
-    int onScrolledPosition = 0;
     Section homeSectionCreate = Section(
       id: "40",
       sectionName: "Home",
@@ -368,7 +365,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   }
 
   SectionPojo modelClassFromJson(String str) =>
-      SectionPojo.fromJson(json.decode(str));
+      SectionPojo.fromJson(jsonDecode(str));
 
   @override
   void dispose() {
@@ -380,7 +377,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   bool getBookMarkStatus(String articleId) {
     final bookMarkQuery = bookmarkBox?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
     final bookMarkArticle = bookMarkQuery?.find();
-    if (bookMarkArticle!.length == 0) {
+    if (bookMarkArticle?.length == 0) {
       return false;
     } else {
       return true;

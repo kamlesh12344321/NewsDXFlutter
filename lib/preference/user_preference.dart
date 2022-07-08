@@ -15,6 +15,8 @@ class Prefs  {
   static const String articleIdsList = "article_id_list";
   static const String onBoardingstatus = "onboarding";
   static const String onBookMarkArticelId ="bookmakrarticelId";
+  static const String fcmToken= "fcm_token";
+  static const String fcmTokenSave = "fcm_token_save";
 
   static Future<SharedPreferences?> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -24,6 +26,14 @@ class Prefs  {
   static Future<bool> saveIsLoggedIn( bool value) async =>
       await _prefs!.setBool(isLoggedInKey, value);
   static bool getIsLoggedIn() => _prefs!.getBool(isLoggedInKey) ?? false;
+
+  static Future<bool> isFcmTokenSent(bool value) async =>
+  await _prefs!.setBool(fcmToken, value);
+  static bool getIsFcmTokenSent() => _prefs!.getBool(fcmToken) ?? false;
+
+  static Future<bool> saveFcmToken(String? value) async =>
+  await _prefs!.setString(fcmTokenSave, value!);
+  static String? getSavedFcmToken() => _prefs!.getString(fcmTokenSave) ?? "";
 
   static Future<bool> saveOtpId( int value) async =>
       await _prefs!.setInt(otpId, value);

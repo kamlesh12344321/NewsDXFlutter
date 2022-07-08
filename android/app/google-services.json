@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "886272885402-7bgdmd8g03740a24gghfl6h85hspvl6d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ninestars.newspublishers.newsdx",
+            "certificate_hash": "d866f0c930f22de2932391d7ad5ea22b93067895"
+          }
+        },
+        {
           "client_id": "886272885402-hhi4ds6iuq5k3pdmqg9sgpcif5ulvlsb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -37,6 +45,13 @@
             {
               "client_id": "886272885402-egadbjc0agls2bis8vjoc7gkierem2um.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "886272885402-nh7krdr0c4bt94s3j2ldq4psj7e7r29j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ninestars.newspublishers.newsdx"
+              }
             }
           ]
         }

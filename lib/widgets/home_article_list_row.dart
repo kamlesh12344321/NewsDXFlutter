@@ -13,14 +13,14 @@ class HomeArticleListItem extends StatefulWidget {
   final HomeArticle? articleItem;
    bool? bookmarkStatus;
 
-  final Box<BookMarkArticleModel> bookmarkBox;
+  final Box<BookMarkArticleModel>? bookmarkBox;
   final BookMarkArticleModel? bookMarkArticleModel;
 
    HomeArticleListItem({
     Key? key,
     required this.articleItem,
      this.bookmarkStatus,
-    required this.bookmarkBox,
+     this.bookmarkBox,
     this.bookMarkArticleModel
   }) : super(key: key);
 
@@ -41,7 +41,7 @@ class _HomeArticleListItemState extends State<HomeArticleListItem> {
 
     if (widget.articleItem!.images!.isNotEmpty) {
       imageUrl =
-          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageId}_100.jpg";
+          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageId}_300.jpg";
     } else {
       imageUrl = "https://via.placeholder.com/600x340";
     }
@@ -84,7 +84,7 @@ class _HomeArticleListItemState extends State<HomeArticleListItem> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                BigText(16, Colors.black, 1, widget.articleItem?.title ?? ""),
+                BigText(14, Colors.black, 1, widget.articleItem?.title ?? ""),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -157,6 +157,6 @@ class _HomeArticleListItemState extends State<HomeArticleListItem> {
   }
 
   void onRemoveBookMark(int id) {
-    widget.bookmarkBox.remove(id);
+    widget.bookmarkBox?.remove(id);
   }
 }
