@@ -8,10 +8,13 @@ import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
-import 'package:newsdx/screens/bookmark.dart';
+import 'package:newsdx/bookmark/bookmark.dart';
 import 'package:newsdx/screens/notificaton_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
+
+import '../bookmark/model/bookmark_article.dart';
+import '../objectbox.g.dart';
 
 class MyAccountPage extends StatefulWidget {
   const MyAccountPage({Key? key}) : super(key: key);
@@ -21,6 +24,19 @@ class MyAccountPage extends StatefulWidget {
 }
 
 class _MyAccountPageState extends State<MyAccountPage> {
+
+  Store? _store;
+  late Box<BookMarkArticleModel>? bookmarkBox;
+  BookMarkArticleModel? bookMarkArticleModel;
+
+  @override
+  void initState() {
+    openStore().then((Store store) {
+      _store = store;
+      bookmarkBox = store.box<BookMarkArticleModel>();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +266,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
              onTap: (){
                appState.currentAction = PageAction(
                    state: PageState.addWidget,
-                   widget: const BookMarks(),
+                   widget:  BookMarks(
+                     bookmarkArticleIdList : bookMarkList(),
+                     bookmarkBox: bookmarkBox,
+                     bookMarkArticleModel: bookMarkArticleModel,
+                   ),
                    page: BookMarkPageConfig);
              },
              child:  Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
@@ -380,5 +400,24 @@ class _MyAccountPageState extends State<MyAccountPage> {
         ),
       ),
     );
+  }
+
+  String bookMarkList() {
+    String articleIdList = "";
+    final bookMarkQuery = bookmarkBox?.query().build();
+    List<BookMarkArticleModel>? data =  bookMarkQuery?.find();
+
+    if (data?.length == 0) {
+      return articleIdList;
+    } else {
+      for (int i = 0 ; i < data!.length ; i++) {
+        if ( i == 0) {
+          articleIdList = data[i].articleId;
+        }  else {
+          articleIdList = data[i].articleId+","+articleIdList;
+        }
+      }
+      return articleIdList;
+    }
   }
 }

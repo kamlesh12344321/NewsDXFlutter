@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,6 +7,7 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:newsdx/model/SectionPojo.dart';
+import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
@@ -21,13 +24,17 @@ class ArticleDetail extends StatefulWidget {
   bool? bookmarkStatus;
   Box<BookMarkArticleModel>? bookmarkBox;
   BookMarkArticleModel? bookMarkArticleModel;
+  Function? callbackBookMark;
+  int? row_index;
 
   ArticleDetail({
     Key? key,
     this.articleItem,
     this.bookmarkStatus,
     this.bookmarkBox,
-    this.bookMarkArticleModel
+    this.bookMarkArticleModel,
+    this.callbackBookMark,
+    this.row_index
   }) : super(key: key);
 
   @override
@@ -35,6 +42,10 @@ class ArticleDetail extends StatefulWidget {
 }
 
 class _ArticleDetailState extends State<ArticleDetail> {
+
+  late String articleId;
+  late String bookmarkStatus;
+
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
@@ -244,11 +255,15 @@ class _ArticleDetailState extends State<ArticleDetail> {
                                 setState(() {
                                   if( widget.bookmarkStatus == true){
                                     widget.bookmarkStatus = false;
+                                    bookmarkStatus = "Remove";
                                   } else {
                                     widget.bookmarkStatus = true;
+                                    bookmarkStatus = "Add";
                                   }
                                 });
                                 onBookmark(widget.articleItem!.articleid!);
+                                articleId =  widget.articleItem!.articleid!;
+                                Prefs.saveBookMarkArticleId(widget.articleItem!.articleid!);
                               },
                             ),
                         ),
@@ -375,6 +390,11 @@ class _ArticleDetailState extends State<ArticleDetail> {
   void onRemoveBookMark(int id) {
     widget.bookmarkBox?.remove(id);
   }
+
+  @override
+  void dispose() {
+    widget.callbackBookMark!(articleId,bookmarkStatus,widget.row_index);
+  }
 }
 
 class FadingEffect extends CustomPainter {
@@ -396,4 +416,6 @@ class FadingEffect extends CustomPainter {
 
   @override
   bool shouldRepaint(FadingEffect linePainter) => false;
+
+
 }

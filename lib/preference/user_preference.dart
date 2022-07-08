@@ -14,6 +14,7 @@ class Prefs  {
   static const String isProfileImagePresent = "profile_image_present";
   static const String articleIdsList = "article_id_list";
   static const String onBoardingstatus = "onboarding";
+  static const String onBookMarkArticelId ="bookmakrarticelId";
 
   static Future<SharedPreferences?> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -43,5 +44,10 @@ class Prefs  {
   static Future<bool> saveOnbording(bool value) async =>
       await _prefs!.setBool(onBoardingstatus, value);
   static bool getOnBoarding() => _prefs!.getBool(onBoardingstatus) ?? false;
+
+  static Future<bool> saveBookMarkArticleId(String articleId) async =>
+    await _prefs!.setString(onBookMarkArticelId, articleId);
+  static String? getBookMarkArticelId() => _prefs!.getString(onBookMarkArticelId) ?? "";
+
 
 }

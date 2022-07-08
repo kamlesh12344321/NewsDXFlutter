@@ -86,8 +86,7 @@ DataPojo copyWith({  String? currentpage,
 }
 class Articles {
   Articles({
-      bool? bookmarked,
-      String? sectionname, 
+      String? sectionname,
       String? sectionid, 
       String? articleid, 
       String? propkey, 
@@ -109,7 +108,6 @@ class Articles {
      bool? premium,
       String? authorphoto, 
       String? guid,}){
-    _bookmarked = bookmarked;
     _sectionname = sectionname;
     _sectionid = sectionid;
     _articleid = articleid;
@@ -135,7 +133,6 @@ class Articles {
 }
 
   Articles.fromJson(dynamic json) {
-    _bookmarked = json['bookmarked'];
     _sectionname = json['SECTION_NAME'];
     _sectionid = json['SECTION_ID'];
     _articleid = json['ARTICLE_ID'];
@@ -169,7 +166,6 @@ class Articles {
     _authorphoto = json['AUTHOR_PHOTO'];
     _guid = json['guid'];
   }
-  bool? _bookmarked;
   String? _sectionname;
   String? _sectionid;
   String? _articleid;
@@ -193,7 +189,6 @@ class Articles {
   String? _authorphoto;
   String? _guid;
 
-  bool? get bookmarked => _bookmarked;
   String? get sectionname => _sectionname;
   String? get sectionid => _sectionid;
   String? get articleid => _articleid;
@@ -215,16 +210,11 @@ class Articles {
   int? get publishdategmtmillis => _publishdategmtmillis;
   bool? get premium => _premium;
 
-  set bookmarked(bool? value) {
-    _bookmarked = value;
-  }
-
   String? get authorphoto => _authorphoto;
   String? get guid => _guid;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['bookmarked'] = _bookmarked;
     map['SECTION_NAME'] = _sectionname;
     map['SECTION_ID'] = _sectionid;
     map['ARTICLE_ID'] = _articleid;
