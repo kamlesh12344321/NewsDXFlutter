@@ -7,7 +7,7 @@ import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/router_delegate.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
-import 'package:newsdx/screens/bookmark.dart';
+import 'package:newsdx/bookmark/bookmark.dart';
 import 'package:newsdx/screens/home_screen.dart';
 import 'package:newsdx/screens/home_section_article_detail.dart';
 import 'package:newsdx/screens/login_screen.dart';
@@ -222,7 +222,7 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
           break;
 
         case Pages.BookMark:
-          _addPageData(const BookMarks(), BookMarkPageConfig);
+          _addPageData(BookMarks(), BookMarkPageConfig);
           break;
 
         case Pages.Notification:

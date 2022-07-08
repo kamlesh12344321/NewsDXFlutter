@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'dart:developer' as developer;
 
-import 'package:newsdx/screens/bookmark.dart';
+import 'package:newsdx/bookmark/bookmark.dart';
 
 class NewsDxRouteParser extends RouteInformationParser<PageConfiguration> {
   @override

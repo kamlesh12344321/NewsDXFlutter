@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:newsdx/screens/bookmark.dart';
+import 'package:newsdx/bookmark/bookmark.dart';
 import 'package:newsdx/myfeed/my_feed_screen.dart';
 import 'package:newsdx/widgets/big_text.dart';
 
@@ -41,7 +41,7 @@ class _NavBarState extends State<NavBar> {
              child:  const Text("Bookmark"),
              onPressed: () {
                Navigator.of(context).pop();
-               Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BookMarks()));
+               Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  BookMarks()));
              },
            ),),
            Padding(padding: EdgeInsets.only(top: 20,left: 10, right: 10), child: ElevatedButton(

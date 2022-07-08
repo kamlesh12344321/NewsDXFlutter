@@ -5,31 +5,35 @@ import 'package:newsdx/model/SectionPojo.dart';
 import 'package:newsdx/widgets/big_text.dart';
 import 'package:newsdx/widgets/small_text.dart';
 import 'package:get_time_ago/get_time_ago.dart';
+import 'package:provider/provider.dart';
 import '../bookmark/model/bookmark_article.dart';
 import '../objectbox.g.dart';
+import '../provider/bookmark_provider.dart';
 import '../shared/shared_method.dart';
 
 
-class HomePageListItem extends StatefulWidget {
-  final Articles? articleItem;
-  bool? bookmarkStatus;
+class BookmarkListRow extends StatefulWidget {
+  Articles? articleItem;
+  int? row_index;
 
   final Box<BookMarkArticleModel>? bookmarkBox;
   final BookMarkArticleModel? bookMarkArticleModel;
+  final Function? callback;
 
-  HomePageListItem({
+  BookmarkListRow({
     Key? key,
-    required this.articleItem,
-    this.bookmarkStatus,
+     this.articleItem,
+     this.row_index,
      this.bookmarkBox,
-    this.bookMarkArticleModel
+     this.bookMarkArticleModel,
+     this.callback
   }) : super(key: key);
 
   @override
-  State<HomePageListItem> createState() => _HomePageListItemState();
+  State<BookmarkListRow> createState() => _BookmarkListRowState();
 }
 
-class _HomePageListItemState extends State<HomePageListItem> {
+class _BookmarkListRowState extends State<BookmarkListRow> {
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,7 @@ class _HomePageListItemState extends State<HomePageListItem> {
 
     if (widget.articleItem!.images!.isNotEmpty) {
       imageUrl =
-          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageid}_300.jpg";
+          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageid}_100.jpg";
     } else {
       imageUrl = "https://via.placeholder.com/600x340";
     }
@@ -106,21 +110,15 @@ class _HomePageListItemState extends State<HomePageListItem> {
                            },
                          ),
                          const SizedBox(
-                          width: 6,
+                          width: 14,
+                          height: 17,
                         ),
                         IconButton(
-                          icon:  widget.bookmarkStatus!
-                              ? SvgPicture.asset("assets/bookmark_filled.svg")
-                              : SvgPicture.asset("assets/bi_bookmark.svg"),
+                          icon: SvgPicture.asset("assets/bookmark_filled.svg"),
                           onPressed: () {
-                            setState(() {
-                              if( widget.bookmarkStatus == true){
-                                widget.bookmarkStatus = false;
-                              } else {
-                                widget.bookmarkStatus = true;
-                              }
-                            });
                             onBookmark(widget.articleItem!.articleid!);
+                            widget.callback!(widget.row_index);
+                            // Provider.of<BookMarkIndex>(context, listen: false).BookMarkRowPosition(1);
                           },
                         ),
                       ],
@@ -136,27 +134,13 @@ class _HomePageListItemState extends State<HomePageListItem> {
   }
 
   void onBookmark(String articleId) {
-
     final query = widget.bookmarkBox
         ?.query(BookMarkArticleModel_.articleId.equals(articleId))
         .build();
-    final people = query?.find();
-    debugPrint("bookmark check ->"+people.toString());
-      if (people?.length == 0) {
-        debugPrint("Bookmark Added 1");
-        onAddBookMark(articleId);
-      } else {
-        debugPrint("Bookmark remove");
-        onRemoveBookMark(people!.first.id);
-      }
+    final bookmarkArticleItem = query?.find();
+    debugPrint("Bookmark remove");
+    onRemoveBookMark(bookmarkArticleItem!.first.id);
     setState(() {});
-  }
-
-  void onAddBookMark(String articleId) {
-    debugPrint("kk id insert -> $articleId");
-    var bookMarkArticleModel = BookMarkArticleModel(articleId: articleId);
-    int id = widget.bookmarkBox!.put(bookMarkArticleModel!);
-    debugPrint("kk id -> $id");
   }
 
   void onRemoveBookMark(int id) {
