@@ -41,7 +41,7 @@ class _HomeArticleListItemState extends State<HomeArticleListItem> {
 
     if (widget.articleItem!.images!.isNotEmpty) {
       imageUrl =
-          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageId}_100.jpg";
+          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageId}_300.jpg";
     } else {
       imageUrl = "https://via.placeholder.com/600x340";
     }
