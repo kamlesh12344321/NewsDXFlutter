@@ -30,6 +30,7 @@ class HomeSectionsViewModel extends ChangeNotifier{
     var response = await SectionServices.getHomeSection();
     if(response is Success){
       setSectionListModel(response.response as HomeSection);
+      setLoading(false);
       notifyListeners();
     }
   }

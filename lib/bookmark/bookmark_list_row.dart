@@ -46,7 +46,7 @@ class _BookmarkListRowState extends State<BookmarkListRow> {
 
     if (widget.articleItem!.images!.isNotEmpty) {
       imageUrl =
-          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageid}_100.jpg";
+          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageid}_300.jpg";
     } else {
       imageUrl = "https://via.placeholder.com/600x340";
     }

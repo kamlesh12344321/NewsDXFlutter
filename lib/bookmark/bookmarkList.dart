@@ -40,13 +40,8 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
   bool rememberMe = false;
   bool? shouldRefress = false;
   late Future<SectionPojo> myData;
-
+ late FutureBuilder futureBuilder;
   late List<Articles> articleList ;
-  updateData(){
-    setState((){
-      shouldRefress = true;
-    });
-}
 
   late int markedIndex;
   callback(bookmarkIndex){
@@ -77,7 +72,7 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
        }
      }
      widget.bookmarkArticleList = articleIdList;
-     myData = getArticles(widget.bookmarkArticleList!);
+     futureBuilder;
    });
 
   }
@@ -91,8 +86,6 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
       email = myController.text;
       setState(() {});
     });
-
-
     String? articleId = Prefs.getBookMarkArticelId();
     debugPrint("Bookmakr remove article id kk => $articleId");
 
@@ -110,7 +103,7 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-   var futureBuilder =  FutureBuilder<SectionPojo>(
+    futureBuilder =  FutureBuilder<SectionPojo>(
       future:  myData,
       builder: (context, snapShot) {
         if (snapShot.hasData) {

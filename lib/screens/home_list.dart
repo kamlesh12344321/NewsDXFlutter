@@ -61,18 +61,24 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   late HomeSectionsViewModel homeSectionsViewModel;
   HomeSection? homeSection;
   int _currentIndex = 0;
+  bool isOpned = false;
 
   Store? _store;
-  late Box<BookMarkArticleModel>? bookmarkBox;
+   Box<BookMarkArticleModel>? bookmarkBox;
   BookMarkArticleModel? bookMarkArticleModel;
 
   @override
   void initState() {
     super.initState();
-    openStore().then((Store store) {
-      _store = store;
-      bookmarkBox = store.box<BookMarkArticleModel>();
-    });
+    if(!isOpned) {
+      openStore().then((Store store) {
+        _store = store;
+        setState(() {
+          isOpned = true;
+        });
+        bookmarkBox = store.box<BookMarkArticleModel>();
+      });
+    }
   }
 
   @override
@@ -305,7 +311,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                   state: PageState.addWidget,
                                   widget: ArticleDetail(
                                     articleItem: article,
-                                    bookmarkStatus: getBookMarkStatus(article!.articleid!),
+                                    bookmarkStatus: getBookMarkStatus(article.articleid!),
                                     bookmarkBox: bookmarkBox,
                                     bookMarkArticleModel: bookMarkArticleModel,
                                   ),
@@ -337,6 +343,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
       ),
     );
   }
+
 
   _getSportChipsList(SectionsViewModel? sectionsViewModel) {
     SectionsList? sections = sectionsViewModel?.sectionList;
@@ -376,9 +383,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
 
 
   bool getBookMarkStatus(String articleId) {
-    final bookMarkQuery = bookmarkBox?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
-    final bookMarkArticle = bookMarkQuery?.find();
-    if (bookMarkArticle?.length == 0) {
+    if (bookmarkBox?.query(BookMarkArticleModel_.articleId.equals(articleId)).build()?.find()?.length == 0) {
       return false;
     } else {
       return true;
@@ -391,4 +396,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
     ),);
 
   }
+
+
 }

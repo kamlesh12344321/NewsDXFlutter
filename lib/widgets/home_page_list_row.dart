@@ -105,9 +105,6 @@ class _HomePageListItemState extends State<HomePageListItem> {
                                  widget.articleItem!.link!);
                            },
                          ),
-                         const SizedBox(
-                          width: 6,
-                        ),
                         IconButton(
                           icon:  widget.bookmarkStatus!
                               ? SvgPicture.asset("assets/bookmark_filled.svg")

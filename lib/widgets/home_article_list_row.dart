@@ -96,10 +96,6 @@ class _HomeArticleListItemState extends State<HomeArticleListItem> {
                     Row(
                       children: [
                         SvgPicture.asset("assets/share.svg"),
-                        const SizedBox(
-                          width: 18,
-                          height: 17,
-                        ),
                         IconButton(
                           icon:  widget.bookmarkStatus! ? SvgPicture.asset("assets/bookmark_filled.svg")
                               : SvgPicture.asset("assets/bi_bookmark.svg"),

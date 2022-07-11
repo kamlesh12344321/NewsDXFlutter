@@ -104,6 +104,14 @@ class _MyAppState extends State<MyApp> {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
+      String id = "";
+      if(message?.data['type'] == "article"){
+        id = message?.data['article_id'];
+        appState.currentAction = PageAction(
+            state: PageState.addWidget,
+            widget: NotificationArticleDetailScreen(articleIdFromNotification: id,),
+            page: UserProfileInfoPageConfig);
+      }
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
