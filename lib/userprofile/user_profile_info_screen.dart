@@ -1,10 +1,14 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
+import 'package:newsdx/utils/device_information_list.dart';
 import 'package:provider/provider.dart';
 
 import '../model/subscription_plan.dart';
@@ -21,7 +25,6 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -70,10 +73,10 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
+                  children:  [
                     CircleAvatar(
-                      backgroundImage:
-                          NetworkImage('https://picsum.photos/id/237/200/300'),
+                      backgroundImage: Prefs.getIsLoggedIn() == true ?
+                          NetworkImage(Prefs.getUserImageUrlInfo()!) : NetworkImage('https://picsum.photos/id/237/200/300') ,
                       radius: 30,
                     ),
                   ],
@@ -93,14 +96,14 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                       Column(
                         children: [
                           Text(
-                            "Krishan",
+                            Prefs.getIsLoggedIn() == true ? Prefs.getUserNameInfo()! : "Guest",
                             style: GoogleFonts.roboto(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.black),
                           ),
                           Text(
-                            "Kanhai",
+                            "",
                             style: GoogleFonts.roboto(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w700,
@@ -115,15 +118,15 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                   title: Text(
                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been",
                       style: GoogleFonts.roboto(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w400,
                           color: Colors.black
                       )
                   ),
                 ),
-                Visibility(visible: false,child: ListTile(
+                Visibility(visible: true,child: ListTile(
                   title: Text(
-                    '9999999999', style: GoogleFonts.roboto(
+                     Prefs.getIsLoggedIn() == true ? Prefs.getUserNumberInfo()! : "", style: GoogleFonts.roboto(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
                       color: Colors.black
@@ -136,7 +139,7 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                 ),),
                 ListTile(
                   title: Text(
-                    'newsdx@gmail.com',
+                    Prefs.getIsLoggedIn() == true ? Prefs.getUserEmailInfo()! : "",
                       style: GoogleFonts.roboto(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -170,7 +173,7 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                             Text(
                               "No Active Plans",
                               style: GoogleFonts.roboto(
-                                  fontSize: 26,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.black54
                               ),
@@ -185,7 +188,7 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                   title: Text(
                     'Change Password',
                     style: GoogleFonts.roboto(
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: Colors.black
                     ),
@@ -196,7 +199,7 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                 ),),
                 const Visibility(visible: true,child: Divider(
                   color: Colors.black,
-                  height: 20,
+                  height: 15,
                   thickness: 0.5,
                   indent: 10,
                   endIndent: 10,
@@ -205,7 +208,7 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                   title: Text(
                     'Payment History',
                     style: GoogleFonts.roboto(
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: Colors.black
                     ),
@@ -217,7 +220,7 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                 ),
                 const Divider(
                   color: Colors.black,
-                  height: 20,
+                  height: 15,
                   thickness: 0.5,
                   indent: 10,
                   endIndent: 10,
@@ -226,7 +229,7 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                   title: Text(
                     'Change/Upgrade Plan',
                     style: GoogleFonts.roboto(
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: Colors.black
                     ),

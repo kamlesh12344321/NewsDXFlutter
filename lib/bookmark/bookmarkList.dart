@@ -129,7 +129,7 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
                         widget: ArticleDetail(
                           articleItem: article,
                           bookmarkStatus:
-                          getBookMarkStatus(article!.articleid!),
+                          getBookMarkStatus(article.articleid!),
                           bookmarkBox: widget.bookmarkBox,
                           bookMarkArticleModel: widget.bookMarkArticleModel,
                           callbackBookMark: callbackBookMarkArticleId,

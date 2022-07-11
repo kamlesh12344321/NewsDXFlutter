@@ -17,6 +17,7 @@ import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/home_screen.dart';
 import 'package:newsdx/screens/otp_screen.dart';
+import 'package:newsdx/utils/device_information_list.dart';
 import 'package:newsdx/widgets/app_bar.dart';
 import 'package:newsdx/widgets/dialog.dart';
 import 'package:provider/provider.dart';
@@ -66,245 +67,231 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
       appBar: AppBarWidget(MyConstant.noTitle),
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Row(
+      body: SingleChildScrollView(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  top: 21,
+                ),
+                child: SizedBox(
+                  height: 37,
+                  width: 39,
+                  child: SvgPicture.asset("assets/app_logo_new.svg"),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 5,
+                  top: 21,
+                ),
+                child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        top: 21,
-                      ),
-                      child: SizedBox(
-                        height: 37,
-                        width: 39,
-                        child: SvgPicture.asset("assets/app_logo_new.svg"),
+                    Text(
+                      MyConstant.appName,
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 5,
-                        top: 21,
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            MyConstant.appName,
-                            style: GoogleFonts.lato(
-                              textStyle: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w900),
-                            ),
-                          ),
-                          Text(
-                            MyConstant.appType,
-                            style: GoogleFonts.lato(
-                              textStyle: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ],
+                    Text(
+                      MyConstant.appType,
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
                       ),
                     ),
                   ],
                 ),
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 16.0, top: 14.0, right: 0.0, bottom: 0.0),
-                    child: Text(
-                      MyConstant.loginScreenTitle,
-                      style: TextStyle(
-                          color: Colors.black,
-                          letterSpacing: .5,
-                          fontSize: 30,
-                          fontWeight: FontWeight.w900),
-                    ),
+              ),
+            ],
+          ),
+          const Padding(
+            padding:
+                EdgeInsets.only(left: 16.0, top: 14.0, right: 0.0, bottom: 0.0),
+            child: Text(
+              MyConstant.loginScreenTitle,
+              style: TextStyle(
+                  color: Colors.black,
+                  letterSpacing: .5,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w900),
+            ),
+          ),
+          const Padding(
+            padding:
+                EdgeInsets.only(left: 16.0, top: 10.0, right: 0.0, bottom: 0.0),
+            child: Text(
+              MyConstant.loginScreenSubTitle,
+              style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          const Padding(
+            padding:
+                EdgeInsets.only(left: 16.0, top: 16.0, right: 0.0, bottom: 0.0),
+            child: Text(
+              MyConstant.emailErrorMsg,
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 16.0, top: 5.0, right: 16.0, bottom: 0.0),
+            child: TextField(
+              controller: myController,
+              maxLines: 1,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                label: Text(MyConstant.emailHint),
+              ),
+              onChanged: (text) {
+                setState() {
+                  email = text;
+                }
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 16.0, top: 18.0, right: 16.0, bottom: 0.0),
+            child: TextButton(
+              onPressed: () {},
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
                   ),
                 ),
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 16.0, top: 10.0, right: 0.0, bottom: 0.0),
-                    child: Text(
-                      MyConstant.loginScreenSubTitle,
-                      style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 16.0, top: 16.0, right: 0.0, bottom: 0.0),
-                    child: Text(
-                      MyConstant.emailErrorMsg,
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16.0, top: 5.0, right: 16.0, bottom: 0.0),
-                    child: TextField(
-                      controller: myController,
-                      maxLines: 1,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        label: Text(MyConstant.emailHint),
-                      ),
-                      onChanged: (text) {
-                        setState() {
-                          email = text;
-                        }
-                      },
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16.0, top: 18.0, right: 16.0, bottom: 0.0),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.blue,
-                          minimumSize: const Size.fromHeight(50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                        ),
-                        child: const Text(MyConstant.signInButtonTitle),
-                        onPressed: () {
-                          if (email!.isNotEmpty || email != null) {
-                           showProgressIndicator(true);
-                            Future<OtpSendStatus> status =
-                                getOtpSendStatus(email!);
-                            status
-                                .then(
-                                  (value) => {
-                                    if (value.status == true)
-                                      {
-                                        Prefs.saveOtpId(value.data.otpId),
-                                        showProgressIndicator(false),
-                                        appState.currentAction = PageAction(
-                                            state: PageState.addWidget,
-                                            widget: OTPScreen(emailId: email!,),
-                                            page: OtpPageConfig),
-                                      }
-                                  },
-                                )
-                                .onError(
-                                  (error, stackTrace) => {
-                                  showProgressIndicator(false),
-                                  },
-                                );
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16.0, top: 17.0, right: 0.0, bottom: 0.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        SvgPicture.asset("assets/line.svg"),
-                        const Text("or"),
-                        SvgPicture.asset("assets/line.svg"),
-                      ],
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16.0, top: 15.0, right: 0.0, bottom: 0.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextButton(
-                            onPressed: () {
-                              Future<UserCredential> signIn =
-                              signInWithGoogle();
-                              signIn
-                                  .then((value) =>
+                child: const Text(MyConstant.signInButtonTitle),
+                onPressed: () {
+                  if (email!.isNotEmpty || email != null) {
+                    showProgressIndicator(true);
+                    Future<OtpSendStatus> status = getOtpSendStatus(email!);
+                    status
+                        .then(
+                          (value) => {
+                            if (value.status == true)
                               {
-                                if (value.user != null)
-                                  {
-                                    appState.login(true),
-                                    appState.currentAction = PageAction(
-                                        state: PageState.addWidget,
-                                        widget: const HomeScreen(),
-                                        page: HomePageConfig)
-                                  }
-                              })
-                                  .onError((error, stackTrace) =>
-                              {
-                                // show snakeBar
-                              });
-                            },
-                            child:
-                            SvgPicture.asset("assets/google_logo_new.svg")),
-                        TextButton(
-                            onPressed: () {
-                              Future<UserCredential?> signIn =
-                              signInWithFacebook();
-                              signIn
-                                  .then((value) =>
-                              {
-                                if (value?.user != null)
-                                  {
-                                    appState.login(true),
-                                    appState.currentAction = PageAction(
-                                        state: PageState.addWidget,
-                                        widget: const HomeScreen(),
-                                        page: HomePageConfig)
-                                  }
-                              })
-                                  .onError((error, stackTrace) =>
-                              {
-                                // show snakeBar
-                              });
-                            },
-                            child: SvgPicture.asset("assets/facebook.svg")),
-                        TextButton(
-                            onPressed: () {},
-                            child: SvgPicture.asset("assets/apple.svg")),
-                      ],
-                    ),
-                  ),
-                ),
+                                Prefs.saveOtpId(value.data.otpId),
+                                showProgressIndicator(false),
+                                appState.currentAction = PageAction(
+                                    state: PageState.addWidget,
+                                    widget: OTPScreen(
+                                      emailId: email!,
+                                    ),
+                                    page: OtpPageConfig),
+                              }
+                          },
+                        )
+                        .onError(
+                          (error, stackTrace) => {
+                            showProgressIndicator(false),
+                          },
+                        );
+                  }
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 16.0, top: 17.0, right: 0.0, bottom: 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SvgPicture.asset("assets/line.svg"),
+                const Text("or"),
+                SvgPicture.asset("assets/line.svg"),
               ],
             ),
-            Align(
-              alignment: const AlignmentDirectional(-0.02, 0.90),
-              child: SizedBox(
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 16.0, top: 15.0, right: 0.0, bottom: 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Future<UserCredential> signIn =
+                      signInWithGoogle();
+                      signIn
+                          .then((value) =>
+                      {
+                        if (value.user != null)
+                          {
+                            DeviceInfo.saveUserInformation(value.user!),
+                            Prefs.saveIsLoggedIn(true),
+                            appState.login(true),
+                            appState.currentAction = PageAction(
+                                state: PageState.addWidget,
+                                widget: const HomeScreen(),
+                                page: HomePageConfig)
+                          }
+                      })
+                          .onError((error, stackTrace) =>
+                      {
+                        // show snakeBar
+                      });
+                    },
+                    child:
+                    SvgPicture.asset("assets/google_logo_new.svg")),
+                TextButton(
+                    onPressed: () {
+                      Future<UserCredential?> signIn =
+                      signInWithFacebook();
+                      signIn
+                          .then((value) =>
+                      {
+                        if (value?.user != null)
+                          {
+                            DeviceInfo.saveUserInformation(value!.user!),
+                            Prefs.saveIsLoggedIn(true),
+                            appState.login(true),
+                            appState.currentAction = PageAction(
+                                state: PageState.addWidget,
+                                widget: const HomeScreen(),
+                                page: HomePageConfig)
+                          }
+                      })
+                          .onError((error, stackTrace) =>
+                      {
+                        // show snakeBar
+                      });
+                    },
+                    child: SvgPicture.asset("assets/facebook.svg")),
+                TextButton(
+                    onPressed: () {},
+                    child: SvgPicture.asset("assets/apple.svg")),
+              ],
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
                 width: double.infinity,
                 height: 100,
                 child: Column(
@@ -317,34 +304,32 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                   ],
                 ),
               ),
-            ),
-            Align(
-                alignment: const AlignmentDirectional(-0.02, 0.92),
-                child: SizedBox(
-                  height: 60,
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(
-                          right: 40,
-                        ),
-                        transform: Matrix4.translationValues(0.0, 10.0, 0.0),
-                        child: Text(
-                          MyConstant.poweredBy,
-                          style: GoogleFonts.roboto(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                          ),
+              SizedBox(
+                height: 60,
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(
+                        right: 40,
+                      ),
+                      transform: Matrix4.translationValues(0.0, 10.0, 0.0),
+                      child: Text(
+                        MyConstant.poweredBy,
+                        style: GoogleFonts.roboto(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
-                      SvgPicture.asset("assets/powered_news.svg")
-                    ],
-                  ),
-                ))
-          ],
-        ),
-      ),
+                    ),
+                    SvgPicture.asset("assets/powered_news.svg")
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      )),
     );
   }
 
@@ -357,7 +342,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   Future<UserCredential> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth =
-    await googleUser?.authentication;
+        await googleUser?.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
@@ -366,12 +351,12 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   }
 
   Future<UserCredential?> signInWithFacebook() async {
-    final LoginResult result = await FacebookAuth.instance.login(
-      permissions: ['public_profile', 'email', 'user_friends']
-    );
-    if(result.status == LoginStatus.success) {
+    final LoginResult result = await FacebookAuth.instance
+        .login(permissions: ['public_profile', 'email', 'user_friends']);
+    if (result.status == LoginStatus.success) {
       // Create a credential from the access token
-      final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.token);
+      final OAuthCredential credential =
+          FacebookAuthProvider.credential(result.accessToken!.token);
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.signInWithCredential(credential);
     }
@@ -381,21 +366,23 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
   Future<void> _signInWithApple(BuildContext context) async {
     try {
       final authService = Provider.of<AuthService>(context, listen: false);
-      final user = await authService.signInWithApple([Scope.email, Scope.fullName]);
+      final user =
+          await authService.signInWithApple([Scope.email, Scope.fullName]);
       print('uid: ${user.uid}');
     } catch (e) {
       // TODO: Show alert here
       print(e);
     }
   }
+
   Future<OtpSendStatus> getOtpSendStatus(String email) async {
     String? getAccessToken = MyConstant.propertyToken;
     final response = await http.post(
-        Uri.parse("https://api.newsdx.io/V1/end_users/send_email_otp"),
+      Uri.parse("https://api.newsdx.io/V1/end_users/send_email_otp"),
       headers: {
-        "Authorization":  getAccessToken,
+        "Authorization": getAccessToken,
       },
-        body: {"email" : email, "propertyKey" : MyConstant.propertyKey},
+      body: {"email": email, "propertyKey": MyConstant.propertyKey},
     );
     if (response.statusCode == 200) {
       return OtpSendStatus.fromJson(jsonDecode(response.body));
@@ -404,14 +391,16 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
     }
   }
 
-  showProgressIndicator(bool visibility){
-    Visibility(visible :visibility, child:  const SizedBox(
-      height: 100,
-      width: 100,
-      child: Center(
-        child: CircularProgressIndicator(),
+  showProgressIndicator(bool visibility) {
+    Visibility(
+      visible: visibility,
+      child: const SizedBox(
+        height: 100,
+        width: 100,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
-    ),
     );
   }
 }

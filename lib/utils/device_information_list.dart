@@ -1,15 +1,26 @@
-
+import 'dart:convert';
 import 'dart:io';
 
-class DeviceInfo{
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:newsdx/model/user_info.dart';
+
+import '../preference/user_preference.dart';
+
+class DeviceInfo {
   static Future<String> getPhoneInfo() async {
-    if(Platform.isAndroid) {
-    return "Android";
-    } else if(Platform.isIOS) {
+    if (Platform.isAndroid) {
+      return "Android";
+    } else if (Platform.isIOS) {
       return "iOS";
     }
     return "";
   }
 
+  static saveUserInformation(User user) {
+    Prefs.saveUserNameInfo(user.displayName);
+    Prefs.saveUserEmailInfo(user.email);
+    Prefs.saveUserPhoneInfo(user.phoneNumber);
+    Prefs.saveUserImageUrlInfo(user.photoURL);
+  }
 }
 

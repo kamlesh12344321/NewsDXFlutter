@@ -19,6 +19,7 @@ import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
 import 'package:newsdx/screens/home_section_article_detail.dart';
+import 'package:newsdx/screens/login_screen.dart';
 import 'package:newsdx/userprofile/user_profile_info_screen.dart';
 import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
@@ -151,10 +152,17 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                   child: SvgPicture.asset("assets/profile_placeholder.svg"),
                 ),
                 onPressed: () {
-                  appState.currentAction = PageAction(
-                      state: PageState.addWidget,
-                      widget: const UserProfileInfoScreen(),
-                      page: UserProfileInfoPageConfig);
+                 if(Prefs.getIsLoggedIn() == true){
+                   appState.currentAction = PageAction(
+                       state: PageState.addWidget,
+                       widget: const UserProfileInfoScreen(),
+                       page: UserProfileInfoPageConfig);
+                 } else{
+                   appState.currentAction = PageAction(
+                       state: PageState.addWidget,
+                       widget: const LoginScreen(),
+                       page: LoginPageConfig);
+                 }
                 },
               ),
             )

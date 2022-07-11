@@ -17,6 +17,10 @@ class Prefs  {
   static const String fcmToken= "fcm_token";
   static const String fcmTokenSave = "fcm_token_save";
   static const String onBookMarkArticelId ="bookmakrarticelId";
+  static const String userNameKey = "firebase_name_info";
+  static const String userEmaiKey = "firebase_email_info";
+  static const String userNumberKey = "firebase_number_info";
+  static const String userImageKey = "firebase_image_info";
 
   static Future<SharedPreferences?> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -58,6 +62,27 @@ class Prefs  {
   static Future<bool> saveBookMarkArticleId(String articleId) async =>
     await _prefs!.setString(onBookMarkArticelId, articleId);
   static String? getBookMarkArticelId() => _prefs!.getString(onBookMarkArticelId) ?? "";
+
+  static Future<bool> saveUserNameInfo(String? info) async =>
+      await _prefs!.setString(userNameKey, info ?? "");
+
+  static String? getUserNameInfo() => _prefs!.getString(userNameKey);
+
+  static Future<bool> saveUserEmailInfo(String? info) async =>
+      await _prefs!.setString(userEmaiKey, info ?? "");
+
+  static String? getUserEmailInfo() => _prefs!.getString(userEmaiKey);
+
+  static Future<bool> saveUserPhoneInfo(String? info) async =>
+      await _prefs!.setString(userNumberKey, info ?? "");
+
+  static String? getUserNumberInfo() => _prefs!.getString(userNumberKey);
+
+  static Future<bool> saveUserImageUrlInfo(String? info) async =>
+      await _prefs!.setString(userImageKey, info ?? "");
+
+  static String? getUserImageUrlInfo() => _prefs!.getString(userImageKey);
+
 
 
 }
