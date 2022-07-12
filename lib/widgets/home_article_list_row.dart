@@ -7,21 +7,18 @@ import 'package:newsdx/widgets/big_text.dart';
 import 'package:newsdx/widgets/small_text.dart';
 
 import '../bookmark/model/bookmark_article.dart';
+import '../database/data_helper.dart';
 import '../objectbox.g.dart';
 
 class HomeArticleListItem extends StatefulWidget {
   final HomeArticle? articleItem;
    bool? bookmarkStatus;
 
-  final Box<BookMarkArticleModel>? bookmarkBox;
-  final BookMarkArticleModel? bookMarkArticleModel;
 
    HomeArticleListItem({
     Key? key,
     required this.articleItem,
      this.bookmarkStatus,
-     this.bookmarkBox,
-    this.bookMarkArticleModel
   }) : super(key: key);
 
   @override
@@ -126,33 +123,20 @@ class _HomeArticleListItemState extends State<HomeArticleListItem> {
 
   void onBookmark(String articleId) {
 
-    final query = widget.bookmarkBox
-        ?.query(BookMarkArticleModel_.articleId.equals(articleId))
-        .build();
-    final people = query?.find();
-    debugPrint("bookmark check ->"+people.toString());
-    if (people == null) {
-      debugPrint("Bookmark Added 0");
-      onAddBookMark(articleId);
-    } else {
-    if (people!.length == 0) {
-      debugPrint("Bookmark Added 1");
-      onAddBookMark(articleId);
-    } else {
-      debugPrint("Bookmark remove");
-      onRemoveBookMark(people.first.id);
-    }}
+    var result = Helpers.queryArticleId(articleId);
+    result.then((value) => {
+      if (value!.length == 0)
+        {
+          Helpers.insert(BookMarkArticleModel(articleId: articleId)),
+          debugPrint("Bookmark Result added $articleId"),
+        }
+      else
+        {
+          Helpers.delete(articleId),
+          debugPrint("Bookmark Result remove "+value.first.articleId),
+        }
+    });
+
     setState(() {});
-  }
-
-  void onAddBookMark(String articleId) {
-    debugPrint("kk id insert -> $articleId");
-    var bookMarkArticleModel = BookMarkArticleModel(articleId: articleId);
-    int id = widget.bookmarkBox!.put(bookMarkArticleModel!);
-    debugPrint("kk id -> $id");
-  }
-
-  void onRemoveBookMark(int id) {
-    widget.bookmarkBox?.remove(id);
   }
 }

@@ -15,6 +15,7 @@ import 'package:newsdx/widgets/article_detail_fullimage.dart';
 import 'package:provider/provider.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 import '../bookmark/model/bookmark_article.dart';
+import '../database/data_helper.dart';
 import '../objectbox.g.dart';
 import '../shared/shared_method.dart';
 
@@ -22,8 +23,6 @@ class ArticleDetail extends StatefulWidget {
   final Articles? articleItem;
 
   bool? bookmarkStatus;
-  Box<BookMarkArticleModel>? bookmarkBox;
-  BookMarkArticleModel? bookMarkArticleModel;
   Function? callbackBookMark;
   int? row_index;
 
@@ -31,8 +30,6 @@ class ArticleDetail extends StatefulWidget {
     Key? key,
     this.articleItem,
     this.bookmarkStatus,
-    this.bookmarkBox,
-    this.bookMarkArticleModel,
     this.callbackBookMark,
     this.row_index
   }) : super(key: key);
@@ -361,35 +358,23 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
   void onBookmark(String articleId) {
 
-    final query = widget.bookmarkBox
-        ?.query(BookMarkArticleModel_.articleId.equals(articleId))
-        .build();
-    final people = query?.find();
-    debugPrint("bookmark check ->"+people.toString());
-    if (people == null) {
-      debugPrint("Bookmark Added 0");
-      onAddBookMark(articleId);
-    } else {
-      if (people?.length == 0) {
-        debugPrint("Bookmark Added 1");
-        onAddBookMark(articleId);
-      } else {
-        debugPrint("Bookmark remove");
-        onRemoveBookMark(people.first.id);
-      }}
+    var result = Helpers.queryArticleId(articleId);
+    result.then((value) => {
+      if (value!.length == 0)
+        {
+          Helpers.insert(BookMarkArticleModel(articleId: articleId)),
+          debugPrint("Bookmark Result added $articleId"),
+        }
+      else
+        {
+          Helpers.delete(articleId),
+          debugPrint("Bookmark Result remove "+value.first.articleId),
+        }
+    });
+
     setState(() {});
   }
 
-  void onAddBookMark(String articleId) {
-    debugPrint("kk id insert -> $articleId");
-    var bookMarkArticleModel = BookMarkArticleModel(articleId: articleId);
-    int id = widget.bookmarkBox!.put(bookMarkArticleModel!);
-    debugPrint("kk id -> $id");
-  }
-
-  void onRemoveBookMark(int id) {
-    widget.bookmarkBox?.remove(id);
-  }
 
   @override
   void dispose() {

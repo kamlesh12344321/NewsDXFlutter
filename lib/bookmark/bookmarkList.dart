@@ -22,11 +22,9 @@ import 'model/bookmark_article.dart';
 
 class BookMarkFilledContainer extends StatefulWidget {
   String? bookmarkArticleList;
-  Box<BookMarkArticleModel>? bookmarkBox;
-  BookMarkArticleModel? bookMarkArticleModel;
 
 
-  BookMarkFilledContainer({Key? key, this.bookmarkArticleList, this.bookmarkBox, this.bookMarkArticleModel })
+  BookMarkFilledContainer({Key? key, this.bookmarkArticleList,})
       : super(key: key);
 
   @override
@@ -40,8 +38,13 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
   bool rememberMe = false;
   bool? shouldRefress = false;
   late Future<SectionPojo> myData;
- late FutureBuilder futureBuilder;
+
   late List<Articles> articleList ;
+  updateData(){
+    setState((){
+      shouldRefress = true;
+    });
+}
 
   late int markedIndex;
   callback(bookmarkIndex){
@@ -72,7 +75,7 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
        }
      }
      widget.bookmarkArticleList = articleIdList;
-     futureBuilder;
+     myData = getArticles(widget.bookmarkArticleList!);
    });
 
   }
@@ -81,11 +84,12 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
   @override
   void initState() {
     super.initState();
-    myData = getArticles(widget.bookmarkArticleList!);
     myController.addListener(() {
       email = myController.text;
       setState(() {});
     });
+
+
     String? articleId = Prefs.getBookMarkArticelId();
     debugPrint("Bookmakr remove article id kk => $articleId");
 
@@ -103,8 +107,8 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-    futureBuilder =  FutureBuilder<SectionPojo>(
-      future:  myData,
+   var futureBuilder =  FutureBuilder<SectionPojo>(
+      future:  getArticles(widget.bookmarkArticleList!),
       builder: (context, snapShot) {
         if (snapShot.hasData) {
           DataPojo? articleItem = snapShot.data?.data;
@@ -119,8 +123,6 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
                   title: BookmarkListRow(
                     articleItem: article,
                     row_index: index,
-                    bookmarkBox: widget.bookmarkBox,
-                    bookMarkArticleModel: widget.bookMarkArticleModel,
                     callback: callback,
                   ),
                   onTap: () {
@@ -129,9 +131,7 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
                         widget: ArticleDetail(
                           articleItem: article,
                           bookmarkStatus:
-                          getBookMarkStatus(article.articleid!),
-                          bookmarkBox: widget.bookmarkBox,
-                          bookMarkArticleModel: widget.bookMarkArticleModel,
+                          getBookMarkStatus(article!.articleid!),
                           callbackBookMark: callbackBookMarkArticleId,
                           row_index: index,
                         ),

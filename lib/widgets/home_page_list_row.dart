@@ -6,6 +6,9 @@ import 'package:newsdx/widgets/big_text.dart';
 import 'package:newsdx/widgets/small_text.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import '../bookmark/model/bookmark_article.dart';
+import '../database/data_helper.dart';
+import '../database/mydatabase_viewmodel.dart';
+import '../my_object_box.dart';
 import '../objectbox.g.dart';
 import '../shared/shared_method.dart';
 
@@ -14,15 +17,10 @@ class HomePageListItem extends StatefulWidget {
   final Articles? articleItem;
   bool? bookmarkStatus;
 
-  final Box<BookMarkArticleModel>? bookmarkBox;
-  final BookMarkArticleModel? bookMarkArticleModel;
-
   HomePageListItem({
     Key? key,
     required this.articleItem,
-    this.bookmarkStatus,
-     this.bookmarkBox,
-    this.bookMarkArticleModel
+    this.bookmarkStatus
   }) : super(key: key);
 
   @override
@@ -134,29 +132,21 @@ class _HomePageListItemState extends State<HomePageListItem> {
 
   void onBookmark(String articleId) {
 
-    final query = widget.bookmarkBox
-        ?.query(BookMarkArticleModel_.articleId.equals(articleId))
-        .build();
-    final people = query?.find();
-    debugPrint("bookmark check ->"+people.toString());
-      if (people?.length == 0) {
-        debugPrint("Bookmark Added 1");
-        onAddBookMark(articleId);
-      } else {
-        debugPrint("Bookmark remove");
-        onRemoveBookMark(people!.first.id);
-      }
+    var result = Helpers.queryArticleId(articleId);
+    result.then((value) => {
+      if (value!.length == 0)
+        {
+          Helpers.insert(BookMarkArticleModel(articleId: articleId)),
+          debugPrint("Bookmark Result added $articleId"),
+        }
+      else
+        {
+          Helpers.delete(articleId),
+          debugPrint("Bookmark Result remove "+value.first.articleId),
+        }
+    });
+
     setState(() {});
   }
 
-  void onAddBookMark(String articleId) {
-    debugPrint("kk id insert -> $articleId");
-    var bookMarkArticleModel = BookMarkArticleModel(articleId: articleId);
-    int id = widget.bookmarkBox!.put(bookMarkArticleModel!);
-    debugPrint("kk id -> $id");
-  }
-
-  void onRemoveBookMark(int id) {
-    widget.bookmarkBox?.remove(id);
-  }
 }

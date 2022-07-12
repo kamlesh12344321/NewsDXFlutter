@@ -7,6 +7,7 @@ import 'package:newsdx/widgets/small_text.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:provider/provider.dart';
 import '../bookmark/model/bookmark_article.dart';
+import '../database/data_helper.dart';
 import '../objectbox.g.dart';
 import '../provider/bookmark_provider.dart';
 import '../shared/shared_method.dart';
@@ -15,17 +16,12 @@ import '../shared/shared_method.dart';
 class BookmarkListRow extends StatefulWidget {
   Articles? articleItem;
   int? row_index;
-
-  final Box<BookMarkArticleModel>? bookmarkBox;
-  final BookMarkArticleModel? bookMarkArticleModel;
   final Function? callback;
 
   BookmarkListRow({
     Key? key,
      this.articleItem,
      this.row_index,
-     this.bookmarkBox,
-     this.bookMarkArticleModel,
      this.callback
   }) : super(key: key);
 
@@ -134,16 +130,8 @@ class _BookmarkListRowState extends State<BookmarkListRow> {
   }
 
   void onBookmark(String articleId) {
-    final query = widget.bookmarkBox
-        ?.query(BookMarkArticleModel_.articleId.equals(articleId))
-        .build();
-    final bookmarkArticleItem = query?.find();
-    debugPrint("Bookmark remove");
-    onRemoveBookMark(bookmarkArticleItem!.first.id);
+    Helpers.delete(articleId);
     setState(() {});
   }
 
-  void onRemoveBookMark(int id) {
-    widget.bookmarkBox?.remove(id);
-  }
 }

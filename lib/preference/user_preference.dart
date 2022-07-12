@@ -14,9 +14,9 @@ class Prefs  {
   static const String isProfileImagePresent = "profile_image_present";
   static const String articleIdsList = "article_id_list";
   static const String onBoardingstatus = "onboarding";
+  static const String onBookMarkArticelId ="bookmakrarticelId";
   static const String fcmToken= "fcm_token";
   static const String fcmTokenSave = "fcm_token_save";
-  static const String onBookMarkArticelId ="bookmakrarticelId";
   static const String userNameKey = "firebase_name_info";
   static const String userEmaiKey = "firebase_email_info";
   static const String userNumberKey = "firebase_number_info";

@@ -12,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/apple/auth_service.dart';
+import 'package:newsdx/database/data_helper.dart';
 import 'package:newsdx/model/notification_register.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
@@ -30,6 +31,8 @@ import 'dart:developer' as developer;
 import 'apple/apple_sign_in_available.dart';
 import 'package:http/http.dart' as http;
 
+import 'my_object_box.dart';
+
 
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
   'high_importance_channel', //id
@@ -44,7 +47,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
 
+// late MyObjectBox objectbox;
+
 Future<void> main() async {
+
+
   Loggy.initLoggy();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -60,6 +67,8 @@ Future<void> main() async {
     sound: true,
   );
   await Prefs.init();
+  // await MyObjectBox.init();
+  await Helpers.init();
   final appleSignInAvailable = await AppleSignInAvailable.check();
   runApp(Provider<AppleSignInAvailable>.value(
     value: appleSignInAvailable,
