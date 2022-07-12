@@ -22,11 +22,9 @@ import 'model/bookmark_article.dart';
 
 class BookMarkFilledContainer extends StatefulWidget {
   String? bookmarkArticleList;
-  Box<BookMarkArticleModel>? bookmarkBox;
-  BookMarkArticleModel? bookMarkArticleModel;
 
 
-  BookMarkFilledContainer({Key? key, this.bookmarkArticleList, this.bookmarkBox, this.bookMarkArticleModel })
+  BookMarkFilledContainer({Key? key, this.bookmarkArticleList,})
       : super(key: key);
 
   @override
@@ -86,7 +84,6 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
   @override
   void initState() {
     super.initState();
-    myData = getArticles(widget.bookmarkArticleList!);
     myController.addListener(() {
       email = myController.text;
       setState(() {});
@@ -111,7 +108,7 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
    var futureBuilder =  FutureBuilder<SectionPojo>(
-      future:  myData,
+      future:  getArticles(widget.bookmarkArticleList!),
       builder: (context, snapShot) {
         if (snapShot.hasData) {
           DataPojo? articleItem = snapShot.data?.data;
@@ -126,8 +123,6 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
                   title: BookmarkListRow(
                     articleItem: article,
                     row_index: index,
-                    bookmarkBox: widget.bookmarkBox,
-                    bookMarkArticleModel: widget.bookMarkArticleModel,
                     callback: callback,
                   ),
                   onTap: () {
@@ -137,8 +132,6 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
                           articleItem: article,
                           bookmarkStatus:
                           getBookMarkStatus(article!.articleid!),
-                          bookmarkBox: widget.bookmarkBox,
-                          bookMarkArticleModel: widget.bookMarkArticleModel,
                           callbackBookMark: callbackBookMarkArticleId,
                           row_index: index,
                         ),

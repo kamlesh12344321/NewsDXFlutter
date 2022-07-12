@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 import '../bookmark/model/bookmark_article.dart';
+import '../database/data_helper.dart';
 import '../objectbox.g.dart';
 
 class MyAccountPage extends StatefulWidget {
@@ -24,19 +25,6 @@ class MyAccountPage extends StatefulWidget {
 }
 
 class _MyAccountPageState extends State<MyAccountPage> {
-
-  Store? _store;
-  late Box<BookMarkArticleModel>? bookmarkBox;
-  BookMarkArticleModel? bookMarkArticleModel;
-
-  @override
-  void initState() {
-    openStore().then((Store store) {
-      _store = store;
-      bookmarkBox = store.box<BookMarkArticleModel>();
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -268,8 +256,6 @@ class _MyAccountPageState extends State<MyAccountPage> {
                    state: PageState.addWidget,
                    widget:  BookMarks(
                      bookmarkArticleIdList : bookMarkList(),
-                     bookmarkBox: bookmarkBox,
-                     bookMarkArticleModel: bookMarkArticleModel,
                    ),
                    page: BookMarkPageConfig);
              },
@@ -404,8 +390,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
 
   String bookMarkList() {
     String articleIdList = "";
-    final bookMarkQuery = bookmarkBox?.query().build();
-    List<BookMarkArticleModel>? data =  bookMarkQuery?.find();
+
+    List<BookMarkArticleModel>? data =  Helpers.getAllBookmarkList();
 
     if (data?.length == 0) {
       return articleIdList;

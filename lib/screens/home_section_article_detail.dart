@@ -3,11 +3,13 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:newsdx/database/data_helper.dart';
 import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/widgets/article_detail_fullimage.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 
 import '../bookmark/model/bookmark_article.dart';
+import '../my_object_box.dart';
 import '../objectbox.g.dart';
 import '../shared/shared_method.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,15 +18,11 @@ import 'package:path_provider/path_provider.dart';
 class HomeSectionArticleDetail extends StatefulWidget {
    HomeArticle? homeArticle;
    bool? bookmarkStatus;
-   Box<BookMarkArticleModel>? bookmarkBox;
-   BookMarkArticleModel? bookMarkArticleModel;
 
   HomeSectionArticleDetail({
     Key? key,
      this.homeArticle,
-     this.bookmarkStatus,
-     this.bookmarkBox,
-    this.bookMarkArticleModel
+     this.bookmarkStatus
   }) : super(key: key);
 
   @override
@@ -35,7 +33,28 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
 
   @override
   Widget build(BuildContext context) {
-    bool isBookMarkState = false;
+
+
+  /*  bool bookmarkArticleStatus = false;
+
+    Helpers.queryArticleId(widget.homeArticle!.articleId).then((value) => {
+      if (value!.length == 0)
+        {
+          setState((){
+            bookmarkArticleStatus = false;
+            debugPrint("Bookmark Result added Home section ");
+          })
+        }
+      else
+        {
+          setState((){
+            bookmarkArticleStatus = true;
+            debugPrint("Bookmark Result remove Home section ");
+          })
+        }
+    });*/
+
+
     TextToSpeech tts = TextToSpeech();
     double volume = 1.0;
     String? _timestamp = widget.homeArticle?.publishDate.toString(); // [DateTime] formatted as String.
@@ -197,36 +216,23 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
     return htmlText.replaceAll(exp, '');
   }
 
-
   void onBookmark(String articleId) {
+    var result = Helpers.queryArticleId(articleId);
+    result.then((value) => {
+          if (value!.length == 0)
+            {
+              Helpers.insert(BookMarkArticleModel(articleId: articleId)),
+              debugPrint("Bookmark Result added "),
+            }
+          else
+            {
+              Helpers.delete(articleId),
+              debugPrint("Bookmark Result remove "),
+            }
+        });
 
-    final query = widget.bookmarkBox
-        ?.query(BookMarkArticleModel_.articleId.equals(articleId))
-        .build();
-    final people = query?.find();
-    debugPrint("bookmark check ->"+people.toString());
-    if (people == null) {
-      debugPrint("Bookmark Added 0");
-      onAddBookMark(articleId);
-    } else {
-      if (people?.length == 0) {
-        debugPrint("Bookmark Added 1");
-        onAddBookMark(articleId);
-      } else {
-        debugPrint("Bookmark remove");
-        onRemoveBookMark(people.first.id);
-      }}
-    setState(() {});
-  }
+    setState(() {
 
-  void onAddBookMark(String articleId) {
-    debugPrint("kk id insert -> $articleId");
-    var bookMarkArticleModel = BookMarkArticleModel(articleId: articleId);
-    int id = widget.bookmarkBox!.put(bookMarkArticleModel!);
-    debugPrint("kk id -> $id");
-  }
-
-  void onRemoveBookMark(int id) {
-    widget.bookmarkBox?.remove(id);
+    });
   }
 }

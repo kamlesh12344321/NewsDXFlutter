@@ -76,6 +76,7 @@ dependencies:
   flutter_local_notifications: ^9.6.1
   firebase_core_platform_interface: 4.4.3
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

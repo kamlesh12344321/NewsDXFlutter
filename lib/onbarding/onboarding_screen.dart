@@ -17,7 +17,7 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   var size, height, width;
   var selectedindex = 0;
-  late int count = 0;
+  late int count = -1;
 
   PageController controller = PageController();
 

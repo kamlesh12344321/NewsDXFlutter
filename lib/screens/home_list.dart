@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
+import 'package:newsdx/database/data_helper.dart';
 import 'package:newsdx/internet_connectivity/internet_status.dart';
 import 'package:newsdx/bookmark/model/bookmark_article.dart';
 import 'package:newsdx/model/SectionList.dart';
@@ -37,6 +38,7 @@ import 'package:newsdx/widgets/sport_star_item.dart';
 import 'package:newsdx/widgets/sport_stars.dart';
 import 'package:newsdx/widgets/top_picks_item.dart';
 import 'package:provider/provider.dart';
+import '../my_object_box.dart';
 import '../objectbox.g.dart';
 import '../utils/CustomColors.dart';
 import 'package:http/http.dart' as http;
@@ -44,13 +46,16 @@ import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+
+  const HomePage({Key? key,}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with UiLoggy {
+
+
   late SectionsViewModel sectionsViewModel;
   late SectionsList? sectionsList;
   int initPosition = 0;
@@ -60,22 +65,8 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   HomeSection? homeSection;
   int _currentIndex = 0;
 
-  Store? _store;
-  late Box<BookMarkArticleModel>? bookmarkBox;
-  BookMarkArticleModel? bookMarkArticleModel;
-
-  @override
-  void initState() {
-    super.initState();
-    openStore().then((Store store) {
-      _store = store;
-      bookmarkBox = store.box<BookMarkArticleModel>();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    bookmarkBox = _store?.box<BookMarkArticleModel>();
     final appState = Provider.of<AppState>(context, listen: false);
     _controller = ScrollController();
     _controllerBanner = ScrollController();
@@ -226,8 +217,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                       widget: HomeSectionArticleDetail(
                                         homeArticle: article,
                                         bookmarkStatus: getBookMarkStatus(article.articleId),
-                                        bookmarkBox: bookmarkBox,
-                                        bookMarkArticleModel: bookMarkArticleModel,
                                       ),
                                       page: HomeArticleDetailPageConfig);
                                 },
@@ -261,16 +250,12 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                       widget: HomeSectionArticleDetail(
                                         homeArticle: homeArticle,
                                         bookmarkStatus: getBookMarkStatus(homeArticle.articleId),
-                                        bookmarkBox: bookmarkBox,
-                                        bookMarkArticleModel: bookMarkArticleModel,
                                       ),
                                       page: HomeArticleDetailPageConfig);
                                 },
                                 child: HomeArticleListItem(
                                     articleItem: homeArticle,
                                     bookmarkStatus: getBookMarkStatus(homeArticle.articleId),
-                                    bookmarkBox: bookmarkBox,
-                                    bookMarkArticleModel: bookMarkArticleModel,
                                 ),
                               );
                             });
@@ -296,8 +281,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                             title: HomePageListItem(
                               articleItem: article,
                               bookmarkStatus: getBookMarkStatus(article!.articleid!),
-                              bookmarkBox: bookmarkBox,
-                              bookMarkArticleModel: bookMarkArticleModel,
                             ),
                             onTap: () {
                               appState.currentAction = PageAction(
@@ -305,8 +288,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                   widget: ArticleDetail(
                                     articleItem: article,
                                     bookmarkStatus: getBookMarkStatus(article!.articleid!),
-                                    bookmarkBox: bookmarkBox,
-                                    bookMarkArticleModel: bookMarkArticleModel,
                                   ),
                                   page: ArticleDetailPageConfig);
                             },
@@ -367,17 +348,9 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   SectionPojo modelClassFromJson(String str) =>
       SectionPojo.fromJson(jsonDecode(str));
 
-  @override
-  void dispose() {
-    _store?.close();
-    super.dispose();
-  }
-
-
   bool getBookMarkStatus(String articleId) {
-    final bookMarkQuery = bookmarkBox?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
-    final bookMarkArticle = bookMarkQuery?.find();
-    if (bookMarkArticle?.length == 0) {
+    var result = Helpers.queryArticleIds(articleId);
+    if (result!.length == 0) {
       return false;
     } else {
       return true;
