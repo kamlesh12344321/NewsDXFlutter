@@ -98,7 +98,7 @@ class _ArticleDetailState extends State<ArticleDetail> {
                       height: 20,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 16, right: 16),
+                      padding: const EdgeInsets.only(left: 16, right: 16),
                       child: Center(
                         child: Text(
                           "You will get access to all the premium and personalised contents with AD free experience",
@@ -199,7 +199,11 @@ class _ArticleDetailState extends State<ArticleDetail> {
               padding: const EdgeInsets.only(right: 16),
               child: Transform.scale(
                 scale: 1,
-                child: SvgPicture.asset("assets/profile_placeholder.svg"),
+                child:   CircleAvatar(
+                  backgroundImage: Prefs.getIsLoggedIn() == true ?
+                  NetworkImage(Prefs.getUserImageUrlInfo()!) : const NetworkImage('https://newsdx.io/assets/others/carbon_user-avatar-filled.svg') ,
+                  radius: 15,
+                ),
               ),
             ),
           ],

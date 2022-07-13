@@ -132,7 +132,11 @@ class _HomePageState extends State<HomePage> with UiLoggy {
               child: IconButton(
                 icon: Transform.scale(
                   scale: 1,
-                  child: SvgPicture.asset("assets/profile_placeholder.svg"),
+                  child:   CircleAvatar(
+                    backgroundImage: Prefs.getIsLoggedIn() == true ?
+                    NetworkImage(Prefs.getUserImageUrlInfo()!) : const NetworkImage('https://newsdx.io/assets/others/carbon_user-avatar-filled.svg') ,
+                    radius: 15,
+                  ),
                 ),
                 onPressed: () {
                  if(Prefs.getIsLoggedIn() == true){

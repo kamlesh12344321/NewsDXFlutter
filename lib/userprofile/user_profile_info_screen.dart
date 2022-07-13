@@ -76,7 +76,7 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                   children:  [
                     CircleAvatar(
                       backgroundImage: Prefs.getIsLoggedIn() == true ?
-                          NetworkImage(Prefs.getUserImageUrlInfo()!) : NetworkImage('https://picsum.photos/id/237/200/300') ,
+                          NetworkImage(Prefs.getUserImageUrlInfo()!) : const NetworkImage('https://newsdx.io/assets/others/carbon_user-avatar-filled.svg') ,
                       radius: 30,
                     ),
                   ],
