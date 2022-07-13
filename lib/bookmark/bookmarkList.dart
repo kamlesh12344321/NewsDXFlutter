@@ -58,7 +58,11 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
        articleIdList = articleList[i].articleid!+","+articleIdList;
      }
    }
-   widget.bookmarkArticleList = articleIdList;
+   if(articleList.isNotEmpty) {
+     widget.bookmarkArticleList = articleIdList;
+   } else{
+     widget.bookmarkArticleList = "";
+   }
     });
   }
 

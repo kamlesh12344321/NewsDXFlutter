@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -40,6 +41,9 @@ AndroidNotificationChannel channel = const AndroidNotificationChannel(
   importance: Importance.high,
   playSound: true,
 );
+
+
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -57,9 +61,9 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -69,11 +73,8 @@ Future<void> main() async {
   await Prefs.init();
   // await MyObjectBox.init();
   await Helpers.init();
-  final appleSignInAvailable = await AppleSignInAvailable.check();
-  runApp(Provider<AppleSignInAvailable>.value(
-    value: appleSignInAvailable,
-    child: const MyApp(),
-  ));
+  runApp(const MyApp(),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -97,6 +98,17 @@ class _MyAppState extends State<MyApp> {
     parser = NewsDxRouteParser();
   }
 
+  _requestIOSPermission() {
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      alert: false,
+      badge: true,
+      sound: true,
+    );
+  }
+
   @override
   initState() {
     super.initState();
@@ -110,18 +122,15 @@ class _MyAppState extends State<MyApp> {
        }
     });
 
+
+    if (Platform.isIOS) {
+      _requestIOSPermission();
+    }
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      String id = "";
-      if(message?.data['type'] == "article"){
-        id = message?.data['article_id'];
-        appState.currentAction = PageAction(
-            state: PageState.addWidget,
-            widget: NotificationArticleDetailScreen(articleIdFromNotification: id,),
-            page: UserProfileInfoPageConfig);
-      }
-      if (notification != null && android != null) {
+      // AndroidNotification? android = message.notification?.android;
+      if (notification != null ) {
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
             notification.title,
@@ -134,7 +143,11 @@ class _MyAppState extends State<MyApp> {
               color: Colors.blue,
               playSound: true,
               icon:'@mipmap/ic_launcher',
-            )));
+            ),
+            iOS: IOSNotificationDetails(
+
+            )
+              ,),);
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -148,7 +161,7 @@ class _MyAppState extends State<MyApp> {
       }
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
-      if (notification != null && android != null) {
+      if (notification != null ) {
         showDialog(
             context: context,
             builder: (_) {
@@ -185,7 +198,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => SectionsViewModel()),
         ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
         ChangeNotifierProvider(create: (_) => HomeSectionsViewModel()),
-        Provider(create: (_) => AuthService())
+        // Provider(create: (_) => AuthService())
       ],
       child: ThemeProvider(
         saveThemesOnChange: true,
@@ -246,6 +259,7 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
+
   Future<bool?> sendFcmToken(String? fcmToken) async {
     String? getAccessToken = MyConstant.propertyToken;
     var url = Uri.parse(MyConstant.Fcm_token);
@@ -267,3 +281,5 @@ class _MyAppState extends State<MyApp> {
   NotificationRegistration modelClassToJson(String str) =>
       NotificationRegistration.fromJson(JsonDecoder().convert(str));
 }
+
+

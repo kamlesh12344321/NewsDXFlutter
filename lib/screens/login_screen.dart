@@ -21,10 +21,7 @@ import 'package:newsdx/utils/device_information_list.dart';
 import 'package:newsdx/widgets/app_bar.dart';
 import 'package:newsdx/widgets/dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:sign_button/constants.dart';
-import 'package:sign_button/create_button.dart';
 import 'package:http/http.dart' as http;
-import 'package:the_apple_sign_in/scope.dart';
 
 import '../apple/auth_service.dart';
 
@@ -363,17 +360,17 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
     return null;
   }
 
-  Future<void> _signInWithApple(BuildContext context) async {
-    try {
-      final authService = Provider.of<AuthService>(context, listen: false);
-      final user =
-          await authService.signInWithApple([Scope.email, Scope.fullName]);
-      print('uid: ${user.uid}');
-    } catch (e) {
-      // TODO: Show alert here
-      print(e);
-    }
-  }
+  // Future<void> _signInWithApple(BuildContext context) async {
+  //   try {
+  //     final authService = Provider.of<AuthService>(context, listen: false);
+  //     final user =
+  //         await authService.signInWithApple([Scope.email, Scope.fullName]);
+  //     print('uid: ${user.uid}');
+  //   } catch (e) {
+  //     // TODO: Show alert here
+  //     print(e);
+  //   }
+  // }
 
   Future<OtpSendStatus> getOtpSendStatus(String email) async {
     String? getAccessToken = MyConstant.propertyToken;
