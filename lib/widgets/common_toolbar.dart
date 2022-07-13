@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:newsdx/preference/user_preference.dart';
 
 class CommonToolbar extends StatelessWidget with PreferredSizeWidget {
   final String? title;
@@ -21,10 +22,14 @@ class CommonToolbar extends StatelessWidget with PreferredSizeWidget {
       ),
       actions: [
         Padding(
-          padding:  EdgeInsets.only(right: 16),
+          padding:  const EdgeInsets.only(right: 16),
           child: Transform.scale(
             scale: 1,
-            child: SvgPicture.asset("assets/profile_placeholder.svg"),
+            child:   CircleAvatar(
+              backgroundImage: Prefs.getIsLoggedIn() == true ?
+              NetworkImage(Prefs.getUserImageUrlInfo()!) : NetworkImage('https://picsum.photos/id/237/200/300') ,
+              radius: 15,
+            ),
           ),
         ),
       ],

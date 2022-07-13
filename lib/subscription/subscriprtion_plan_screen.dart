@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:newsdx/model/subscription_plan.dart';
@@ -13,6 +14,8 @@ import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
+import 'package:newsdx/widgets/common_toolbar.dart';
+import '../app_constants/string_constant.dart';
 import 'consumable_store.dart';
 
 class SubscriptionPlanScreen extends StatefulWidget {
@@ -76,33 +79,68 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
     );
 
     return Scaffold(
-        appBar: AppBar(title: Text("Subscriptions List")),
+        appBar: const CommonToolbar(title: '',),
         body: Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(0),
-                child: Align(
-                    alignment: Alignment.topLeft,
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      top: 21,
+                    ),
                     child: SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: SvgPicture.asset("assets/app_logo_new.svg"))),
+                      height: 37,
+                      width: 39,
+                      child: SvgPicture.asset("assets/app_logo_new.svg"),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 5,
+                      top: 21,
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          MyConstant.appName,
+                          style: GoogleFonts.lato(
+                            textStyle: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w900),
+                          ),
+                        ),
+                        Text(
+                          MyConstant.appType,
+                          style: GoogleFonts.lato(
+                            textStyle: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 6),
-                child: const SizedBox(
+               Padding(
+                padding: const  EdgeInsets.only(top: 6, left: 16),
+                child: SizedBox(
                     child: Text(
                   'Subscription Plan',
-                 style: TextStyle(
+                 style: GoogleFonts.roboto(
+                   fontSize: 30,
                    fontWeight: FontWeight.w900,
-                   fontSize: 30
+                   color: Colors.black
                  ),),),
               ),
-              SizedBox(height: 50,),
+              const SizedBox(height: 50,),
               Expanded(
                 child:  PageView.builder(
                   itemCount: _products.length,
@@ -112,16 +150,24 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              const Align(
+               Align(
                 alignment: Alignment.bottomCenter,
-                child: Text('For support contact '),
+                child: Text('For support contact ', style: GoogleFonts.roboto(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14
+                ),),
               ),
-             Align(
+              Align(
                alignment: Alignment.bottomCenter,
-               child:  const Text('wecare@alpinenews.com', style: TextStyle(color: Colors.blue),),
+               child:  Text('wecare@alpinenews.com', style: GoogleFonts.roboto(
+                 color: Colors.blue,
+                 fontSize: 14,
+                 fontWeight: FontWeight.w500
+               ),),
              )
             ],
           ),
@@ -135,14 +181,14 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
 
     Map data = {
       "app_bundleId": "in.ninestars.NewsDX",
-      "propertyKey": "0a415906df2fd643733b865167adb19d",
+      // "propertyKey": "0a415906df2fd643733b865167adb19d",
     };
 
     var url = Uri.parse("https://api.newsdx.io/V1/List_in_app_products/apple");
     final response = await http.post(url,
         body: data,
       headers: {
-        "Authorization" : getAccessToken
+        "Authorization" : MyConstant.propertyToken
       },
     );
 
@@ -173,7 +219,7 @@ class _SubscriptionPlanScreenState extends State<SubscriptionPlanScreen> {
         _consumables = <String>[];
         _purchasePending = false;
         _loading = false;
-        debugPrint("kk1 initStoreInfo-> product"+_products.length.toString()+" "+_purchases.length.toString()+" "+_notFoundIds.length.toString());
+        debugPrint("kk1 initStoreInfo-> product${_products.length} ${_purchases.length} ${_notFoundIds.length}");
       });
       return;
     }

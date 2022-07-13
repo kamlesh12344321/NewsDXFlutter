@@ -47,8 +47,8 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                 Text(
                   "logout",
                   style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
                       color: Colors.black54),
                 ),
                 IconButton(
@@ -102,13 +102,13 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                                 fontWeight: FontWeight.w700,
                                 color: Colors.black),
                           ),
-                          Text(
-                            "",
-                            style: GoogleFonts.roboto(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black),
-                          ),
+                          // Text(
+                          //   "",
+                          //   style: GoogleFonts.roboto(
+                          //       fontSize: 28,
+                          //       fontWeight: FontWeight.w700,
+                          //       color: Colors.black),
+                          // ),
                         ],
                       )
                     ],
@@ -118,7 +118,7 @@ class _UserProfileInfoScreenState extends State<UserProfileInfoScreen> {
                   title: Text(
                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been",
                       style: GoogleFonts.roboto(
-                          fontSize: 14,
+                          fontSize: 16,
                           fontWeight: FontWeight.w400,
                           color: Colors.black
                       )

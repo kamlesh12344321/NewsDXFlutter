@@ -8,10 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
-import 'package:newsdx/apple/auth_service.dart';
 import 'package:newsdx/database/data_helper.dart';
 import 'package:newsdx/model/notification_register.dart';
 import 'package:newsdx/preference/user_preference.dart';
@@ -28,10 +26,7 @@ import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'dart:developer' as developer;
-import 'apple/apple_sign_in_available.dart';
 import 'package:http/http.dart' as http;
-
-import 'my_object_box.dart';
 
 
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
@@ -72,11 +67,9 @@ Future<void> main() async {
   await Prefs.init();
   // await MyObjectBox.init();
   await Helpers.init();
-  final appleSignInAvailable = await AppleSignInAvailable.check();
-  runApp(Provider<AppleSignInAvailable>.value(
-    value: appleSignInAvailable,
-    child: const MyApp(),
-  ));
+  // final appleSignInAvailable = await AppleSignInAvailable.check();
+  runApp( const MyApp()
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -132,13 +125,13 @@ class _MyAppState extends State<MyApp> {
               color: Colors.blue,
               playSound: true,
               icon:'@mipmap/ic_launcher',
-            )));
+            ),),);
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       String id = "";
-      if(message?.data['type'] == "article"){
-        id = message?.data['article_id'];
+      if(message.data['type'] == "article"){
+        id = message.data['article_id'];
         appState.currentAction = PageAction(
             state: PageState.addWidget,
             widget: HomeSectionArticleDetail(
@@ -186,7 +179,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => SectionsViewModel()),
         ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
         ChangeNotifierProvider(create: (_) => HomeSectionsViewModel()),
-        Provider(create: (_) => AuthService())
+        // Provider(create: (_) => AuthService())
       ],
       child: ThemeProvider(
         saveThemesOnChange: true,
@@ -197,8 +190,7 @@ class _MyAppState extends State<MyApp> {
             controller.setTheme(savedTheme);
           } else {
             Brightness platformBrightness =
-                SchedulerBinding.instance?.window.platformBrightness ??
-                    Brightness.light;
+                SchedulerBinding.instance.window.platformBrightness;
             if (platformBrightness == Brightness.dark) {
               controller.setTheme('dark');
             } else {
@@ -266,5 +258,5 @@ class _MyAppState extends State<MyApp> {
     return notificationRegistration.status;
   }
   NotificationRegistration modelClassToJson(String str) =>
-      NotificationRegistration.fromJson(JsonDecoder().convert(str));
+      NotificationRegistration.fromJson(const JsonDecoder().convert(str));
 }
