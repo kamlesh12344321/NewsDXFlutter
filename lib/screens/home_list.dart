@@ -222,7 +222,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                   appState.currentAction = PageAction(
                                       state: PageState.addWidget,
                                       widget: HomeSectionArticleDetail(
-                                        homeArticle: article,
+                                        homeArticle: article.articleId,
                                         bookmarkStatus: getBookMarkStatus(article.articleId),
                                       ),
                                       page: HomeArticleDetailPageConfig);
@@ -255,7 +255,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                                   appState.currentAction = PageAction(
                                       state: PageState.addWidget,
                                       widget: HomeSectionArticleDetail(
-                                        homeArticle: homeArticle,
+                                        homeArticle: homeArticle.articleId,
                                         bookmarkStatus: getBookMarkStatus(homeArticle.articleId),
                                       ),
                                       page: HomeArticleDetailPageConfig);
@@ -292,11 +292,11 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                             onTap: () {
                               appState.currentAction = PageAction(
                                   state: PageState.addWidget,
-                                  widget: ArticleDetail(
-                                    articleItem: article,
-                                    bookmarkStatus: getBookMarkStatus(article!.articleid!),
+                                  widget: HomeSectionArticleDetail(
+                                    homeArticle: article.articleid,
+                                    bookmarkStatus: getBookMarkStatus(article.articleid!),
                                   ),
-                                  page: ArticleDetailPageConfig);
+                                  page: HomeArticleDetailPageConfig);
                             },
                           );
                         },
@@ -326,17 +326,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   }
 
 
-  _getSportChipsList(SectionsViewModel? sectionsViewModel) {
-    SectionsList? sections = sectionsViewModel?.sectionList;
-    List<Section>? sectionList = sections?.data;
-    if (sectionList!.isNotEmpty) {
-      for (Section section in sectionList) {
-        if (section.subsections!.isNotEmpty) {
-          return section.subsections;
-        }
-      }
-    }
-  }
 
   Future<SectionPojo> getArticles(String? sectionId) async {
     String? getAccessToken = MyConstant.propertyToken;

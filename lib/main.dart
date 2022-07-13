@@ -20,7 +20,7 @@ import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/route_parser.dart';
 import 'package:newsdx/router/router_delegate.dart';
 import 'package:newsdx/router/ui_pages.dart';
-import 'package:newsdx/screens/notification_detail.dart';
+import 'package:newsdx/screens/home_section_article_detail.dart';
 import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
@@ -37,6 +37,7 @@ import 'my_object_box.dart';
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
   'high_importance_channel', //id
   'High importance notification',
+  description: 'This channel is used for important notification',
   importance: Importance.high,
   playSound: true,
 );
@@ -57,10 +58,12 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
+
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
@@ -103,7 +106,9 @@ class _MyAppState extends State<MyApp> {
     initPlatformState();
     firebaseMessaging = FirebaseMessaging.instance;
     firebaseMessaging.getToken().then((value) {
-       print(value);
+       if (kDebugMode) {
+         print(value);
+       }
        Prefs.saveFcmToken(value);
        if(!Prefs.getIsFcmTokenSent()) {
          sendFcmToken(value);
@@ -113,14 +118,7 @@ class _MyAppState extends State<MyApp> {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
-      String id = "";
-      if(message?.data['type'] == "article"){
-        id = message?.data['article_id'];
-        appState.currentAction = PageAction(
-            state: PageState.addWidget,
-            widget: NotificationArticleDetailScreen(articleIdFromNotification: id,),
-            page: UserProfileInfoPageConfig);
-      }
+
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
@@ -143,8 +141,11 @@ class _MyAppState extends State<MyApp> {
         id = message?.data['article_id'];
         appState.currentAction = PageAction(
             state: PageState.addWidget,
-            widget: NotificationArticleDetailScreen(articleIdFromNotification: id,),
-            page: UserProfileInfoPageConfig);
+            widget: HomeSectionArticleDetail(
+              homeArticle: id,
+              bookmarkStatus: false,
+            ),
+            page: HomeArticleDetailPageConfig);
       }
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;

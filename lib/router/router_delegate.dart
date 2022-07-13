@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:newsdx/onbarding/onboarding_screen.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/back_dispatcher.dart';
-import 'package:newsdx/router/router_delegate.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
 import 'package:newsdx/bookmark/bookmark.dart';
 import 'package:newsdx/screens/home_screen.dart';
 import 'package:newsdx/screens/home_section_article_detail.dart';
 import 'package:newsdx/screens/login_screen.dart';
-import 'package:newsdx/screens/notification_detail.dart';
 import 'package:newsdx/screens/notificaton_screen.dart';
 import 'package:newsdx/screens/otp_screen.dart';
 import 'package:newsdx/screens/splash_screen.dart';
@@ -180,9 +178,6 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
       case Pages.HomeArticleDetail:
         HomeArticleDetailPageConfig.currentPageAction = action;
         break;
-      case Pages.NotificationArticleDetail:
-        NotificationArticleDetailPageConfig.currentPageAction = action;
-        break;
       default:
         break;
     }
@@ -236,10 +231,6 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
         case Pages.HomeArticleDetail:
           _addPageData(HomeSectionArticleDetail(), HomeArticleDetailPageConfig);
               break;
-
-        case Pages.NotificationArticleDetail:
-          _addPageData(NotificationArticleDetailScreen(), NotificationArticleDetailPageConfig);
-          break;
 
         default:
           break;
