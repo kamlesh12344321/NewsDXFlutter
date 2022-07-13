@@ -9,10 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
-import 'package:newsdx/apple/auth_service.dart';
 import 'package:newsdx/database/data_helper.dart';
 import 'package:newsdx/model/notification_register.dart';
 import 'package:newsdx/preference/user_preference.dart';
@@ -21,7 +19,7 @@ import 'package:newsdx/router/back_dispatcher.dart';
 import 'package:newsdx/router/route_parser.dart';
 import 'package:newsdx/router/router_delegate.dart';
 import 'package:newsdx/router/ui_pages.dart';
-import 'package:newsdx/screens/notification_detail.dart';
+import 'package:newsdx/screens/home_section_article_detail.dart';
 import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
@@ -29,21 +27,16 @@ import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'dart:developer' as developer;
-import 'apple/apple_sign_in_available.dart';
 import 'package:http/http.dart' as http;
-
-import 'my_object_box.dart';
 
 
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
   'high_importance_channel', //id
   'High importance notification',
+  description: 'This channel is used for important notification',
   importance: Importance.high,
   playSound: true,
 );
-
-
-
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -61,7 +54,6 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
@@ -115,7 +107,9 @@ class _MyAppState extends State<MyApp> {
     initPlatformState();
     firebaseMessaging = FirebaseMessaging.instance;
     firebaseMessaging.getToken().then((value) {
-       print(value);
+       if (kDebugMode) {
+         print(value);
+       }
        Prefs.saveFcmToken(value);
        if(!Prefs.getIsFcmTokenSent()) {
          sendFcmToken(value);
@@ -156,8 +150,11 @@ class _MyAppState extends State<MyApp> {
         id = message?.data['article_id'];
         appState.currentAction = PageAction(
             state: PageState.addWidget,
-            widget: NotificationArticleDetailScreen(articleIdFromNotification: id,),
-            page: UserProfileInfoPageConfig);
+            widget: HomeSectionArticleDetail(
+              homeArticle: id,
+              bookmarkStatus: false,
+            ),
+            page: HomeArticleDetailPageConfig);
       }
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -209,8 +206,7 @@ class _MyAppState extends State<MyApp> {
             controller.setTheme(savedTheme);
           } else {
             Brightness platformBrightness =
-                SchedulerBinding.instance?.window.platformBrightness ??
-                    Brightness.light;
+                SchedulerBinding.instance.window.platformBrightness;
             if (platformBrightness == Brightness.dark) {
               controller.setTheme('dark');
             } else {
@@ -279,7 +275,5 @@ class _MyAppState extends State<MyApp> {
     return notificationRegistration.status;
   }
   NotificationRegistration modelClassToJson(String str) =>
-      NotificationRegistration.fromJson(JsonDecoder().convert(str));
+      NotificationRegistration.fromJson(const JsonDecoder().convert(str));
 }
-
-

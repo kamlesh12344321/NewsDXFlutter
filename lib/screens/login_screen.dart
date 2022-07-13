@@ -21,7 +21,10 @@ import 'package:newsdx/utils/device_information_list.dart';
 import 'package:newsdx/widgets/app_bar.dart';
 import 'package:newsdx/widgets/dialog.dart';
 import 'package:provider/provider.dart';
+// import 'package:sign_button/constants.dart';
+// import 'package:sign_button/create_button.dart';
 import 'package:http/http.dart' as http;
+// import 'package:the_apple_sign_in/scope.dart';
 
 import '../apple/auth_service.dart';
 
@@ -222,7 +225,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
           ),
           Padding(
             padding: const EdgeInsets.only(
-                left: 16.0, top: 15.0, right: 0.0, bottom: 0.0),
+                left: 16.0, top: 15.0, right: 0.0, bottom: 30.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -264,7 +267,7 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                           {
                             DeviceInfo.saveUserInformation(value!.user!),
                             Prefs.saveIsLoggedIn(true),
-                            appState.login(true),
+                            // appState.login(true),
                             appState.currentAction = PageAction(
                                 state: PageState.addWidget,
                                 widget: const HomeScreen(),
@@ -292,12 +295,20 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                 width: double.infinity,
                 height: 100,
                 child: Column(
-                  children: const [
-                    Text(MyConstant.signInScreenPrivacyPolicy),
-                    SizedBox(
-                      height: 10,
+                  children: [
+                    Text(MyConstant.signInScreenPrivacyPolicy, style: GoogleFonts.roboto(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black87
+                    ),),
+                    const SizedBox(
+                      height: 16,
                     ),
-                    Text(MyConstant.tcTitle),
+                    Text(MyConstant.tcTitle, style: GoogleFonts.roboto(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14
+                    ),),
                   ],
                 ),
               ),
