@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/components/toggle/gf_toggle.dart';
 import 'package:getwidget/types/gf_toggle_type.dart';
@@ -8,14 +7,13 @@ import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
-import 'package:newsdx/bookmark/bookmark.dart';
 import 'package:newsdx/screens/notificaton_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_provider/theme_provider.dart';
 
+import '../bookmark/bookmarkList.dart';
 import '../bookmark/model/bookmark_article.dart';
 import '../database/data_helper.dart';
-import '../objectbox.g.dart';
 import '../userprofile/user_profile_info_screen.dart';
 import 'login_screen.dart';
 
@@ -273,8 +271,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
              onTap: (){
                appState.currentAction = PageAction(
                    state: PageState.addWidget,
-                   widget:  BookMarks(
-                     bookmarkArticleIdList : bookMarkList(),
+                   widget:  BookMarkFilledContainer(
+                     bookmarkArticleList: bookMarkList(),
                    ),
                    page: BookMarkPageConfig);
              },

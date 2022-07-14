@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:newsdx/preference/user_preference.dart';
-import 'package:newsdx/bookmark/bookmark.dart';
-import 'package:newsdx/userprofile/user_profile_info_screen.dart';
 
 class AppBarWithBack extends StatelessWidget with PreferredSizeWidget {
   const AppBarWithBack({Key? key}) : super(key: key);

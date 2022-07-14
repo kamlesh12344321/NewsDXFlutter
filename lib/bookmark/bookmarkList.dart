@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/bookmark/bookmark_list_row.dart';
+import 'package:newsdx/bookmark/empty_bookmark.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:provider/provider.dart';
 
@@ -17,15 +18,17 @@ import '../provider/bookmark_provider.dart';
 import '../router/app_state.dart';
 import '../router/ui_pages.dart';
 import '../screens/article_detail.dart';
+import '../widgets/app_bar.dart';
 import '../widgets/home_page_list_row.dart';
 import 'model/bookmark_article.dart';
 
 class BookMarkFilledContainer extends StatefulWidget {
   String? bookmarkArticleList;
 
-
-  BookMarkFilledContainer({Key? key, this.bookmarkArticleList,})
-      : super(key: key);
+  BookMarkFilledContainer({
+    Key? key,
+    this.bookmarkArticleList,
+  }) : super(key: key);
 
   @override
   State<BookMarkFilledContainer> createState() =>
@@ -38,52 +41,60 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
   bool rememberMe = false;
   bool? shouldRefress = false;
   late Future<SectionPojo> myData;
+  late List<Articles> articleList;
+ late bool isDataPresent  = true;
 
-  late List<Articles> articleList ;
-  updateData(){
-    setState((){
+  updateData() {
+    setState(() {
       shouldRefress = true;
     });
-}
+  }
 
   late int markedIndex;
-  callback(bookmarkIndex){
-    setState((){
-   articleList = List.from(articleList)..removeAt(bookmarkIndex);
-   String articleIdList = "";
-   for (int i = 0 ; i < articleList.length ; i++) {
-     if ( i == 0) {
-       articleIdList = articleList[i].articleid!;
-     }  else {
-       articleIdList = articleList[i].articleid!+","+articleIdList;
-     }
-   }
-   if(articleList.isNotEmpty) {
-     widget.bookmarkArticleList = articleIdList;
-   } else{
-     widget.bookmarkArticleList = "";
-   }
+
+  callback(bookmarkIndex) {
+    setState(() {
+      articleList = List.from(articleList)..removeAt(bookmarkIndex);
+      String articleIdList = "";
+      for (int i = 0; i < articleList.length; i++) {
+        if (i == 0) {
+          articleIdList = articleList[i].articleid!;
+        } else {
+          articleIdList = "${articleList[i].articleid!},$articleIdList";
+        }
+      }
+      if (articleList.isNotEmpty) {
+        widget.bookmarkArticleList = articleIdList;
+        setState((){
+          isDataPresent = true;
+        });
+      } else {
+        widget.bookmarkArticleList = "";
+        setState((){
+          isDataPresent = false;
+        });
+
+      }
     });
   }
 
-  callbackBookMarkArticleId(String articleId, String bookmarkStatus, int index ) {
-   debugPrint("ArticleDitail call back $articleId $bookmarkStatus");
-   setState((){
-     articleList = List.from(articleList)..removeAt(index);
-     String articleIdList = "";
-     for (int i = 0 ; i < articleList.length ; i++) {
-       if ( i == 0) {
-         articleIdList = articleList[i].articleid!;
-       }  else {
-         articleIdList = articleList[i].articleid!+","+articleIdList;
-       }
-     }
-     widget.bookmarkArticleList = articleIdList;
-     myData = getArticles(widget.bookmarkArticleList!);
-   });
-
+  callbackBookMarkArticleId(
+      String articleId, String bookmarkStatus, int index) {
+    debugPrint("ArticleDitail call back $articleId $bookmarkStatus");
+    setState(() {
+      articleList = List.from(articleList)..removeAt(index);
+      String articleIdList = "";
+      for (int i = 0; i < articleList.length; i++) {
+        if (i == 0) {
+          articleIdList = articleList[i].articleid!;
+        } else {
+          articleIdList = articleList[i].articleid! + "," + articleIdList;
+        }
+      }
+      widget.bookmarkArticleList = articleIdList;
+      myData = getArticles(widget.bookmarkArticleList!);
+    });
   }
-
 
   @override
   void initState() {
@@ -93,14 +104,9 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
       setState(() {});
     });
 
-
     String? articleId = Prefs.getBookMarkArticelId();
     debugPrint("Bookmakr remove article id kk => $articleId");
-
   }
-
-
-
 
   @override
   void dispose() {
@@ -111,12 +117,22 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-   var futureBuilder =  FutureBuilder<SectionPojo>(
-      future:  getArticles(widget.bookmarkArticleList!),
+    if(widget.bookmarkArticleList == ""){
+      setState((){
+        isDataPresent = false;
+      });
+    }
+    var futureBuilder = FutureBuilder<SectionPojo>(
+      future: getArticles(widget.bookmarkArticleList!),
       builder: (context, snapShot) {
         if (snapShot.hasData) {
           DataPojo? articleItem = snapShot.data?.data;
-          articleList = articleItem!.articles!;
+          articleList = articleItem?.articles ?? [];
+          if(articleList == []){
+            setState((){
+              isDataPresent = false;
+            });
+          }
           return SizedBox(
             child: ListView.builder(
               itemCount: articleList.length,
@@ -135,7 +151,7 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
                         widget: ArticleDetail(
                           articleItem: article,
                           bookmarkStatus:
-                          getBookMarkStatus(article!.articleid!),
+                              getBookMarkStatus(article!.articleid!),
                           callbackBookMark: callbackBookMarkArticleId,
                           row_index: index,
                         ),
@@ -160,19 +176,20 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
       },
     );
     return Scaffold(
-      body: futureBuilder,
+      appBar: AppBarWidget(MyConstant.noTitle,),
+      body: isDataPresent == true ? futureBuilder : const EmptyBookMarkContainer(),
     );
   }
 
   _onRememberMeChanged(bool newValue) => setState(() {
-    rememberMe = newValue;
+        rememberMe = newValue;
 
-    if (rememberMe) {
-      // TODO: Here goes your functionality that remembers the user.
-    } else {
-      // TODO: Forget the user
-    }
-  });
+        if (rememberMe) {
+          // TODO: Here goes your functionality that remembers the user.
+        } else {
+          // TODO: Forget the user
+        }
+      });
 
   Future<SectionPojo> getArticles(String articleIdsList) async {
     String? getAccessToken = MyConstant.propertyToken;

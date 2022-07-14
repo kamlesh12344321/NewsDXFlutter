@@ -253,7 +253,7 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
                               onTap: () {
                                 if (isSpeaking) {
                                   isSpeaking = false;
-                                  tts.stop();
+                                  tts.resume();
                                 } else {
                                   isSpeaking = true;
                                   tts.speak(removeAllHtmlTags(
@@ -322,7 +322,9 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
               ),
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Scaffold(
+              body:  Center(child: CircularProgressIndicator()),
+            );
           }
         });
   }
