@@ -16,6 +16,8 @@ import 'package:theme_provider/theme_provider.dart';
 import '../bookmark/model/bookmark_article.dart';
 import '../database/data_helper.dart';
 import '../objectbox.g.dart';
+import '../userprofile/user_profile_info_screen.dart';
+import 'login_screen.dart';
 
 class MyAccountPage extends StatefulWidget {
   const MyAccountPage({Key? key}) : super(key: key);
@@ -37,13 +39,30 @@ class _MyAccountPageState extends State<MyAccountPage> {
         elevation: 0.0,
         actions: [
           Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: CircleAvatar(
-                radius: 16.0,
-                child: ClipRect(
-                  child: Prefs.getProfilePre() ? Image.network('https://picsum.photos/250?image=9') : SvgPicture.asset("assets/profile_placeholder.svg"),
+            padding: const EdgeInsets.only(right: 16),
+            child: IconButton(
+              icon: Transform.scale(
+                scale: 1,
+                child:   CircleAvatar(
+                  backgroundImage: Prefs.getIsLoggedIn() == true ?
+                  NetworkImage(Prefs.getUserImageUrlInfo()!) : const NetworkImage('https://newsdx.io/assets/others/carbon_user-avatar-filled.svg') ,
+                  radius: 15,
                 ),
-              )
+              ),
+              onPressed: () {
+                if(Prefs.getIsLoggedIn() == true){
+                  appState.currentAction = PageAction(
+                      state: PageState.addWidget,
+                      widget: const UserProfileInfoScreen(),
+                      page: UserProfileInfoPageConfig);
+                } else{
+                  appState.currentAction = PageAction(
+                      state: PageState.addWidget,
+                      widget: const LoginScreen(),
+                      page: LoginPageConfig);
+                }
+              },
+            ),
           )
         ],
       ),

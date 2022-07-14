@@ -10,6 +10,11 @@ import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../router/app_state.dart';
+import '../router/ui_pages.dart';
+import '../screens/login_screen.dart';
+import '../userprofile/user_profile_info_screen.dart';
+
 class MyFeedScreen extends StatefulWidget {
   @override
   State<MyFeedScreen> createState() => _MyFeedScreenState();
@@ -27,6 +32,7 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
     sectionsViewModel = context.watch<SectionsViewModel>();
     sectionsList = sectionsViewModel?.sectionList;
     sectionsList?.data?.removeAt(0);
@@ -40,15 +46,31 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
         elevation: 0.0,
         actions: [
           Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: CircleAvatar(
-                radius: 16.0,
-                child: ClipRect(
-                  child: Prefs.getProfilePre()
-                      ? Image.network('https://picsum.photos/250?image=9')
-                      : SvgPicture.asset("assets/profile_placeholder.svg"),
+            padding: const EdgeInsets.only(right: 16),
+            child: IconButton(
+              icon: Transform.scale(
+                scale: 1,
+                child:   CircleAvatar(
+                  backgroundImage: Prefs.getIsLoggedIn() == true ?
+                  NetworkImage(Prefs.getUserImageUrlInfo()!) : const NetworkImage('https://newsdx.io/assets/others/carbon_user-avatar-filled.svg') ,
+                  radius: 15,
                 ),
-              ))
+              ),
+              onPressed: () {
+                if(Prefs.getIsLoggedIn() == true){
+                  appState.currentAction = PageAction(
+                      state: PageState.addWidget,
+                      widget: const UserProfileInfoScreen(),
+                      page: UserProfileInfoPageConfig);
+                } else{
+                  appState.currentAction = PageAction(
+                      state: PageState.addWidget,
+                      widget: const LoginScreen(),
+                      page: LoginPageConfig);
+                }
+              },
+            ),
+          )
         ],
       ),
       body: Padding(

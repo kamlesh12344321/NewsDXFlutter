@@ -28,7 +28,7 @@ class _BookMarksState extends State<BookMarks> {
       body: showScree
           ? BookMarkFilledContainer(bookmarkArticleList: widget.bookmarkArticleIdList
       )
-          : EmptyBookMarkContainer()
+          : const EmptyBookMarkContainer()
     );
   }
 }
