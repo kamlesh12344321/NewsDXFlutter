@@ -49,11 +49,6 @@ class AppState extends ChangeNotifier {
     bool onBoardingStatus =  Prefs.getOnBoarding();
     if(onBoardingStatus) {
       _currentAction = PageAction(state: PageState.replaceAll, page: HomePageConfig);
-      /*if(_loggedIn) {
-        _currentAction = PageAction(state: PageState.replaceAll, page: HomePageConfig);
-      } else {
-        _currentAction = PageAction(state: PageState.replaceAll, page:OnBoardingPageConfig);
-      }*/
     } else {
       _currentAction = PageAction(state: PageState.replaceAll, page:OnBoardingPageConfig);
     }

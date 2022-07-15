@@ -68,7 +68,7 @@ class IAPModel {
 
   SubscriptionPlan subscriptionPlan = SubscriptionPlan();
 
-  Set<String> kProductIds = Set();
+  Set<String> kProductIds = {};
   List<PurchaseDetails> purchases = <PurchaseDetails>[];
   List<ProductDetails> products = <ProductDetails>[];
   List<String> consumables = <String>[];

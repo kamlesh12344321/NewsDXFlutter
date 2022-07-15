@@ -1,9 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:newsdx/model/user_info.dart';
-
 import '../preference/user_preference.dart';
 
 class DeviceInfo {

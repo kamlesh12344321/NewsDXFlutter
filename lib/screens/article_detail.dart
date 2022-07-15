@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,7 +14,6 @@ import 'package:provider/provider.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 import '../bookmark/model/bookmark_article.dart';
 import '../database/data_helper.dart';
-import '../objectbox.g.dart';
 import '../shared/shared_method.dart';
 
 class ArticleDetail extends StatefulWidget {

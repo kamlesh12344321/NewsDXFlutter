@@ -140,17 +140,17 @@ class Item {
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
     isEnabled: json["IS_ENABLED"],
-    url: json["URL"] == null ? null : json["URL"],
-    position: json["POSITION"] == null ? null : json["POSITION"],
-    action: json["ACTION"] == null ? null : json["ACTION"],
-    source: json["SOURCE"] == null ? null : json["SOURCE"],
+    url: json["URL"] ?? "",
+    position: json["POSITION"] ?? "",
+    action: json["ACTION"] ?? "",
+    source: json["SOURCE"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {
     "IS_ENABLED": isEnabled,
-    "URL": url == null ? null : url,
-    "POSITION": position == null ? null : position,
-    "ACTION": action == null ? null : action,
-    "SOURCE": source == null ? null : source,
+    "URL": url ?? "",
+    "POSITION": position ?? "",
+    "ACTION": action ?? "",
+    "SOURCE": source ?? "",
   };
 }

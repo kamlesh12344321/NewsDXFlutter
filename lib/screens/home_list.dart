@@ -1,52 +1,29 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/database/data_helper.dart';
-import 'package:newsdx/internet_connectivity/internet_status.dart';
-import 'package:newsdx/bookmark/model/bookmark_article.dart';
 import 'package:newsdx/model/SectionList.dart';
 import 'package:newsdx/model/SectionPojo.dart';
 import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/preference/user_preference.dart';
-import 'package:newsdx/repo/api_status.dart';
-import 'package:newsdx/repo/section_service.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
-import 'package:newsdx/router/ui_pages.dart';
-import 'package:newsdx/screens/article_detail.dart';
 import 'package:newsdx/screens/home_section_article_detail.dart';
 import 'package:newsdx/screens/login_screen.dart';
 import 'package:newsdx/userprofile/user_profile_info_screen.dart';
-import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
-import 'package:newsdx/viewmodel/generic_list_view_model.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
-import 'package:newsdx/viewmodel/sport_stars_view_model.dart';
-import 'package:newsdx/widgets/AllSportsView.dart';
-import 'package:newsdx/widgets/article_list.dart';
 import 'package:newsdx/widgets/banner_ads.dart';
-import 'package:newsdx/widgets/custom_tab_view.dart';
 import 'package:newsdx/widgets/full_image_view_item.dart';
-import 'package:newsdx/widgets/full_width_article.dart';
 import 'package:newsdx/widgets/home_article_list_row.dart';
 import 'package:newsdx/widgets/home_page_list_row.dart';
 import 'package:newsdx/widgets/nav_bar.dart';
 import 'package:newsdx/widgets/powered_widget.dart';
-import 'package:newsdx/widgets/sport_star_item.dart';
-import 'package:newsdx/widgets/sport_stars.dart';
-import 'package:newsdx/widgets/top_picks_item.dart';
 import 'package:provider/provider.dart';
-import '../my_object_box.dart';
-import '../objectbox.g.dart';
-import '../utils/CustomColors.dart';
 import 'package:http/http.dart' as http;
-import 'package:loggy/loggy.dart';
-import 'package:path_provider/path_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -60,7 +37,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   late SectionsList? sectionsList;
   int initPosition = 0;
   late ScrollController _controller;
-  late ScrollController _controllerBanner;
   late HomeSectionsViewModel homeSectionsViewModel;
   HomeSection? homeSection;
   int _currentIndex = 0;
@@ -69,11 +45,10 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
     _controller = ScrollController();
-    _controllerBanner = ScrollController();
     homeSectionsViewModel = context.watch<HomeSectionsViewModel>();
     sectionsViewModel = context.watch<SectionsViewModel>();
     homeSection = homeSectionsViewModel.homeSectionList;
-    sectionsList = sectionsViewModel?.sectionList;
+    sectionsList = sectionsViewModel.sectionList;
     int? lengthValue = sectionsList?.data?.length ?? 0;
     Section homeSectionCreate = Section(
       id: "40",
@@ -175,12 +150,11 @@ class _HomePageState extends State<HomePage> with UiLoggy {
             lengthValue,
             (int index) {
               if (index == 0) {
-                List<HomeArticle>? bannerList = homeSection?.data?.banner;
-                List<WidgetHome>? widgetsList = homeSection?.data?.widgets;
-                List<HomeArticle>? homeArticle3 = homeSection?.data?.articles;
-                LiveWidget? liveWidget = homeSection?.data?.liveWidget;
-                HtmlWidget? htmlWidget = homeSection?.data?.htmlWidget;
-                int? indexForAds = homeArticle3?.length;
+                List<HomeArticle>? bannerList = homeSection?.data.banner;
+                List<WidgetHome>? widgetsList = homeSection?.data.widgets;
+                List<HomeArticle>? homeArticle3 = homeSection?.data.articles;
+                LiveWidget? liveWidget = homeSection?.data.liveWidget;
+                HtmlWidget? htmlWidget = homeSection?.data.htmlWidget;
 
                 int listSize = 0;
                 if (bannerList != null) {
@@ -281,7 +255,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                       DataPojo? val = snapShot.data?.data;
                       List<Articles>? listValue = val?.articles;
                       var sectionName = listValue![0].sectionname;
-                      var sectionId = listValue[0].sectionid;
                       loggy.debug('SectionName :: $sectionName');
                       return ListView.builder(
                         itemCount: val?.articles?.length,
@@ -333,7 +306,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
 
   Future<SectionPojo> getArticles(String? sectionId) async {
     String? getAccessToken = MyConstant.propertyToken;
-    var url = Uri.parse(MyConstant.ARTICLE_LIST);
+    var url = Uri.parse(MyConstant.articleList);
     final response = await http.post(
       url,
       body: {"sectionId": sectionId},

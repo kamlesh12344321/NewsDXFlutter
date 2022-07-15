@@ -9,6 +9,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:newsdx/database/data_helper.dart';
 import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/widgets/article_detail_fullimage.dart';
+import 'package:provider/provider.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 
 import '../app_constants/string_constant.dart';
@@ -16,10 +17,13 @@ import '../bookmark/model/bookmark_article.dart';
 import '../model/article_detail_pojo.dart';
 import '../my_object_box.dart';
 import '../objectbox.g.dart';
+import '../router/app_state.dart';
+import '../router/ui_pages.dart';
 import '../shared/shared_method.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
+import '../subscription/subscriprtion_plan_screen.dart';
 import '../widgets/common_toolbar.dart';
 
 class HomeSectionArticleDetail extends StatefulWidget {
@@ -35,8 +39,10 @@ class HomeSectionArticleDetail extends StatefulWidget {
 }
 
 class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
+
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
     return FutureBuilder<ArticleDetailPojo>(
         future: getArticleFromNotification(widget.homeArticle),
         builder: (context, snapshot) {
@@ -71,8 +77,8 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
                               decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                 colors: [
-                                  (Colors.transparent.withAlpha(0)),
-                                  Colors.transparent.withAlpha(10)
+                                  (Colors.white.withOpacity(0.0)),
+                                  Colors.white.withOpacity(0.7)
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -90,7 +96,7 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
                               height: 20,
                             ),
                             Padding(
-                                padding: EdgeInsets.only(left: 16, right: 16),
+                                padding: const EdgeInsets.only(left: 16, right: 16),
                                 child: Center(
                                   child: Text(
                                     "You will get access to all the premium and personalised contents with AD free experience",
@@ -125,10 +131,10 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
                               ),
                               child: const Text("View Plans"),
                               onPressed: () {
-                                // appState.currentAction = PageAction(
-                                //     state: PageState.addWidget,
-                                //     widget: const SubscriptionPlanScreen(),
-                                //     page: SubscriptionPlanPageConfig);
+                                appState.currentAction = PageAction(
+                                    state: PageState.addWidget,
+                                    widget: const SubscriptionPlanScreen(),
+                                    page: SubscriptionPlanPageConfig);
                               },
                             ),
                             const SizedBox(
@@ -247,7 +253,7 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
                               onTap: () {
                                 if (isSpeaking) {
                                   isSpeaking = false;
-                                  tts.stop();
+                                  tts.resume();
                                 } else {
                                   isSpeaking = true;
                                   tts.speak(removeAllHtmlTags(
@@ -316,7 +322,11 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
               ),
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return
+              const Scaffold(
+              body:  Center(child:
+              CircularProgressIndicator()),
+            );
           }
         });
   }

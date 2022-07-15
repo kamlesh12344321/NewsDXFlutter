@@ -2,7 +2,6 @@
 //
 //     final otpStatus = otpStatusFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 OtpSendStatus otpStatusFromJson(String str) => OtpSendStatus.fromJson(json.decode(str));

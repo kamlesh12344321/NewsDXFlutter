@@ -7,7 +7,7 @@ class PoweredByAdsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: Container(
         height: 90,
         decoration: const BoxDecoration(

@@ -57,7 +57,7 @@ class EmptyBookMarkContainer extends StatelessWidget {
                   TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Padding(

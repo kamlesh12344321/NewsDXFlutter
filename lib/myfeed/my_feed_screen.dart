@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/components/toggle/gf_toggle.dart';
@@ -10,10 +8,16 @@ import 'package:newsdx/myfeed/model/myfeed_section.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
 import 'package:provider/provider.dart';
+import '../router/app_state.dart';
+import '../router/ui_pages.dart';
+import '../screens/login_screen.dart';
+import '../userprofile/user_profile_info_screen.dart';
 
 import '../database/data_helper.dart';
 
 class MyFeedScreen extends StatefulWidget {
+  const MyFeedScreen({Key? key}) : super(key: key);
+
   @override
   State<MyFeedScreen> createState() => _MyFeedScreenState();
 }
@@ -22,7 +26,7 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
   late SectionsViewModel sectionsViewModel;
   late SectionsList? sectionsList;
   TextEditingController myController = TextEditingController();
-  String? article_title = "";
+  String? articleTitle = "";
   bool rememberMe = false;
   List<String> selectedArticleList = [];
   List<Section>?  sectionSList = [];
@@ -30,11 +34,11 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
     sectionsViewModel = context.watch<SectionsViewModel>();
-    sectionsList = sectionsViewModel?.sectionList;
+    sectionsList = sectionsViewModel.sectionList;
     sectionsList?.data?.removeAt(0);
     int? lengthValue = sectionsList?.data?.length ?? 0;
-    String filter = "";
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -43,15 +47,31 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
         elevation: 0.0,
         actions: [
           Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: CircleAvatar(
-                radius: 16.0,
-                child: ClipRect(
-                  child: Prefs.getProfilePre()
-                      ? Image.network('https://picsum.photos/250?image=9')
-                      : SvgPicture.asset("assets/profile_placeholder.svg"),
+            padding: const EdgeInsets.only(right: 16),
+            child: IconButton(
+              icon: Transform.scale(
+                scale: 1,
+                child:   CircleAvatar(
+                  backgroundImage: Prefs.getIsLoggedIn() == true ?
+                  NetworkImage(Prefs.getUserImageUrlInfo()!) : const NetworkImage('https://newsdx.io/assets/others/carbon_user-avatar-filled.svg') ,
+                  radius: 15,
                 ),
-              ))
+              ),
+              onPressed: () {
+                if(Prefs.getIsLoggedIn() == true){
+                  appState.currentAction = PageAction(
+                      state: PageState.addWidget,
+                      widget: const UserProfileInfoScreen(),
+                      page: UserProfileInfoPageConfig);
+                } else{
+                  appState.currentAction = PageAction(
+                      state: PageState.addWidget,
+                      widget: const LoginScreen(),
+                      page: LoginPageConfig);
+                }
+              },
+            ),
+          )
         ],
       ),
       body: Padding(
@@ -89,9 +109,9 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
                 label: Text("Search Articles"),
               ),
               onChanged: (text) {
-                setState() {
-                  article_title = text;
-                }
+               setState((){
+                 articleTitle = text;
+               });
               },
             ),
             Expanded(
@@ -183,7 +203,7 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
   @override
   void initState() {
     myController.addListener(() {
-      article_title = myController.text;
+      articleTitle = myController.text;
       setState(() {});
     });
     super.initState();

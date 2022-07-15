@@ -8,15 +8,15 @@ class ArticleDetailPojo {
   ArticleDetailPojo.fromJson(Map<String, dynamic> json) {
     sTATUS = json['STATUS'];
     sTATUSMSG = json['STATUS_MSG'];
-    dATA = json['DATA'] != null ? new DATA.fromJson(json['DATA']) : null;
+    dATA = json['DATA'] != null ? DATA.fromJson(json['DATA']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['STATUS'] = this.sTATUS;
-    data['STATUS_MSG'] = this.sTATUSMSG;
-    if (this.dATA != null) {
-      data['DATA'] = this.dATA!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['STATUS'] = sTATUS;
+    data['STATUS_MSG'] = sTATUSMSG;
+    if (dATA != null) {
+      data['DATA'] = dATA!.toJson();
     }
     return data;
   }
@@ -64,28 +64,28 @@ class DATA {
     if (json['IMAGES'] != null) {
       iMAGES = <IMAGES>[];
       json['IMAGES'].forEach((v) {
-        iMAGES!.add(new IMAGES.fromJson(v));
+        iMAGES!.add(IMAGES.fromJson(v));
       });
     }
     premium = json['premium'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['guid'] = this.guid;
-    data['TITLE'] = this.tITLE;
-    data['LEAD_TEXT'] = this.lEADTEXT;
-    data['ARTICLE_ID'] = this.aRTICLEID;
-    data['SECTION_NAME'] = this.sECTIONNAME;
-    data['DESCRIPTION'] = this.dESCRIPTION;
-    data['LINK'] = this.lINK;
-    data['LOCATION'] = this.lOCATION;
-    data['PUBLISH_DATE'] = this.pUBLISHDATE;
-    data['TIMESTAMP'] = this.tIMESTAMP;
-    if (this.iMAGES != null) {
-      data['IMAGES'] = this.iMAGES!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data =  <String, dynamic>{};
+    data['guid'] = guid;
+    data['TITLE'] = tITLE;
+    data['LEAD_TEXT'] = lEADTEXT;
+    data['ARTICLE_ID'] = aRTICLEID;
+    data['SECTION_NAME'] = sECTIONNAME;
+    data['DESCRIPTION'] = dESCRIPTION;
+    data['LINK'] = lINK;
+    data['LOCATION'] = lOCATION;
+    data['PUBLISH_DATE'] = pUBLISHDATE;
+    data['TIMESTAMP'] = tIMESTAMP;
+    if (iMAGES != null) {
+      data['IMAGES'] = iMAGES!.map((v) => v.toJson()).toList();
     }
-    data['premium'] = this.premium;
+    data['premium'] = premium;
     return data;
   }
 }
@@ -116,13 +116,13 @@ class IMAGES {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ID'] = this.iD;
-    data['PROP_ID'] = this.pROPID;
-    data['ARTICLE_ID'] = this.aRTICLEID;
-    data['IMAGE_ID'] = this.iMAGEID;
-    data['CAPTION'] = this.cAPTION;
-    data['INSERTED_ON'] = this.iNSERTEDON;
+    final Map<String, dynamic> data =  <String, dynamic>{};
+    data['ID'] = iD;
+    data['PROP_ID'] = pROPID;
+    data['ARTICLE_ID'] = aRTICLEID;
+    data['IMAGE_ID'] = iMAGEID;
+    data['CAPTION'] = cAPTION;
+    data['INSERTED_ON'] = iNSERTEDON;
     return data;
   }
 }

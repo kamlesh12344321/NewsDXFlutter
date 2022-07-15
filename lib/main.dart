@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:loggy/loggy.dart';
@@ -24,7 +22,6 @@ import 'package:newsdx/viewmodel/Article_list_view_model.dart';
 import 'package:newsdx/viewmodel/HomeSectionViewModel.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:theme_provider/theme_provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
@@ -123,7 +120,6 @@ class _MyAppState extends State<MyApp> {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
-      // AndroidNotification? android = message.notification?.android;
       if (notification != null ) {
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
@@ -138,7 +134,7 @@ class _MyAppState extends State<MyApp> {
               playSound: true,
               icon:'@mipmap/ic_launcher',
             ),
-            iOS: IOSNotificationDetails(
+            iOS: const IOSNotificationDetails(
 
             )
               ,),);
@@ -146,8 +142,8 @@ class _MyAppState extends State<MyApp> {
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       String id = "";
-      if(message?.data['type'] == "article"){
-        id = message?.data['article_id'];
+      if(message.data['type'] == "article"){
+        id = message.data['article_id'];
         appState.currentAction = PageAction(
             state: PageState.addWidget,
             widget: HomeSectionArticleDetail(
@@ -157,7 +153,6 @@ class _MyAppState extends State<MyApp> {
             page: HomeArticleDetailPageConfig);
       }
       RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
       if (notification != null ) {
         showDialog(
             context: context,
@@ -195,44 +190,15 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => SectionsViewModel()),
         ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
         ChangeNotifierProvider(create: (_) => HomeSectionsViewModel()),
-        // Provider(create: (_) => AuthService())
       ],
-      child: ThemeProvider(
-        saveThemesOnChange: true,
-        loadThemeOnInit: false,
-        onInitCallback: (controller, previouslySavedThemeFuture) async {
-          String? savedTheme = await previouslySavedThemeFuture;
-          if (savedTheme != null) {
-            controller.setTheme(savedTheme);
-          } else {
-            Brightness platformBrightness =
-                SchedulerBinding.instance.window.platformBrightness;
-            if (platformBrightness == Brightness.dark) {
-              controller.setTheme('dark');
-            } else {
-              controller.setTheme('light');
-            }
-            controller.forgetSavedTheme();
-          }
-        },
-        themes: <AppTheme>[
-          AppTheme.light(id: 'light'),
-          AppTheme.dark(id: 'dark'),
-        ],
-        child: ThemeConsumer(
-          child: Builder(
-            builder: (themeContext) => MaterialApp.router(
+      child: MaterialApp.router(
               routeInformationParser: parser,
               routerDelegate: delegate,
               backButtonDispatcher: backButtonDispatcher,
               debugShowCheckedModeBanner: false,
               title: MyConstant.appName,
-              theme: ThemeProvider.themeOf(themeContext).data,
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 
   Future<void> initPlatformState() async {
@@ -258,7 +224,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<bool?> sendFcmToken(String? fcmToken) async {
     String? getAccessToken = MyConstant.propertyToken;
-    var url = Uri.parse(MyConstant.Fcm_token);
+    var url = Uri.parse(MyConstant.fcmToken);
     final response = await http.post(
       url,
       body: {"deviceToken": fcmToken},

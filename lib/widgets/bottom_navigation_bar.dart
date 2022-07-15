@@ -6,7 +6,6 @@ import 'package:newsdx/screens/setting_screen.dart';
 import 'package:newsdx/myfeed/my_feed_screen.dart';
 import 'package:newsdx/screens/trending_screen.dart';
 import 'package:newsdx/widgets/nav_bar.dart';
-import 'package:newsdx/widgets/appbar_with_back.dart';
 
 class TheHinduBottomNav extends StatefulWidget {
   const TheHinduBottomNav({Key? key}) : super(key: key);

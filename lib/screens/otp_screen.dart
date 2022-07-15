@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,6 +30,7 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   void initState() {
+    super.initState();
     OtpID = Prefs.getOtpId();
   }
 
@@ -172,7 +172,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      MyConstant.otp_sent,
+                      MyConstant.otpSent,
                       style: GoogleFonts.lato(
                         textStyle: const TextStyle(
                             color: Colors.grey,
@@ -181,7 +181,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       ),
                     ),
                     Text(
-                      MyConstant.otp_mail_id + widget.emailId,
+                      MyConstant.otpMailId + widget.emailId,
                       style: GoogleFonts.lato(
                         textStyle: const TextStyle(
                             color: Colors.grey,
@@ -276,41 +276,6 @@ class _OTPScreenState extends State<OTPScreen> {
     );
   }
 
-  Widget _textFieldOTP({required bool first, last}) {
-    return SizedBox(
-      height: 50,
-      width: 50,
-      child: AspectRatio(
-        aspectRatio: 0.5,
-        child: TextField(
-          autofocus: true,
-          onChanged: (value) {
-            if (value.length == 1 && last == false) {
-              FocusScope.of(context).nextFocus();
-            }
-            if (value.isEmpty && first == false) {
-              FocusScope.of(context).previousFocus();
-            }
-          },
-          showCursor: false,
-          readOnly: false,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          keyboardType: TextInputType.number,
-          maxLength: 1,
-          decoration: InputDecoration(
-            counter: const Offstage(),
-            enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: Colors.black),
-                borderRadius: BorderRadius.circular(12)),
-            focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 1, color: Colors.purple),
-                borderRadius: BorderRadius.circular(12)),
-          ),
-        ),
-      ),
-    );
-  }
 
   Future<OtpVerification> getOtpVerificationStatus(String otp) async {
     String? getAccessToken = MyConstant.propertyToken;
