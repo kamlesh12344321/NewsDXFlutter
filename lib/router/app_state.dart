@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/preference/user_preference.dart';
-import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer' as developer;
 
 
@@ -52,11 +49,6 @@ class AppState extends ChangeNotifier {
     bool onBoardingStatus =  Prefs.getOnBoarding();
     if(onBoardingStatus) {
       _currentAction = PageAction(state: PageState.replaceAll, page: HomePageConfig);
-      /*if(_loggedIn) {
-        _currentAction = PageAction(state: PageState.replaceAll, page: HomePageConfig);
-      } else {
-        _currentAction = PageAction(state: PageState.replaceAll, page:OnBoardingPageConfig);
-      }*/
     } else {
       _currentAction = PageAction(state: PageState.replaceAll, page:OnBoardingPageConfig);
     }

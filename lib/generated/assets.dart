@@ -19,6 +19,7 @@ class Assets {
   static const String assetsHomeSelected = 'D:/NewsDX/assets/home_selected.svg';
   static const String assetsHomeUnSelected = 'D:/NewsDX/assets/home_un_selected.svg';
   static const String assetsLine = 'D:/NewsDX/assets/line.svg';
+  static const String assetsLogout = 'D:/NewsDX/assets/logout.svg';
   static const String assetsMenu = 'D:/NewsDX/assets/menu.svg';
   static const String assetsMore = 'D:/NewsDX/assets/more.svg';
   static const String assetsMoreSelected = 'D:/NewsDX/assets/more_selected.svg';

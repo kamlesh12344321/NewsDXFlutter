@@ -1,25 +1,14 @@
-import 'dart:ffi';
-import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
 import 'package:newsdx/model/otp_verification.dart';
 import 'package:newsdx/preference/user_preference.dart';
-import 'package:newsdx/viewmodel/Article_list_view_model.dart';
-import 'package:newsdx/viewmodel/generic_list_view_model.dart';
-import 'package:newsdx/viewmodel/sections_list_view_model.dart';
-import 'package:newsdx/viewmodel/sport_stars_view_model.dart';
 import 'package:newsdx/widgets/bottom_navigation_bar.dart';
-import 'package:provider/provider.dart';
-import 'package:theme_provider/theme_provider.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -30,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
 
   @override
   Widget build(BuildContext context) {

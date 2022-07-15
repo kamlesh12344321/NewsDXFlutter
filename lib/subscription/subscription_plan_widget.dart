@@ -45,7 +45,7 @@ class _SubscriptionPlanCardState extends State<SubscriptionPlanCard> {
   bool _isAvailable = false;
   bool _loading = true;
   String? _queryProductError;
-   List<String> _kProductIds = <String>[
+   final List<String> _kProductIds = <String>[
     "article_30",
     "article_40",
     "article_50",
@@ -61,7 +61,7 @@ class _SubscriptionPlanCardState extends State<SubscriptionPlanCard> {
     _subscription =
         purchaseUpdated.listen((List<PurchaseDetails> purchaseDetailsList) {
           _listenToPurchaseUpdated(purchaseDetailsList);
-          debugPrint("kk1 initStoreInfo-> product"+purchaseDetailsList.length.toString());
+          debugPrint("kk1 initStoreInfo-> product${purchaseDetailsList.length}");
         }, onDone: () {
           _subscription.cancel();
         }, onError: (Object error) {

@@ -1,13 +1,12 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:newsdx/bookmark/bookmarkList.dart';
 import 'package:newsdx/onbarding/onboarding_screen.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/back_dispatcher.dart';
-import 'package:newsdx/router/router_delegate.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/screens/article_detail.dart';
-import 'package:newsdx/screens/bookmark.dart';
 import 'package:newsdx/screens/home_screen.dart';
 import 'package:newsdx/screens/home_section_article_detail.dart';
 import 'package:newsdx/screens/login_screen.dart';
@@ -214,11 +213,11 @@ class NewsDxRouterDelegate extends RouterDelegate<PageConfiguration>
           _addPageData(const UserProfileInfoScreen(), UserProfileInfoPageConfig);
           break;
         case Pages.ArticleDe:
-          _addPageData(const ArticleDetail(), ArticleDetailPageConfig);
+          _addPageData(ArticleDetail(), ArticleDetailPageConfig);
           break;
 
         case Pages.BookMark:
-          _addPageData(const BookMarks(), BookMarkPageConfig);
+          _addPageData(BookMarkFilledContainer(), BookMarkPageConfig);
           break;
 
         case Pages.Notification:

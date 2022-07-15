@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:newsdx/model/SectionList.dart';
 import 'package:newsdx/model/home_section.dart';
-import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/repo/api_status.dart';
 import '../repo/section_service.dart';
 
@@ -30,6 +28,7 @@ class HomeSectionsViewModel extends ChangeNotifier{
     var response = await SectionServices.getHomeSection();
     if(response is Success){
       setSectionListModel(response.response as HomeSection);
+      setLoading(false);
       notifyListeners();
     }
   }

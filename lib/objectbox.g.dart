@@ -13,25 +13,45 @@ import 'package:objectbox/internal.dart'; // generated code can access "internal
 import 'package:objectbox/objectbox.dart';
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import 'model/bookmark_article_list.dart';
+import 'bookmark/model/bookmark_article.dart';
+import 'myfeed/model/myfeed_section.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
 final _entities = <ModelEntity>[
   ModelEntity(
-      id: const IdUid(1, 140014033892763327),
-      name: 'BookmarkedArticleList',
-      lastPropertyId: const IdUid(2, 7279772838933251738),
+      id: const IdUid(1, 2309581249632737194),
+      name: 'BookMarkArticleModel',
+      lastPropertyId: const IdUid(2, 8049664023637509511),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
-            id: const IdUid(1, 1601494717411579907),
+            id: const IdUid(1, 4772868920908895255),
             name: 'id',
             type: 6,
             flags: 1),
         ModelProperty(
-            id: const IdUid(2, 7279772838933251738),
+            id: const IdUid(2, 8049664023637509511),
             name: 'articleId',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <ModelRelation>[],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(2, 1358648710926437916),
+      name: 'MyFeedModel',
+      lastPropertyId: const IdUid(2, 7823371966333037859),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 158990058824888897),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 7823371966333037859),
+            name: 'sectionId',
             type: 9,
             flags: 0)
       ],
@@ -59,7 +79,7 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(1, 140014033892763327),
+      lastEntityId: const IdUid(2, 1358648710926437916),
       lastIndexId: const IdUid(0, 0),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
@@ -72,15 +92,15 @@ ModelDefinition getObjectBoxModel() {
       version: 1);
 
   final bindings = <Type, EntityDefinition>{
-    BookmarkedArticleList: EntityDefinition<BookmarkedArticleList>(
+    BookMarkArticleModel: EntityDefinition<BookMarkArticleModel>(
         model: _entities[0],
-        toOneRelations: (BookmarkedArticleList object) => [],
-        toManyRelations: (BookmarkedArticleList object) => {},
-        getId: (BookmarkedArticleList object) => object.id,
-        setId: (BookmarkedArticleList object, int id) {
+        toOneRelations: (BookMarkArticleModel object) => [],
+        toManyRelations: (BookMarkArticleModel object) => {},
+        getId: (BookMarkArticleModel object) => object.id,
+        setId: (BookMarkArticleModel object, int id) {
           object.id = id;
         },
-        objectToFB: (BookmarkedArticleList object, fb.Builder fbb) {
+        objectToFB: (BookMarkArticleModel object, fb.Builder fbb) {
           final articleIdOffset = fbb.writeString(object.articleId);
           fbb.startTable(3);
           fbb.addInt64(0, object.id);
@@ -92,10 +112,37 @@ ModelDefinition getObjectBoxModel() {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
 
-          final object = BookmarkedArticleList(
-              id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
+          final object = BookMarkArticleModel(
               articleId: const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 6, ''));
+                  .vTableGet(buffer, rootOffset, 6, ''))
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
+        }),
+    MyFeedModel: EntityDefinition<MyFeedModel>(
+        model: _entities[1],
+        toOneRelations: (MyFeedModel object) => [],
+        toManyRelations: (MyFeedModel object) => {},
+        getId: (MyFeedModel object) => object.id,
+        setId: (MyFeedModel object, int id) {
+          object.id = id;
+        },
+        objectToFB: (MyFeedModel object, fb.Builder fbb) {
+          final sectionIdOffset = fbb.writeString(object.sectionId);
+          fbb.startTable(3);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, sectionIdOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = MyFeedModel(
+              sectionId: const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 6, ''))
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
         })
@@ -104,13 +151,24 @@ ModelDefinition getObjectBoxModel() {
   return ModelDefinition(model, bindings);
 }
 
-/// [BookmarkedArticleList] entity fields to define ObjectBox queries.
-class BookmarkedArticleList_ {
-  /// see [BookmarkedArticleList.id]
+/// [BookMarkArticleModel] entity fields to define ObjectBox queries.
+class BookMarkArticleModel_ {
+  /// see [BookMarkArticleModel.id]
   static final id =
-      QueryIntegerProperty<BookmarkedArticleList>(_entities[0].properties[0]);
+      QueryIntegerProperty<BookMarkArticleModel>(_entities[0].properties[0]);
 
-  /// see [BookmarkedArticleList.articleId]
+  /// see [BookMarkArticleModel.articleId]
   static final articleId =
-      QueryStringProperty<BookmarkedArticleList>(_entities[0].properties[1]);
+      QueryStringProperty<BookMarkArticleModel>(_entities[0].properties[1]);
+}
+
+/// [MyFeedModel] entity fields to define ObjectBox queries.
+class MyFeedModel_ {
+  /// see [MyFeedModel.id]
+  static final id =
+      QueryIntegerProperty<MyFeedModel>(_entities[1].properties[0]);
+
+  /// see [MyFeedModel.sectionId]
+  static final sectionId =
+      QueryStringProperty<MyFeedModel>(_entities[1].properties[1]);
 }

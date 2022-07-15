@@ -29,7 +29,7 @@ enum Pages {
       OnBoarding,
       BookMark,
       Notification,
-      HomeArticleDetail
+      HomeArticleDetail,
 }
 
 class PageConfiguration {

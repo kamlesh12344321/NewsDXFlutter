@@ -14,6 +14,14 @@ class Prefs  {
   static const String isProfileImagePresent = "profile_image_present";
   static const String articleIdsList = "article_id_list";
   static const String onBoardingstatus = "onboarding";
+  static const String onBookMarkArticelId ="bookmakrarticelId";
+  static const String fcmToken= "fcm_token";
+  static const String fcmTokenSave = "fcm_token_save";
+  static const String userNameKey = "firebase_name_info";
+  static const String userEmaiKey = "firebase_email_info";
+  static const String userNumberKey = "firebase_number_info";
+  static const String userImageKey = "firebase_image_info";
+  static const String notificationState = "enable_disable_notification";
 
   static Future<SharedPreferences?> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -23,6 +31,14 @@ class Prefs  {
   static Future<bool> saveIsLoggedIn( bool value) async =>
       await _prefs!.setBool(isLoggedInKey, value);
   static bool getIsLoggedIn() => _prefs!.getBool(isLoggedInKey) ?? false;
+
+  static Future<bool> isFcmTokenSent(bool value) async =>
+  await _prefs!.setBool(fcmToken, value);
+  static bool getIsFcmTokenSent() => _prefs!.getBool(fcmToken) ?? false;
+
+  static Future<bool> saveFcmToken(String? value) async =>
+  await _prefs!.setString(fcmTokenSave, value!);
+  static String? getSavedFcmToken() => _prefs!.getString(fcmTokenSave) ?? "";
 
   static Future<bool> saveOtpId( int value) async =>
       await _prefs!.setInt(otpId, value);
@@ -43,5 +59,31 @@ class Prefs  {
   static Future<bool> saveOnbording(bool value) async =>
       await _prefs!.setBool(onBoardingstatus, value);
   static bool getOnBoarding() => _prefs!.getBool(onBoardingstatus) ?? false;
+
+  static Future<bool> saveBookMarkArticleId(String articleId) async =>
+    await _prefs!.setString(onBookMarkArticelId, articleId);
+  static String? getBookMarkArticelId() => _prefs!.getString(onBookMarkArticelId) ?? "";
+
+  static Future<bool> saveUserNameInfo(String? info) async =>
+      await _prefs!.setString(userNameKey, info ?? "");
+  static String? getUserNameInfo() => _prefs!.getString(userNameKey);
+
+  static Future<bool> saveUserEmailInfo(String? info) async =>
+      await _prefs!.setString(userEmaiKey, info ?? "");
+  static String? getUserEmailInfo() => _prefs!.getString(userEmaiKey);
+
+  static Future<bool> saveUserPhoneInfo(String? info) async =>
+      await _prefs!.setString(userNumberKey, info ?? "");
+  static String? getUserNumberInfo() => _prefs!.getString(userNumberKey);
+
+  static Future<bool> saveUserImageUrlInfo(String? info) async =>
+      await _prefs!.setString(userImageKey, info ?? "");
+  static String? getUserImageUrlInfo() => _prefs!.getString(userImageKey);
+
+  static Future<bool> saveNotificationState(bool? value) async =>
+      await _prefs!.setBool(notificationState, value ?? true);
+  static bool? getNotificationState() => _prefs!.getBool(notificationState);
+
+
 
 }

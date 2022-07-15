@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:newsdx/app_constants/string_constant.dart';
-import 'package:newsdx/model/SectionPojo.dart';
 
 class FullImageViewItemG extends StatefulWidget {
   final String? articleImage;
@@ -19,7 +17,6 @@ class _FullImageViewItemState extends State<FullImageViewItemG> {
     if(widget.articleImage!.isNotEmpty){
       imageUrl = "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleImage}_600.jpg";
     }
-    print(imageUrl);
     return Container(
       margin: const EdgeInsets.only(left: 0.0,top: 10.0,right: 0.0,bottom: 10.0),
       alignment: AlignmentDirectional.bottomStart,
@@ -29,7 +26,7 @@ class _FullImageViewItemState extends State<FullImageViewItemG> {
         color: Colors.white,
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: NetworkImage( imageUrl ??  MyConstant.PLACE_HOLDER),
+          image: NetworkImage( imageUrl),
         ),
       ),
       child: const Padding(

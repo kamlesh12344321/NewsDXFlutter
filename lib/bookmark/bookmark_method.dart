@@ -1,9 +1,9 @@
 
-import '../model/bookmark_article_list.dart';
-import '../objectbox.g.dart';
+
+
 
 class BookMark{
-  static Future<int> onAddBookMark(BookmarkedArticleList add_bookmark) async {
+  /*static Future<int> onAddBookMark(BookmarkedArticleList add_bookmark) async {
     var store = await openStore();
     var box = store.box<BookmarkedArticleList>();
     return box.put(add_bookmark);
@@ -20,7 +20,7 @@ class BookMark{
     var box = store.box<BookmarkedArticleList>();
     final query = box.query().build();
     return query.find();
-  }
+  }*/
 
 
 }

@@ -2,7 +2,6 @@
 //
 //     final otpVerification = otpVerificationFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 OtpVerification otpVerificationFromJson(String str) => OtpVerification.fromJson(json.decode(str));

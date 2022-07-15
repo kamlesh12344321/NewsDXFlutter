@@ -1,4 +1,3 @@
-import 'package:newsdx/model/user_data.dart';
 
 class UserData {
   String? name;

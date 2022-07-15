@@ -31,14 +31,14 @@ class ArticleListById {
       );
 
   factory ArticleListById.fromJson(Map<String, dynamic> json) => ArticleListById(
-    status: json["STATUS"] ?? null,
-    statusMsg: json["STATUS_MSG"] ?? null,
+    status: json["STATUS"] ?? false,
+    statusMsg: json["STATUS_MSG"] ?? "",
     data: json["DATA"] == null ? null : Data.fromJson(json["DATA"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "STATUS": status ?? null,
-    "STATUS_MSG": statusMsg ?? null,
+    "STATUS": status ?? false,
+    "STATUS_MSG": statusMsg ?? "",
     "DATA": data == null ? null : data!.toJson(),
   };
 }
@@ -72,8 +72,8 @@ class Data {
   );
 
   Map<String, dynamic> toJson() => {
-    "CURRENTPAGE": currentpage ?? null,
-    "TIMESTAMP": timestamp ?? null,
+    "CURRENTPAGE": currentpage ?? "",
+    "TIMESTAMP": timestamp ?? "",
     "ARTICLES": articles == null ? null : List<dynamic>.from(articles!.map((x) => x.toJson())),
   };
 }
@@ -174,50 +174,50 @@ class ArticleById {
 
   factory ArticleById.fromJson(Map<String, dynamic> json) => ArticleById(
     sectionName: json["SECTION_NAME"] == null ? null : sectionNameValues.map![json["SECTION_NAME"]],
-    sectionId: json["SECTION_ID"] ?? null,
-    articleId: json["ARTICLE_ID"] ?? null,
+    sectionId: json["SECTION_ID"] ?? "",
+    articleId: json["ARTICLE_ID"] ?? "",
     propKey: json["PROP_KEY"] == null ? null : propKeyValues.map![json["PROP_KEY"]],
-    title: json["TITLE"] ?? null,
-    leadText: json["LEAD_TEXT"] ?? null,
-    link: json["LINK"] ?? null,
+    title: json["TITLE"] ?? "",
+    leadText: json["LEAD_TEXT"] ?? "",
+    link: json["LINK"] ?? "",
     type: json["TYPE"] == null ? null : typeValues.map![json["TYPE"]],
-    category: json["CATEGORY"] ?? null,
-    author: json["AUTHOR"] ?? null,
-    audioUrl: json["AUDIO_URL"] ?? null,
-    videoUrl: json["VIDEO_URL"] ?? null,
-    location: json["LOCATION"] ?? null,
+    category: json["CATEGORY"] ?? "",
+    author: json["AUTHOR"] ?? "",
+    audioUrl: json["AUDIO_URL"] ?? "",
+    videoUrl: json["VIDEO_URL"] ?? "",
+    location: json["LOCATION"] ?? "",
     publishDate: json["PUBLISH_DATE"] == null ? null : DateTime.parse(json["PUBLISH_DATE"]),
     images: json["IMAGES"] == null ? null : List<Photo>.from(json["IMAGES"].map((x) => Photo.fromJson(x))),
     relatedArticles: json["RELATED_ARTICLES"] == null ? null : List<dynamic>.from(json["RELATED_ARTICLES"].map((x) => x)),
-    shortDescription: json["SHORT_DESCRIPTION"] ?? null,
-    descPart1: json["DESC_PART_1"] ?? null,
-    publishDateGmtMillis: json["PUBLISH_DATE_GMT_MILLIS"] ?? null,
-    authorPhoto: json["AUTHOR_PHOTO"] ?? null,
-    guid: json["guid"] ?? null,
+    shortDescription: json["SHORT_DESCRIPTION"] ?? "",
+    descPart1: json["DESC_PART_1"] ?? "",
+    publishDateGmtMillis: json["PUBLISH_DATE_GMT_MILLIS"] ?? "",
+    authorPhoto: json["AUTHOR_PHOTO"] ?? "",
+    guid: json["guid"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {
     "SECTION_NAME": sectionName == null ? null : sectionNameValues.reverse![sectionName],
-    "SECTION_ID": sectionId ?? null,
-    "ARTICLE_ID": articleId ?? null,
+    "SECTION_ID": sectionId ?? "",
+    "ARTICLE_ID": articleId ?? "",
     "PROP_KEY": propKey == null ? null : propKeyValues.reverse![propKey],
-    "TITLE": title ?? null,
-    "LEAD_TEXT": leadText ?? null,
-    "LINK": link ?? null,
+    "TITLE": title ?? "",
+    "LEAD_TEXT": leadText ?? "",
+    "LINK": link ?? "",
     "TYPE": type == null ? null : typeValues.reverse![type],
-    "CATEGORY": category ?? null,
-    "AUTHOR": author ?? null,
-    "AUDIO_URL": audioUrl ?? null,
-    "VIDEO_URL": videoUrl ?? null,
-    "LOCATION": location ?? null,
+    "CATEGORY": category ?? "",
+    "AUTHOR": author ?? "",
+    "AUDIO_URL": audioUrl ?? "",
+    "VIDEO_URL": videoUrl ?? "",
+    "LOCATION": location ?? "",
     "PUBLISH_DATE": publishDate == null ? null : publishDate!.toIso8601String(),
     "IMAGES": images == null ? null : List<dynamic>.from(images!.map((x) => x.toJson())),
     "RELATED_ARTICLES": relatedArticles == null ? null : List<dynamic>.from(relatedArticles!.map((x) => x)),
-    "SHORT_DESCRIPTION": shortDescription ?? null,
-    "DESC_PART_1": descPart1 ?? null,
-    "PUBLISH_DATE_GMT_MILLIS": publishDateGmtMillis ?? null,
-    "AUTHOR_PHOTO": authorPhoto ?? null,
-    "guid": guid ?? null,
+    "SHORT_DESCRIPTION": shortDescription ?? "",
+    "DESC_PART_1": descPart1 ?? "",
+    "PUBLISH_DATE_GMT_MILLIS": publishDateGmtMillis ?? "",
+    "AUTHOR_PHOTO": authorPhoto ?? "",
+    "guid": guid ?? "",
   };
 }
 
@@ -240,13 +240,13 @@ class Photo {
       );
 
   factory Photo.fromJson(Map<String, dynamic> json) => Photo(
-    imageId: json["IMAGE_ID"] ?? null,
-    caption: json["CAPTION"] ?? null,
+    imageId: json["IMAGE_ID"] ?? "",
+    caption: json["CAPTION"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {
-    "IMAGE_ID": imageId ?? null,
-    "CAPTION": caption ?? null,
+    "IMAGE_ID": imageId ?? "",
+    "CAPTION": caption ?? "",
   };
 }
 
@@ -275,9 +275,7 @@ class EnumValues<T> {
   EnumValues(this.map);
 
   Map<T, String>? get reverse {
-    if (reverseMap == null) {
-      reverseMap = map!.map((k, v) => new MapEntry(v, k));
-    }
+    reverseMap ??= map!.map((k, v) =>  MapEntry(v, k));
     return reverseMap;
   }
 }

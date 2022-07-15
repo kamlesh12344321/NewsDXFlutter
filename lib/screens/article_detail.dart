@@ -3,35 +3,175 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:newsdx/model/SectionPojo.dart';
-import 'package:newsdx/model/home_section.dart';
+import 'package:newsdx/preference/user_preference.dart';
+import 'package:newsdx/router/app_state.dart';
+import 'package:newsdx/router/ui_pages.dart';
+import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
 import 'package:newsdx/widgets/article_detail_fullimage.dart';
-import 'package:newsdx/widgets/full_image_view_item.dart';
+import 'package:provider/provider.dart';
 import 'package:text_to_speech/text_to_speech.dart';
+import '../bookmark/model/bookmark_article.dart';
+import '../database/data_helper.dart';
+import '../shared/shared_method.dart';
 
-import '../utils/shared_method.dart';
-
-class ArticleDetail extends StatelessWidget {
+class ArticleDetail extends StatefulWidget {
   final Articles? articleItem;
 
-  const ArticleDetail({Key? key, this.articleItem}) : super(key: key);
+  bool? bookmarkStatus;
+  Function? callbackBookMark;
+  int? row_index;
+
+  ArticleDetail({
+    Key? key,
+    this.articleItem,
+    this.bookmarkStatus,
+    this.callbackBookMark,
+    this.row_index
+  }) : super(key: key);
+
+  @override
+  State<ArticleDetail> createState() => _ArticleDetailState();
+}
+
+class _ArticleDetailState extends State<ArticleDetail> {
+
+  late String articleId;
+  late String bookmarkStatus;
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
     TextToSpeech tts = TextToSpeech();
     double volume = 1.0;
     String? _timestamp =
-        articleItem!.publishdate; // [DateTime] formatted as String.
+        widget.articleItem!.publishdate; // [DateTime] formatted as String.
     var _convertedTimestamp =
-    DateTime.parse(_timestamp!); // Converting into [DateTime] object
+        DateTime.parse(_timestamp!); // Converting into [DateTime] object
     var result = GetTimeAgo.parse(_convertedTimestamp);
     double _height = 1;
     bool isSpeaking = false;
     String? imageId = "";
-    if (articleItem?.images?.length == 0) {
+    if (widget.articleItem?.images?.length == 0) {
       imageId = "";
     } else {
-      imageId = articleItem!.images![0].imageid;
+      imageId = widget.articleItem!.images![0].imageid;
+    }
+    bool? isPremium = widget.articleItem!.premium;
+    if (isPremium == true) {
+      showMaterialModalBottomSheet(
+          context: context,
+          expand: false,
+          builder: (context) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 100,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                        colors: [
+                          (Colors.transparent.withAlpha(0)),
+                          Colors.transparent.withAlpha(10)
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )),
+                    ),
+                    Text(
+                      "Read Premium Content",
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                        fontSize: 24,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: Center(
+                        child: Text(
+                          "You will get access to all the premium and personalised contents with AD free experience",
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
+                        ),
+                      )
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Starts at 10.99/month",
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        minimumSize: const Size.fromHeight(50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
+                      child: const Text("View Plans"),
+                      onPressed: () {
+                        appState.currentAction = PageAction(
+                            state: PageState.addWidget,
+                            widget: const SubscriptionPlanScreen(),
+                            page: SubscriptionPlanPageConfig);
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Already  Subscribed ? ",
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.blueAccent,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Text(
+                      "For support contact",
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      "wecare@alpinenews.com ",
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.blueAccent,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
     }
     return Scaffold(
         backgroundColor: Colors.white,
@@ -56,7 +196,11 @@ class ArticleDetail extends StatelessWidget {
               padding: const EdgeInsets.only(right: 16),
               child: Transform.scale(
                 scale: 1,
-                child: SvgPicture.asset("assets/profile_placeholder.svg"),
+                child:   CircleAvatar(
+                  backgroundImage: Prefs.getIsLoggedIn() == true ?
+                  NetworkImage(Prefs.getUserImageUrlInfo()!) : const NetworkImage('https://newsdx.io/assets/others/carbon_user-avatar-filled.svg') ,
+                  radius: 15,
+                ),
               ),
             ),
           ],
@@ -96,15 +240,31 @@ class ArticleDetail extends StatelessWidget {
                                 icon: SvgPicture.asset("assets/share.svg"),
                                 onPressed: () {
                                   Shared.onArticleShare(context,
-                                      articleItem!.title!,
-                                      articleItem!.link!);
+                                      widget.articleItem!.title!,
+                                      widget.articleItem!.link!);
                                 })),
                         Transform.scale(
                             scale: 1,
                             child: IconButton(
-                                icon:
-                                SvgPicture.asset("assets/bi_bookmark.svg"),
-                                onPressed: () {}))
+                              icon:  widget.bookmarkStatus!
+                                  ? SvgPicture.asset("assets/bookmark_filled.svg")
+                                  : SvgPicture.asset("assets/bi_bookmark.svg"),
+                              onPressed: () {
+                                setState(() {
+                                  if( widget.bookmarkStatus == true){
+                                    widget.bookmarkStatus = false;
+                                    bookmarkStatus = "Remove";
+                                  } else {
+                                    widget.bookmarkStatus = true;
+                                    bookmarkStatus = "Add";
+                                  }
+                                });
+                                onBookmark(widget.articleItem!.articleid!);
+                                articleId =  widget.articleItem!.articleid!;
+                                Prefs.saveBookMarkArticleId(widget.articleItem!.articleid!);
+                              },
+                            ),
+                        ),
                       ],
                     ),
                   )
@@ -123,7 +283,7 @@ class ArticleDetail extends StatelessWidget {
                         } else {
                           isSpeaking = true;
                           tts.speak(
-                              removeAllHtmlTags(articleItem!.descpart1!) ?? "");
+                              removeAllHtmlTags(widget.articleItem!.descpart1!) ?? "");
                         }
                       },
                       child: Align(
@@ -140,14 +300,12 @@ class ArticleDetail extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                        articleItem?.title ?? "",
+                        widget.articleItem?.title ?? "",
                         style: GoogleFonts.roboto(
                             textStyle: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 30
-                            )
-                        ),
+                                fontSize: 26)),
                       ),
                     ),
                   ],
@@ -175,7 +333,17 @@ class ArticleDetail extends StatelessWidget {
                   left: 16,
                   right: 16,
                 ),
-                child: Html(data: articleItem?.descpart1),
+                child: Html(
+                  data: widget.articleItem?.descpart1,
+                  //     style: {
+                  //   "body" : Style(
+                  //     fontSize: FontSize(18.0),
+                  //     fontWeight: FontWeight.w300,
+                  //     fontFamily: "Roboto",
+                  //     height: 1.4,
+                  //   )
+                  // },
+                ),
               ),
             ],
           ),
@@ -187,4 +355,53 @@ class ArticleDetail extends StatelessWidget {
 
     return htmlText.replaceAll(exp, '');
   }
+
+
+  void onBookmark(String articleId) {
+
+    var result = Helpers.queryArticleId(articleId);
+    result.then((value) => {
+      if (value!.length == 0)
+        {
+          Helpers.insert(BookMarkArticleModel(articleId: articleId)),
+          debugPrint("Bookmark Result added $articleId"),
+        }
+      else
+        {
+          Helpers.delete(articleId),
+          debugPrint("Bookmark Result remove "+value.first.articleId),
+        }
+    });
+
+    setState(() {});
+  }
+
+
+  @override
+  void dispose() {
+    widget.callbackBookMark!(articleId,bookmarkStatus,widget.row_index);
+  }
+}
+
+class FadingEffect extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Rect rect =
+        Rect.fromPoints(const Offset(0, 0), Offset(size.width, size.height));
+    LinearGradient lg = const LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          //create 2 white colors, one transparent
+          Color.fromARGB(0, 255, 255, 255),
+          Color.fromARGB(255, 255, 255, 255)
+        ]);
+    Paint paint = Paint()..shader = lg.createShader(rect);
+    canvas.drawRect(rect, paint);
+  }
+
+  @override
+  bool shouldRepaint(FadingEffect linePainter) => false;
+
+
 }
