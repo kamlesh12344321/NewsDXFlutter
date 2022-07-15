@@ -102,7 +102,11 @@ class _MyAppState extends State<MyApp> {
   initState() {
     super.initState();
     initPlatformState();
-    firebaseMessaging = FirebaseMessaging.instance;
+
+
+      firebaseMessaging = FirebaseMessaging.instance;
+
+
     firebaseMessaging.getToken().then((value) {
        if (kDebugMode) {
          print(value);
@@ -118,28 +122,32 @@ class _MyAppState extends State<MyApp> {
       _requestIOSPermission();
     }
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      if (notification != null ) {
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        RemoteNotification? notification = message.notification;
+        if (Prefs.getNotificationState()!) {
+          if (notification != null) {
+            flutterLocalNotificationsPlugin.show(
+              notification.hashCode,
+              notification.title,
+              notification.body,
+              NotificationDetails(
                 android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              color: Colors.blue,
-              playSound: true,
-              icon:'@mipmap/ic_launcher',
-            ),
-            iOS: const IOSNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channelDescription: channel.description,
+                  color: Colors.blue,
+                  playSound: true,
+                  icon: '@mipmap/ic_launcher',
+                ),
+                iOS: const IOSNotificationDetails(
 
-            )
-              ,),);
-      }
-    });
+                )
+                ,),);
+          }
+        }
+      });
+
+
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       String id = "";
       if(message.data['type'] == "article"){

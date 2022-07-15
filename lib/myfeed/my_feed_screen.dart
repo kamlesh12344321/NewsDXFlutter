@@ -142,9 +142,9 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
                                     ),
                                     GFToggle(
                                       onChanged: (val) {
-                                        addOrRemoveSectionId(title!);
+                                        addOrRemoveSectionId(sectionsList?.data?[index]);
                                       },
-                                      value: false,
+                                      value: onCheckSectionId(sectionsList?.data?[index]),
                                       enabledTrackColor: Colors.blue,
                                       type: GFToggleType.ios,
                                     ),
@@ -209,23 +209,24 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
     super.initState();
   }
 
-  bool addOrRemoveSectionId(String sectionId){
-
-    var result = Helpers.queryMyFeed(sectionId);
+  bool onCheckSectionId(Section? sections){
+    var result = Helpers.queryMyFeed(sections!.id!);
     if (result!.length == 0) {
-      var myFeed = MyFeedModel(sectionId: sectionId);
-      Helpers.insertMyFeed(myFeed);
       return false;
     } else {
-      Helpers.deleteMyFeed(result.first.sectionId);
       return true;
     }
-
-    /*if(selectedArticleList.contains(id)){
-      selectedArticleList.add(id);
-    } else{
-      selectedArticleList.remove(id);
-    }*/
   }
 
+  void addOrRemoveSectionId(Section? sections){
+    debugPrint("MyFees -> ${sections!.id} adn ${sections.sectionName}");
+    var result = Helpers.queryMyFeed(sections.id!);
+    debugPrint("MyFees length -> ${result?.length}");
+    if (result!.length == 0) {
+      var myFeed = MyFeedModel(sectionId: sections!.id!);
+      Helpers.insertMyFeed(myFeed);
+    } else {
+      Helpers.deleteMyFeed(result.first.sectionId);
+    }
+  }
 }
