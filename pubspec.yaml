@@ -36,7 +36,6 @@ dependencies:
   cupertino_icons: ^1.0.5
   shared_preferences: ^2.0.15
   simple_connection_checker: ^0.2.1
-#  sign_button: ^2.0.2
   sizer: ^2.0.15
   google_sign_in: ^5.3.3
   firebase_core: ^1.19.1
@@ -49,11 +48,7 @@ dependencies:
   flutter_svg: ^1.1.0
   http: 0.13.4
   flutter_facebook_auth: ^3.5.3
-#  sign_in_with_apple: ^4.0.0
-#  sign_in_with_apple: ^4.0.0
-#  the_apple_sign_in: any
-#  sign_in_with_apple: ^4.0.0
-#  the_apple_sign_in: ^1.1.1
+  firebase_auth_oauth: ^1.2.0
   url_launcher: any
   html: ^0.15.0
   js: ^0.6.2
@@ -71,10 +66,10 @@ dependencies:
   share_plus: ^4.0.10
   objectbox: ^1.6.0
   objectbox_flutter_libs: any
-  connectivity_plus: ^2.3.5
   firebase_messaging: ^11.4.4
   flutter_local_notifications: ^9.6.1
   firebase_core_platform_interface: 4.4.3
+  sign_in_with_apple: ^4.0.0
 
 
 dev_dependencies:

@@ -6,9 +6,12 @@ import 'package:getwidget/components/toggle/gf_toggle.dart';
 import 'package:getwidget/types/gf_toggle_type.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsdx/model/SectionList.dart';
+import 'package:newsdx/myfeed/model/myfeed_section.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/viewmodel/sections_list_view_model.dart';
 import 'package:provider/provider.dart';
+
+import '../database/data_helper.dart';
 
 class MyFeedScreen extends StatefulWidget {
   @override
@@ -186,11 +189,23 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
     super.initState();
   }
 
-  addOrRemoveSectionId(String id){
-    if(selectedArticleList.contains(id)){
+  bool addOrRemoveSectionId(String sectionId){
+
+    var result = Helpers.queryMyFeed(sectionId);
+    if (result!.length == 0) {
+      var myFeed = MyFeedModel(sectionId: sectionId);
+      Helpers.insertMyFeed(myFeed);
+      return false;
+    } else {
+      Helpers.deleteMyFeed(result.first.sectionId);
+      return true;
+    }
+
+    /*if(selectedArticleList.contains(id)){
       selectedArticleList.add(id);
     } else{
       selectedArticleList.remove(id);
-    }
+    }*/
   }
+
 }

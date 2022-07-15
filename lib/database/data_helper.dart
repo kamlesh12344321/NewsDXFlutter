@@ -1,81 +1,62 @@
+import 'package:newsdx/myfeed/model/myfeed_section.dart';
+
 import '../bookmark/model/bookmark_article.dart';
 import '../objectbox.g.dart';
 
 class Helpers {
 
-  static Box<BookMarkArticleModel>? _box;
+  static Box<BookMarkArticleModel>? _boxBookMark;
+  static Box<MyFeedModel>? _boxMyFeed;
 
-  static Future<Box<BookMarkArticleModel>?> init() async
+  static Future init() async
   {
     final store = await openStore();
-    _box = Box<BookMarkArticleModel>(store);
-    return _box;
+    _boxBookMark = Box<BookMarkArticleModel>(store);
+    _boxMyFeed = Box<MyFeedModel>(store);
   }
 
   static Future<int> insert(BookMarkArticleModel articleModel) async {
-    return _box!.put(articleModel);
+    return _boxBookMark!.put(articleModel);
   }
 
   static Future<List<BookMarkArticleModel>?> queryArticleId(String articleId) async {
-
-    var box = await _box?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
-
-      var result =box?.find();
-
+    var box = await _boxBookMark?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
+    var result =box?.find();
     return result;
   }
 
-
   static List<BookMarkArticleModel>? queryArticleIds(String articleId)  {
-
-    var box =  _box?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
-
+    var box =  _boxBookMark?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
     var result =box?.find();
-
     return result;
   }
 
   static List<BookMarkArticleModel>? getAllBookmarkList()  {
-    var box =  _box?.query().build();
+    var box =  _boxBookMark?.query().build();
     var result =box?.find();
     return result;
   }
 
-
-
   static Future delete(String articleId) async {
-    var box =  _box?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
+    var box =  _boxBookMark?.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
     var result =box?.find();
-    return _box?.remove(result!.first.id);
+    return _boxBookMark?.remove(result!.first.id);
   }
 
 
-
-
-
-  /*static Future<int> insert(BookMarkArticleModel person) async {
-    var box = MyObjectBox.create();
-    return box.put(person);
+  static Future<int> insertMyFeed(MyFeedModel myFeedModel) async {
+    return _boxMyFeed!.put(myFeedModel);
   }
 
-  static Future<bool> delete(int id) async {
-    var store = await MyObjectBox.getStore();
-    var box = store.box<BookMarkArticleModel>();
-    return box.remove(id);
+  static List<MyFeedModel>? queryMyFeed(String sectionId) {
+    var box = _boxMyFeed?.query(MyFeedModel_.sectionId.equals(sectionId)).build();
+    var result = box?.find();
+    return result;
   }
 
-  static Future<BookMarkArticleModel> queryPerson(int id) async {
-    var store = await MyObjectBox.getStore();
-    var box = store.box<BookMarkArticleModel>();
-    return box.get(id);
+  static bool? deleteMyFeed(String sectionId) {
+   var myFeedModels = queryMyFeed(sectionId);
+    return _boxMyFeed?.remove(myFeedModels!.first.id);
   }
 
-  static Future<BookMarkArticleModel> queryArticleId(String articleId) async {
-    var store = await MyObjectBox.getStore();
-
-   var box = store.query(BookMarkArticleModel_.articleId.equals(articleId)).build();
-
-
-    return box.get(id);
-  }*/
 }

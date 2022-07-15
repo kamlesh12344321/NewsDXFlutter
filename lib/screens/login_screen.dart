@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth_oauth/firebase_auth_oauth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,6 +26,7 @@ import 'package:provider/provider.dart';
 // import 'package:sign_button/constants.dart';
 // import 'package:sign_button/create_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 // import 'package:the_apple_sign_in/scope.dart';
 
 import '../apple/auth_service.dart';
@@ -281,7 +284,9 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                     },
                     child: SvgPicture.asset("assets/facebook.svg")),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _signInWithApple();
+                    },
                     child: SvgPicture.asset("assets/apple.svg")),
               ],
             ),
@@ -371,17 +376,56 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
     return null;
   }
 
-  // Future<void> _signInWithApple(BuildContext context) async {
-  //   try {
-  //     final authService = Provider.of<AuthService>(context, listen: false);
-  //     final user =
-  //         await authService.signInWithApple([Scope.email, Scope.fullName]);
-  //     print('uid: ${user.uid}');
-  //   } catch (e) {
-  //     // TODO: Show alert here
-  //     print(e);
-  //   }
-  // }
+  Future<void> performLogin(String provider, List<String> scopes,
+      Map<String, String> parameters) async {
+    try {
+      await FirebaseAuthOAuth().openSignInFlow(provider, scopes, parameters);
+
+    } on PlatformException catch (error) {
+      /**
+       * The plugin has the following error codes:
+       * 1. FirebaseAuthError: FirebaseAuth related error
+       * 2. PlatformError: An platform related error
+       * 3. PluginError: An error from this plugin
+       */
+      debugPrint("KK-> 11 "+"${error.code}: ${error.message}");
+    }
+  }
+
+  Future<void> performLink(String provider, List<String> scopes,
+      Map<String, String> parameters) async {
+    try {
+      await FirebaseAuthOAuth()
+          .linkExistingUserWithCredentials(provider, scopes, parameters);
+    } on PlatformException catch (error) {
+      /**
+       * The plugin has the following error codes:
+       * 1. FirebaseAuthError: FirebaseAuth related error
+       * 2. PlatformError: An platform related error
+       * 3. PluginError: An error from this plugin
+       */
+      debugPrint("KK-> 22"+"${error.code}: ${error.message}");
+    }
+  }
+
+  Future<void> _signInWithApple() async {
+    // performLogin("apple.com", ["email"], {"locale": "en"});
+    try {
+      // final authService = Provider.of<AuthService>(context, listen: false);
+
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      print(credential);
+    } catch (e) {
+      // TODO: Show alert here
+      print(e);
+    }
+  }
 
   Future<OtpSendStatus> getOtpSendStatus(String email) async {
     String? getAccessToken = MyConstant.propertyToken;
