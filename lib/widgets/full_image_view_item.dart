@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/model/home_section.dart';
-import 'package:newsdx/widgets/article_list.dart';
 
 class FullImageViewItem extends StatefulWidget {
  final HomeArticle? article;
@@ -21,7 +19,6 @@ class _FullImageViewItemState extends State<FullImageViewItem> {
     if(widget.article!.images.isNotEmpty){
        imageUrl = "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.article!.images[0].imageId}_600.jpg";
     }
-    print(imageUrl);
     return Container(
       margin: const EdgeInsets.only(left: 16.0,top: 10.0,right: 16.0,bottom: 10.0),
       alignment: AlignmentDirectional.bottomStart,
@@ -31,7 +28,7 @@ class _FullImageViewItemState extends State<FullImageViewItem> {
         color: Colors.white,
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: NetworkImage( imageUrl ??  MyConstant.PLACE_HOLDER),
+          image: NetworkImage( imageUrl),
         ),
       ),
       child: Padding(

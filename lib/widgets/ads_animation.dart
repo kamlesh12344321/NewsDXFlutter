@@ -27,7 +27,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 100,
       child: ScaleTransition(
         scale: _animation,

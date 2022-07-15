@@ -1,6 +1,3 @@
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,9 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/ui_pages.dart';
 import 'package:newsdx/subscription/subscriprtion_plan_screen.dart';
-import 'package:newsdx/utils/device_information_list.dart';
 import 'package:provider/provider.dart';
-
 import '../model/subscription_plan.dart';
 import '../router/app_state.dart';
 

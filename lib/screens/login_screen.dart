@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:newsdx/app_constants/string_constant.dart';
-import 'package:newsdx/internet_connectivity/internet_status.dart';
 import 'package:newsdx/model/otp_status.dart';
-import 'package:newsdx/model/user_data.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/router/app_state.dart';
 import 'package:newsdx/router/ui_pages.dart';
@@ -19,14 +15,8 @@ import 'package:newsdx/screens/home_screen.dart';
 import 'package:newsdx/screens/otp_screen.dart';
 import 'package:newsdx/utils/device_information_list.dart';
 import 'package:newsdx/widgets/app_bar.dart';
-import 'package:newsdx/widgets/dialog.dart';
 import 'package:provider/provider.dart';
-// import 'package:sign_button/constants.dart';
-// import 'package:sign_button/create_button.dart';
 import 'package:http/http.dart' as http;
-// import 'package:the_apple_sign_in/scope.dart';
-
-import '../apple/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -36,9 +26,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
-  late final User _user;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
   TextEditingController myController = TextEditingController();
   String? email = "";
   late Future<OtpSendStatus> otpStatus;
@@ -160,9 +147,9 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
                 label: Text(MyConstant.emailHint),
               ),
               onChanged: (text) {
-                setState() {
-                  email = text;
-                }
+               setState((){
+                 email = text;
+               });
               },
             ),
           ),
@@ -370,18 +357,6 @@ class _LoginScreenState extends State<LoginScreen> with ChangeNotifier {
     }
     return null;
   }
-
-  // Future<void> _signInWithApple(BuildContext context) async {
-  //   try {
-  //     final authService = Provider.of<AuthService>(context, listen: false);
-  //     final user =
-  //         await authService.signInWithApple([Scope.email, Scope.fullName]);
-  //     print('uid: ${user.uid}');
-  //   } catch (e) {
-  //     // TODO: Show alert here
-  //     print(e);
-  //   }
-  // }
 
   Future<OtpSendStatus> getOtpSendStatus(String email) async {
     String? getAccessToken = MyConstant.propertyToken;

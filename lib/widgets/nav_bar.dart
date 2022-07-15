@@ -14,7 +14,7 @@ class _NavBarState extends State<NavBar> {
     return Drawer(
       child: Column(
          children: [
-           Padding(padding: EdgeInsets.only(top: 40,left: 10, right: 10), child: ElevatedButton(
+           Padding(padding: const EdgeInsets.only(top: 40,left: 10, right: 10), child: ElevatedButton(
              style: ElevatedButton.styleFrom(
                primary: Colors.blue,
                minimumSize: const Size.fromHeight(50),
@@ -28,7 +28,7 @@ class _NavBarState extends State<NavBar> {
                // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MyFeed()));
              },
            ),),
-           Padding(padding: EdgeInsets.only(top: 20,left: 10, right: 10), child: ElevatedButton(
+           Padding(padding: const EdgeInsets.only(top: 20,left: 10, right: 10), child: ElevatedButton(
              style: ElevatedButton.styleFrom(
                primary: Colors.blue,
                minimumSize: const Size.fromHeight(50),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -143,8 +142,8 @@ class _MyAppState extends State<MyApp> {
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       String id = "";
-      if(message?.data['type'] == "article"){
-        id = message?.data['article_id'];
+      if(message.data['type'] == "article"){
+        id = message.data['article_id'];
         appState.currentAction = PageAction(
             state: PageState.addWidget,
             widget: HomeSectionArticleDetail(
@@ -154,7 +153,6 @@ class _MyAppState extends State<MyApp> {
             page: HomeArticleDetailPageConfig);
       }
       RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
       if (notification != null ) {
         showDialog(
             context: context,
@@ -192,7 +190,6 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => SectionsViewModel()),
         ChangeNotifierProvider(create: (_) => ArticleListViewModel()),
         ChangeNotifierProvider(create: (_) => HomeSectionsViewModel()),
-        // Provider(create: (_) => AuthService())
       ],
       child: MaterialApp.router(
               routeInformationParser: parser,
@@ -227,7 +224,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<bool?> sendFcmToken(String? fcmToken) async {
     String? getAccessToken = MyConstant.propertyToken;
-    var url = Uri.parse(MyConstant.Fcm_token);
+    var url = Uri.parse(MyConstant.fcmToken);
     final response = await http.post(
       url,
       body: {"deviceToken": fcmToken},

@@ -127,6 +127,7 @@ flutter:
     - assets/dot.svg
     - assets/bookmark_filled.svg
     - assets/logout.svg
+    - assets/subs_big.svg
   fonts:
     - family: Montserrat
       fonts:

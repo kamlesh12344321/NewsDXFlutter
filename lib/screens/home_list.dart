@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   late SectionsList? sectionsList;
   int initPosition = 0;
   late ScrollController _controller;
-  late ScrollController _controllerBanner;
   late HomeSectionsViewModel homeSectionsViewModel;
   HomeSection? homeSection;
   int _currentIndex = 0;
@@ -46,11 +45,10 @@ class _HomePageState extends State<HomePage> with UiLoggy {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
     _controller = ScrollController();
-    _controllerBanner = ScrollController();
     homeSectionsViewModel = context.watch<HomeSectionsViewModel>();
     sectionsViewModel = context.watch<SectionsViewModel>();
     homeSection = homeSectionsViewModel.homeSectionList;
-    sectionsList = sectionsViewModel?.sectionList;
+    sectionsList = sectionsViewModel.sectionList;
     int? lengthValue = sectionsList?.data?.length ?? 0;
     Section homeSectionCreate = Section(
       id: "40",
@@ -152,12 +150,11 @@ class _HomePageState extends State<HomePage> with UiLoggy {
             lengthValue,
             (int index) {
               if (index == 0) {
-                List<HomeArticle>? bannerList = homeSection?.data?.banner;
-                List<WidgetHome>? widgetsList = homeSection?.data?.widgets;
-                List<HomeArticle>? homeArticle3 = homeSection?.data?.articles;
-                LiveWidget? liveWidget = homeSection?.data?.liveWidget;
-                HtmlWidget? htmlWidget = homeSection?.data?.htmlWidget;
-                int? indexForAds = homeArticle3?.length;
+                List<HomeArticle>? bannerList = homeSection?.data.banner;
+                List<WidgetHome>? widgetsList = homeSection?.data.widgets;
+                List<HomeArticle>? homeArticle3 = homeSection?.data.articles;
+                LiveWidget? liveWidget = homeSection?.data.liveWidget;
+                HtmlWidget? htmlWidget = homeSection?.data.htmlWidget;
 
                 int listSize = 0;
                 if (bannerList != null) {
@@ -258,7 +255,6 @@ class _HomePageState extends State<HomePage> with UiLoggy {
                       DataPojo? val = snapShot.data?.data;
                       List<Articles>? listValue = val?.articles;
                       var sectionName = listValue![0].sectionname;
-                      var sectionId = listValue[0].sectionid;
                       loggy.debug('SectionName :: $sectionName');
                       return ListView.builder(
                         itemCount: val?.articles?.length,
@@ -310,7 +306,7 @@ class _HomePageState extends State<HomePage> with UiLoggy {
 
   Future<SectionPojo> getArticles(String? sectionId) async {
     String? getAccessToken = MyConstant.propertyToken;
-    var url = Uri.parse(MyConstant.ARTICLE_LIST);
+    var url = Uri.parse(MyConstant.articleList);
     final response = await http.post(
       url,
       body: {"sectionId": sectionId},

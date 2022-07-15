@@ -5,10 +5,8 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:newsdx/model/home_section.dart';
 import 'package:newsdx/widgets/big_text.dart';
 import 'package:newsdx/widgets/small_text.dart';
-
 import '../bookmark/model/bookmark_article.dart';
 import '../database/data_helper.dart';
-import '../objectbox.g.dart';
 
 class HomeArticleListItem extends StatefulWidget {
   final HomeArticle? articleItem;
@@ -30,15 +28,15 @@ class _HomeArticleListItemState extends State<HomeArticleListItem> {
   @override
   Widget build(BuildContext context) {
     String imageUrl = "";
-    String? _timestamp = widget.articleItem!.publishDate
+    String? timestamp = widget.articleItem!.publishDate
         .toString(); // [DateTime] formatted as String.
-    var _convertedTimestamp =
-        DateTime.parse(_timestamp!); // Converting into [DateTime] object
-    var result = GetTimeAgo.parse(_convertedTimestamp);
+    var convertedTimestamp =
+        DateTime.parse(timestamp); // Converting into [DateTime] object
+    var result = GetTimeAgo.parse(convertedTimestamp);
 
-    if (widget.articleItem!.images!.isNotEmpty) {
+    if (widget.articleItem!.images.isNotEmpty) {
       imageUrl =
-          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images?[0].imageId}_300.jpg";
+          "https://ndxv3.s3.ap-south-1.amazonaws.com/${widget.articleItem?.images[0].imageId}_300.jpg";
     } else {
       imageUrl = "https://via.placeholder.com/600x340";
     }
@@ -97,14 +95,14 @@ class _HomeArticleListItemState extends State<HomeArticleListItem> {
                           icon:  widget.bookmarkStatus! ? SvgPicture.asset("assets/bookmark_filled.svg")
                               : SvgPicture.asset("assets/bi_bookmark.svg"),
                           onPressed: () {
-                            debugPrint("Home row click bookmark id -> "+widget.articleItem!.articleId);
+                            debugPrint("Home row click bookmark id -> ${widget.articleItem!.articleId}");
                             setState(() {
                               if( widget.bookmarkStatus == true){
                                 widget.bookmarkStatus = false;
                               } else {
                                 widget.bookmarkStatus = true;
                               }
-                              debugPrint("selection state -> " +  widget.bookmarkStatus.toString());
+                              debugPrint("selection state -> ${widget.bookmarkStatus}");
                             });
                             onBookmark(widget.articleItem!.articleId);
                           },
@@ -125,7 +123,7 @@ class _HomeArticleListItemState extends State<HomeArticleListItem> {
 
     var result = Helpers.queryArticleId(articleId);
     result.then((value) => {
-      if (value!.length == 0)
+      if (value!.isEmpty)
         {
           Helpers.insert(BookMarkArticleModel(articleId: articleId)),
           debugPrint("Bookmark Result added $articleId"),
@@ -133,7 +131,7 @@ class _HomeArticleListItemState extends State<HomeArticleListItem> {
       else
         {
           Helpers.delete(articleId),
-          debugPrint("Bookmark Result remove "+value.first.articleId),
+          debugPrint("Bookmark Result remove ${value.first.articleId}"),
         }
     });
 

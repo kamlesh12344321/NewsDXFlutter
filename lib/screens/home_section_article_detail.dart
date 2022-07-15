@@ -322,8 +322,10 @@ class _HomeSectionArticleDetailState extends State<HomeSectionArticleDetail> {
               ),
             );
           } else {
-            return const Scaffold(
-              body:  Center(child: CircularProgressIndicator()),
+            return
+              const Scaffold(
+              body:  Center(child:
+              CircularProgressIndicator()),
             );
           }
         });

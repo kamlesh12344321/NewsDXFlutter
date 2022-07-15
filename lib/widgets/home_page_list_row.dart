@@ -7,9 +7,6 @@ import 'package:newsdx/widgets/small_text.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import '../bookmark/model/bookmark_article.dart';
 import '../database/data_helper.dart';
-import '../database/mydatabase_viewmodel.dart';
-import '../my_object_box.dart';
-import '../objectbox.g.dart';
 import '../shared/shared_method.dart';
 
 
@@ -32,11 +29,11 @@ class _HomePageListItemState extends State<HomePageListItem> {
   @override
   Widget build(BuildContext context) {
     String imageUrl = "";
-    String? _timestamp =
+    String? timestamp =
         widget.articleItem!.publishdate; // [DateTime] formatted as String.
-    var _convertedTimestamp =
-        DateTime.parse(_timestamp!); // Converting into [DateTime] object
-    var result = GetTimeAgo.parse(_convertedTimestamp);
+    var convertedTimestamp =
+        DateTime.parse(timestamp!); // Converting into [DateTime] object
+    var result = GetTimeAgo.parse(convertedTimestamp);
 
     if (widget.articleItem!.images!.isNotEmpty) {
       imageUrl =
@@ -134,7 +131,7 @@ class _HomePageListItemState extends State<HomePageListItem> {
 
     var result = Helpers.queryArticleId(articleId);
     result.then((value) => {
-      if (value!.length == 0)
+      if (value!.isEmpty)
         {
           Helpers.insert(BookMarkArticleModel(articleId: articleId)),
           debugPrint("Bookmark Result added $articleId"),
@@ -142,7 +139,7 @@ class _HomePageListItemState extends State<HomePageListItem> {
       else
         {
           Helpers.delete(articleId),
-          debugPrint("Bookmark Result remove "+value.first.articleId),
+          debugPrint("Bookmark Result remove ${value.first.articleId}"),
         }
     });
 

@@ -5,23 +5,19 @@ import 'package:newsdx/model/SectionPojo.dart';
 import 'package:newsdx/widgets/big_text.dart';
 import 'package:newsdx/widgets/small_text.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:provider/provider.dart';
-import '../bookmark/model/bookmark_article.dart';
 import '../database/data_helper.dart';
-import '../objectbox.g.dart';
-import '../provider/bookmark_provider.dart';
 import '../shared/shared_method.dart';
 
 
 class BookmarkListRow extends StatefulWidget {
   Articles? articleItem;
-  int? row_index;
+  int? rowIndex;
   final Function? callback;
 
   BookmarkListRow({
     Key? key,
      this.articleItem,
-     this.row_index,
+     this.rowIndex,
      this.callback
   }) : super(key: key);
 
@@ -34,11 +30,11 @@ class _BookmarkListRowState extends State<BookmarkListRow> {
   @override
   Widget build(BuildContext context) {
     String imageUrl = "";
-    String? _timestamp =
+    String? timestamp =
         widget.articleItem!.publishdate; // [DateTime] formatted as String.
-    var _convertedTimestamp =
-        DateTime.parse(_timestamp!); // Converting into [DateTime] object
-    var result = GetTimeAgo.parse(_convertedTimestamp);
+    var convertedTimestamp =
+        DateTime.parse(timestamp!); // Converting into [DateTime] object
+    var result = GetTimeAgo.parse(convertedTimestamp);
 
     if (widget.articleItem!.images!.isNotEmpty) {
       imageUrl =
@@ -113,7 +109,7 @@ class _BookmarkListRowState extends State<BookmarkListRow> {
                           icon: SvgPicture.asset("assets/bookmark_filled.svg"),
                           onPressed: () {
                             onBookmark(widget.articleItem!.articleid!);
-                            widget.callback!(widget.row_index);
+                            widget.callback!(widget.rowIndex);
                             // Provider.of<BookMarkIndex>(context, listen: false).BookMarkRowPosition(1);
                           },
                         ),

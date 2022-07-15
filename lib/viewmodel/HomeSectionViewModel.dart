@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:newsdx/model/SectionList.dart';
 import 'package:newsdx/model/home_section.dart';
-import 'package:newsdx/preference/user_preference.dart';
 import 'package:newsdx/repo/api_status.dart';
 import '../repo/section_service.dart';
 

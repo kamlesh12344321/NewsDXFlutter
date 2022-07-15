@@ -1,26 +1,17 @@
 import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:newsdx/app_constants/string_constant.dart';
 import 'package:newsdx/bookmark/bookmark_list_row.dart';
 import 'package:newsdx/bookmark/empty_bookmark.dart';
 import 'package:newsdx/preference/user_preference.dart';
 import 'package:provider/provider.dart';
-
 import '../model/SectionPojo.dart';
-import '../objectbox.g.dart';
-import '../provider/bookmark_provider.dart';
 import '../router/app_state.dart';
 import '../router/ui_pages.dart';
 import '../screens/article_detail.dart';
 import '../widgets/app_bar.dart';
-import '../widgets/home_page_list_row.dart';
-import 'model/bookmark_article.dart';
 
 class BookMarkFilledContainer extends StatefulWidget {
   String? bookmarkArticleList;
@@ -88,7 +79,7 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
         if (i == 0) {
           articleIdList = articleList[i].articleid!;
         } else {
-          articleIdList = articleList[i].articleid! + "," + articleIdList;
+          articleIdList = "${articleList[i].articleid!},$articleIdList";
         }
       }
       widget.bookmarkArticleList = articleIdList;
@@ -142,7 +133,7 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
                   tileColor: Colors.white,
                   title: BookmarkListRow(
                     articleItem: article,
-                    row_index: index,
+                    rowIndex: index,
                     callback: callback,
                   ),
                   onTap: () {
@@ -151,7 +142,7 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
                         widget: ArticleDetail(
                           articleItem: article,
                           bookmarkStatus:
-                              getBookMarkStatus(article!.articleid!),
+                              getBookMarkStatus(article.articleid!),
                           callbackBookMark: callbackBookMarkArticleId,
                           row_index: index,
                         ),
@@ -180,16 +171,6 @@ class _BookMarkFilledContainerState extends State<BookMarkFilledContainer> {
       body: isDataPresent == true ? futureBuilder : const EmptyBookMarkContainer(),
     );
   }
-
-  _onRememberMeChanged(bool newValue) => setState(() {
-        rememberMe = newValue;
-
-        if (rememberMe) {
-          // TODO: Here goes your functionality that remembers the user.
-        } else {
-          // TODO: Forget the user
-        }
-      });
 
   Future<SectionPojo> getArticles(String articleIdsList) async {
     String? getAccessToken = MyConstant.propertyToken;

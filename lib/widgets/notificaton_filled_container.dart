@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:newsdx/app_constants/string_constant.dart';
 
 class NotificationFilledContainer extends StatefulWidget {
   const NotificationFilledContainer({Key? key}) : super(key: key);
@@ -69,9 +68,9 @@ class _NotificationFilledContainerState extends State<NotificationFilledContaine
               label: Text("Search Articles"),
             ),
             onChanged: (text) {
-              setState() {
-                email = text;
-              }
+             setState((){
+               email = text;
+             });
             },
           ),
         ),

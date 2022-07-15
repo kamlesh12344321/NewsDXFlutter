@@ -25,9 +25,9 @@ class HomeSection {
     required Data data,
   }) =>
       HomeSection(
-        status: status ?? this.status,
-        statusMsg: statusMsg ?? this.statusMsg,
-        data: data ?? this.data,
+        status: status,
+        statusMsg: statusMsg,
+        data: data,
       );
 
   factory HomeSection.fromJson(Map<String, dynamic> json) => HomeSection(
@@ -66,11 +66,11 @@ class Data {
     required HtmlWidget htmlWidget,
   }) =>
       Data(
-        banner: banner ?? this.banner,
-        widgets: widgets ?? this.widgets,
-        articles: articles ?? this.articles,
-        liveWidget: liveWidget ?? this.liveWidget,
-        htmlWidget: htmlWidget ?? this.htmlWidget,
+        banner: banner ,
+        widgets: widgets ,
+        articles: articles ,
+        liveWidget: liveWidget ,
+        htmlWidget: htmlWidget,
       );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -161,31 +161,31 @@ class HomeArticle {
     required String guid,
   }) =>
       HomeArticle(
-        sectionName: sectionName ?? this.sectionName,
-        sectionId: sectionId ?? this.sectionId,
-        articleId: articleId ?? this.articleId,
+        sectionName: sectionName ,
+        sectionId: sectionId,
+        articleId: articleId,
         propKey: propKey ?? this.propKey,
-        title: title ?? this.title,
-        leadText: leadText ?? this.leadText,
-        link: link ?? this.link,
+        title: title ,
+        leadText: leadText ,
+        link: link,
         type: type ?? this.type,
-        category: category ?? this.category,
-        author: author ?? this.author,
-        audioUrl: audioUrl ?? this.audioUrl,
-        videoUrl: videoUrl ?? this.videoUrl,
-        location: location ?? this.location,
-        publishDate: publishDate ?? this.publishDate,
-        images: images ?? this.images,
-        relatedArticles: relatedArticles ?? this.relatedArticles,
-        shortDescription: shortDescription ?? this.shortDescription,
-        descPart1: descPart1 ?? this.descPart1,
-        publishDateGmtMillis: publishDateGmtMillis ?? this.publishDateGmtMillis,
-        authorPhoto: authorPhoto ?? this.authorPhoto,
-        guid: guid ?? this.guid,
+        category: category,
+        author: author,
+        audioUrl: audioUrl,
+        videoUrl: videoUrl,
+        location: location,
+        publishDate: publishDate,
+        images: images,
+        relatedArticles: relatedArticles,
+        shortDescription: shortDescription,
+        descPart1: descPart1,
+        publishDateGmtMillis: publishDateGmtMillis,
+        authorPhoto: authorPhoto,
+        guid: guid,
       );
 
   factory HomeArticle.fromJson(Map<String, dynamic> json) => HomeArticle(
-    sectionName: sectionNameValues!.map[json["SECTION_NAME"]],
+    sectionName: sectionNameValues.map[json["SECTION_NAME"]],
     sectionId: json["SECTION_ID"],
     articleId: json["ARTICLE_ID"],
     propKey: propKeyValues.map[json["PROP_KEY"]],
@@ -247,8 +247,8 @@ class ImageHome {
       required String caption,
   }) =>
       ImageHome(
-        imageId: imageId ?? this.imageId,
-        caption: caption ?? this.caption,
+        imageId: imageId,
+        caption: caption,
       );
 
   factory ImageHome.fromJson(Map<String, dynamic> json) => ImageHome(
@@ -304,11 +304,11 @@ class HtmlWidget {
     required String source,
   }) =>
       HtmlWidget(
-        isEnabled: isEnabled ?? this.isEnabled,
-        url: url ?? this.url,
-        position: position ?? this.position,
-        action: action ?? this.action,
-        source: source ?? this.source,
+        isEnabled: isEnabled,
+        url: url,
+        position: position,
+        action: action,
+        source: source,
       );
 
   factory HtmlWidget.fromJson(Map<String, dynamic> json) => HtmlWidget(
@@ -351,11 +351,11 @@ class LiveWidget {
     required List<dynamic> articles,
   }) =>
       LiveWidget(
-        isEnabled: isEnabled ?? this.isEnabled,
-        position: position ?? this.position,
-        refreshInterval: refreshInterval ?? this.refreshInterval,
-        articlesLimit: articlesLimit ?? this.articlesLimit,
-        articles: articles ?? this.articles,
+        isEnabled: isEnabled,
+        position: position,
+        refreshInterval: refreshInterval,
+        articlesLimit: articlesLimit,
+        articles: articles,
       );
 
   factory LiveWidget.fromJson(Map<String, dynamic> json) => LiveWidget(
@@ -398,11 +398,11 @@ class WidgetHome {
     required List<HomeArticle> articles,
   }) =>
       WidgetHome(
-        sectionId: sectionId ?? this.sectionId,
-        sectionName: sectionName ?? this.sectionName,
-        displayOrder: displayOrder ?? this.displayOrder,
-        type: type ?? this.type,
-        articles: articles ?? this.articles,
+        sectionId: sectionId,
+        sectionName: sectionName,
+        displayOrder: displayOrder,
+        type: type,
+        articles: articles,
       );
 
   factory WidgetHome.fromJson(Map<String, dynamic> json) => WidgetHome(

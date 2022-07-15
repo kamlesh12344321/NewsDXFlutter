@@ -14,6 +14,7 @@ import 'package:theme_provider/theme_provider.dart';
 import '../bookmark/bookmarkList.dart';
 import '../bookmark/model/bookmark_article.dart';
 import '../database/data_helper.dart';
+import '../subscription/thanks_for_subs_widget.dart';
 import '../userprofile/user_profile_info_screen.dart';
 import 'login_screen.dart';
 
@@ -25,12 +26,11 @@ class MyAccountPage extends StatefulWidget {
 }
 
 class _MyAccountPageState extends State<MyAccountPage> {
-
+  bool isNotificationEnabled = Prefs.getNotificationState() ?? true;
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -41,19 +41,21 @@ class _MyAccountPageState extends State<MyAccountPage> {
             child: IconButton(
               icon: Transform.scale(
                 scale: 1,
-                child:   CircleAvatar(
-                  backgroundImage: Prefs.getIsLoggedIn() == true ?
-                  NetworkImage(Prefs.getUserImageUrlInfo()!) : const NetworkImage('https://newsdx.io/assets/others/carbon_user-avatar-filled.svg') ,
+                child: CircleAvatar(
+                  backgroundImage: Prefs.getIsLoggedIn() == true
+                      ? NetworkImage(Prefs.getUserImageUrlInfo()!)
+                      : const NetworkImage(
+                          'https://newsdx.io/assets/others/carbon_user-avatar-filled.svg'),
                   radius: 15,
                 ),
               ),
               onPressed: () {
-                if(Prefs.getIsLoggedIn() == true){
+                if (Prefs.getIsLoggedIn() == true) {
                   appState.currentAction = PageAction(
                       state: PageState.addWidget,
                       widget: const UserProfileInfoScreen(),
                       page: UserProfileInfoPageConfig);
-                } else{
+                } else {
                   appState.currentAction = PageAction(
                       state: PageState.addWidget,
                       widget: const LoginScreen(),
@@ -71,77 +73,94 @@ class _MyAccountPageState extends State<MyAccountPage> {
               padding: const EdgeInsets.only(top: 20, left: 16),
               child: Row(
                 children: [
-                  SvgPicture.asset("assets/more.svg", height: 20, width: 20,),
-                   Text(" More", style: GoogleFonts.roboto(
-                    fontWeight: FontWeight.w700,
-                     fontSize: 30,
-                  ),),
+                  SvgPicture.asset(
+                    "assets/more.svg",
+                    height: 20,
+                    width: 20,
+                  ),
+                  Text(
+                    " More",
+                    style: GoogleFonts.roboto(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 30,
+                    ),
+                  ),
                 ],
               ),
             ),
-            Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                     Text("Notification", style: GoogleFonts.roboto(
-                       fontSize: 16,
-                       fontWeight: FontWeight.w400,
-                       color: Colors.black54
-                     ),),
-                    GFToggle(
-                      onChanged: (val){},
-                      value: true,
-                      enabledTrackColor: Colors.blue,
-                      type: GFToggleType.ios,
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.grey,
-                )
-              ],
-            ),),
-            Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
-              children: [
-                GestureDetector(
-                  child:  Row(
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
+              child: Column(
+                children: [
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                       Text("Dark mode", style:  GoogleFonts.roboto(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black54
-                      ),),
+                      Text(
+                        "Notification",
+                        style: GoogleFonts.roboto(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black54),
+                      ),
                       GFToggle(
-                        onChanged: (val){},
-                        value: true,
+                        onChanged: (val) {
+                          Prefs.saveNotificationState(val);
+                        },
+                        value: isNotificationEnabled,
                         enabledTrackColor: Colors.blue,
                         type: GFToggleType.ios,
                       )
                     ],
                   ),
-                  onTap: (){
-                    ThemeProvider.controllerOf(context).nextTheme();
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.grey,
-                )
-              ],
-            ),),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: Colors.grey,
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Dark mode",
+                          style: GoogleFonts.roboto(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black54),
+                        ),
+                        GFToggle(
+                          onChanged: (val) {},
+                          value: true,
+                          enabledTrackColor: Colors.blue,
+                          type: GFToggleType.ios,
+                        )
+                      ],
+                    ),
+                    onTap: () {
+                      ThemeProvider.controllerOf(context).nextTheme();
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: Colors.grey,
+                  )
+                ],
+              ),
+            ),
             // Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
             //   children: [
             //     Row(
@@ -165,214 +184,247 @@ class _MyAccountPageState extends State<MyAccountPage> {
             //     )
             //   ],
             // ),),
-            Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                     Text("GDPR", style:  GoogleFonts.roboto(
-                         fontSize: 16,
-                         fontWeight: FontWeight.w400,
-                         color: Colors.black54
-                     ),),
-                    SvgPicture.asset("assets/forward.svg")
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.grey,
-                )
-              ],
-            ),),
-            Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                     Text("Text to Speech ", style:  GoogleFonts.roboto(
-                         fontSize: 16,
-                         fontWeight: FontWeight.w400,
-                         color: Colors.black54
-                     ),),
-                    SvgPicture.asset("assets/forward.svg")
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.grey,
-                )
-              ],
-            ),),
             InkWell(
               onTap: (){
-                appState.currentAction = PageAction(
-                    state: PageState.addWidget,
-                    widget: const NotificationScreen(),
-                    page: NotificationPageConfig);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ThanksForSubscribeWidget()));
               },
-              child: Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
+              child:  Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "GDPR",
+                          style: GoogleFonts.roboto(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black54),
+                        ),
+
+                        SvgPicture.asset("forward.svg"),
+
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
+              child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children:  [
-                          Text("Notifications", style: GoogleFonts.roboto(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black54
-                          ),),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          // SvgPicture.asset("assets/dot.svg"),
-                        ],
+                      Text(
+                        "Text to Speech ",
+                        style: GoogleFonts.roboto(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black54),
                       ),
-                      Row(
-                        children: [
-                          // 200 unread can be added notification
-                           Text("",
-                            style:  GoogleFonts.roboto(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black54
-                            ),),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          SvgPicture.asset("assets/forward.svg"),
-                        ],
-                      ),
+                      SvgPicture.asset("assets/forward.svg")
                     ],
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-
                   Container(
                     height: 1,
                     width: double.infinity,
                     color: Colors.grey,
                   )
                 ],
-              ),),
+              ),
             ),
-           InkWell(
-             onTap: (){
-               appState.currentAction = PageAction(
-                   state: PageState.addWidget,
-                   widget:  BookMarkFilledContainer(
-                     bookmarkArticleList: bookMarkList(),
-                   ),
-                   page: BookMarkPageConfig);
-             },
-             child:  Padding(padding: const EdgeInsets.only(left: 16, right: 16, top: 20), child: Column(
-               children: [
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     Row(
-                       children:  [
-                         Text("Bookmark", style:  GoogleFonts.roboto(
-                             fontSize: 16,
-                             fontWeight: FontWeight.w400,
-                             color: Colors.black54
-                         ),),
-                         const SizedBox(
-                           width: 4,
-                         ),
-                         // SvgPicture.asset("assets/dot.svg"),
-                       ],
-                     ),
-                     Row(
-                       children: [
-                         // 200 unread can be added for bookmark
-                          Text("",
-                           style:  GoogleFonts.roboto(
-                               fontSize: 16,
-                               fontWeight: FontWeight.w400,
-                               color: Colors.black54
-                           ),),
-                         const SizedBox(
-                           width: 5,
-                         ),
-                         SvgPicture.asset("assets/forward.svg"),
-                       ],
-                     ),
-                   ],
-                 ),
-                 const SizedBox(
-                   height: 10,
-                 ),
-               ],
-             ),),
-           ),
+            InkWell(
+              onTap: () {
+                appState.currentAction = PageAction(
+                    state: PageState.addWidget,
+                    widget: const NotificationScreen(),
+                    page: NotificationPageConfig);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Notifications",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black54),
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            // SvgPicture.asset("assets/dot.svg"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            // 200 unread can be added notification
+                            Text(
+                              "",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black54),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            SvgPicture.asset("assets/forward.svg"),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                appState.currentAction = PageAction(
+                    state: PageState.addWidget,
+                    widget: BookMarkFilledContainer(
+                      bookmarkArticleList: bookMarkList(),
+                    ),
+                    page: BookMarkPageConfig);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Bookmark",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black54),
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            // SvgPicture.asset("assets/dot.svg"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            // 200 unread can be added for bookmark
+                            Text(
+                              "",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black54),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            SvgPicture.asset("assets/forward.svg"),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ),
             Column(
               children: [
-                Padding(padding: const EdgeInsets.only(top: 110),
+                Padding(
+                    padding: const EdgeInsets.only(top: 110),
                     child: SizedBox(
                       width: 80,
-                      height: 20 ,
+                      height: 20,
                       child: Center(
                         child: Column(
                           children: [
-                           FittedBox(
-                             child:  Row(
-                               children:  [
-                                 Text("Version ", style:  GoogleFonts.roboto(
-                                     fontSize: 16,
-                                     fontWeight: FontWeight.w400,
-                                     color: Colors.black54
-                                 ),),
-                                 Text("1.0.1", style:  GoogleFonts.roboto(
-                                     fontSize: 16,
-                                     fontWeight: FontWeight.w400,
-                                     color: Colors.blueAccent
-                                 ),)
-
-                               ],
-                             ),
-                           )
+                            FittedBox(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Version ",
+                                    style: GoogleFonts.roboto(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black54),
+                                  ),
+                                  Text(
+                                    "1.0.1",
+                                    style: GoogleFonts.roboto(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.blueAccent),
+                                  )
+                                ],
+                              ),
+                            )
                           ],
                         ),
                       ),
-                    )
-                ),
-                Padding(padding: const EdgeInsets.only(top: 20, bottom: 50),
+                    )),
+                Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 50),
                     child: SizedBox(
                       width: 300,
-                      height: 50 ,
+                      height: 50,
                       child: Center(
                         child: Column(
-                          children:  [
-                            Text("For support contact", style:  GoogleFonts.roboto(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black54
-                            ),),
+                          children: [
+                            Text(
+                              "For support contact",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black54),
+                            ),
                             const SizedBox(
                               height: 5,
                             ),
-                            Text("wecare@alpinenews.com", style:  GoogleFonts.roboto(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.blueAccent
-                            ),),
+                            Text(
+                              "wecare@alpinenews.com",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.blueAccent),
+                            ),
                           ],
                         ),
                       ),
-                    )
-                ),
+                    )),
                 Align(
                     alignment: const AlignmentDirectional(-0.02, 0.92),
                     child: SizedBox(
@@ -384,7 +436,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                             margin: const EdgeInsets.only(
                               right: 40,
                             ),
-                            transform: Matrix4.translationValues(0.0, 10.0, 0.0),
+                            transform:
+                                Matrix4.translationValues(0.0, 10.0, 0.0),
                             child: Text(
                               MyConstant.poweredBy,
                               style: GoogleFonts.roboto(
@@ -408,16 +461,16 @@ class _MyAccountPageState extends State<MyAccountPage> {
   String bookMarkList() {
     String articleIdList = "";
 
-    List<BookMarkArticleModel>? data =  Helpers.getAllBookmarkList();
+    List<BookMarkArticleModel>? data = Helpers.getAllBookmarkList();
 
     if (data?.length == 0) {
       return articleIdList;
     } else {
-      for (int i = 0 ; i < data!.length ; i++) {
-        if ( i == 0) {
+      for (int i = 0; i < data!.length; i++) {
+        if (i == 0) {
           articleIdList = data[i].articleId;
-        }  else {
-          articleIdList = data[i].articleId+","+articleIdList;
+        } else {
+          articleIdList = "${data[i].articleId},$articleIdList";
         }
       }
       return articleIdList;
